@@ -1,6 +1,7 @@
 import { combineReducers, createStore, applyMiddleware} from 'redux';
-import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
+import React from 'react';
+import { render } from 'react-dom';
 import reducers from './reducers';
 
 const todoApp = combineReducers(reducers);
@@ -16,4 +17,9 @@ const store = createStore(
 
 replayActionRenderer(store);
 
+const App = ()=>{
+  return (<div>Enis</div>);
+}
+
+render(<App/>, document.querySelector("#app"));
 console.log("store", store.getState());

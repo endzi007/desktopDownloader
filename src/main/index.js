@@ -4,7 +4,7 @@ import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redu
 import reducers from './reducers';
 
 let initialState = {
-    enis: "31"
+    enis: "52"
 };
 const todoApp = combineReducers(reducers);
 

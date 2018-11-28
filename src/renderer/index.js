@@ -3,6 +3,8 @@ import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'el
 import React from 'react';
 import { render } from 'react-dom';
 import reducers from './reducers';
+import App from './components/app';
+import { Provider } from 'react-redux';
 
 const todoApp = combineReducers(reducers);
 const initialState = getInitialStateRenderer();
@@ -17,9 +19,8 @@ const store = createStore(
 
 replayActionRenderer(store);
 
-const App = ()=>{
-  return (<div>Enis</div>);
-}
 
-render(<App/>, document.querySelector("#app"));
+render(
+<Provider store={store}><App/></Provider>
+, document.querySelector("#app"));
 console.log("store", store.getState());

@@ -1,25 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { combineReducers, createStore, applyMiddleware} from 'redux';
-import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
-import reducers from './reducers';
-
-let initialState = {
-    enis: "52"
-};
-const todoApp = combineReducers(reducers);
-
-const store = createStore(
-  todoApp,
-  initialState, // optional
-  applyMiddleware(
-    triggerAlias, // optional, see below
-    forwardToRenderer, // IMPORTANT! This goes last
-  ),
-);
-
- replayActionMain(store);
-
- 
+import store from './store/store';
 
 
 let window;

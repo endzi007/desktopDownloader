@@ -10,15 +10,19 @@ class App extends React.Component{
     }
 
     render(){
-        console.log(this.props.enis)
         return (
-            <div>{this.props.enis}</div>
+            <div>
+                <div>{this.props.test}</div>
+                <button onClick={()=>{
+                    this.props.dispatch({type: "TEST_ACTION", payload: this.props.test === "on"? "off": "on"});
+                }}>{this.props.test === "on"? "off": "on"}</button>
+            </div>
         );
     }
 }
 function mapStateToProps(store){
     return{
-        enis: store.enis
+        test: store.test
     }
 }
 export default connect(mapStateToProps)(App);

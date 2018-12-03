@@ -1,5 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import VideoList from './videoList';
+import Button from '@material-ui/core/Button';
+import { withStyles, MuiThemeProvider } from '@material-ui/core';
+import ButtonAppBar from './app/appBar';
+import theme from '../helpers/theme.js';
+
 
 class App extends React.Component{
     constructor(){
@@ -10,13 +16,13 @@ class App extends React.Component{
     }
 
     render(){
+        const { classes } = this.props;
         return (
-            <div>
-                <div>{this.props.test}</div>
-                <button onClick={()=>{
-                    this.props.dispatch({type: "TEST_ACTION", payload: this.props.test === "on"? "off": "on"});
-                }}>{this.props.test === "on"? "off": "on"}</button>
-            </div>
+            <MuiThemeProvider theme={theme}>
+                <div>
+                    <ButtonAppBar />
+                </div>
+            </MuiThemeProvider>
         );
     }
 }
@@ -25,4 +31,4 @@ function mapStateToProps(store){
         test: store.test
     }
 }
-export default connect(mapStateToProps)(App);
+export default  withStyles(null,{withTheme: true})(connect(mapStateToProps)(App));

@@ -1,7 +1,6 @@
 import { combineReducers } from 'redux';
 
 const test = (state = "off", action)=>{
-    console.log("called reducer on main", action.payload);
     switch (action.type) {
         case "TEST_ACTION": 
             state = action.payload;
@@ -11,6 +10,31 @@ const test = (state = "off", action)=>{
     }
 }
 
+const videos = (state=[], action)=>{
+    let newState = [...state];
+    switch (action.type) {
+        case "ADD_VIDEO":
+            newState.push(action.payload);
+            return newState;
+        default:
+            return newState;
+    }
+}
+
+const options = (state ={      
+    downloadFormat: "mp4",
+    downloadFolder: ""
+}, action)=>{
+    switch (action.type) {
+        case "CONFIGURE_OPTIONS":
+            return state;
+    
+        default:
+            return state;
+    }
+}
 export default combineReducers({
-    test: test
+    test: test,
+    videos: videos,
+    options: options
 });

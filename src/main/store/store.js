@@ -3,6 +3,11 @@ import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redu
 import reducers from '../reducers';
 
 let initialState = {
+    options: {
+      downloadFormat: "mp4",
+      downloadFolder: ""
+    },
+    videos: [{url: "1"}, {url: "2"}],
     test: "off"
 };
 
@@ -16,8 +21,6 @@ const store = createStore(
 );
 
  replayActionMain(store);
-    store.subscribe(()=>{
-        console.log(store.getState());
-    });
+ console.log(store.getState());
 
  export default store;

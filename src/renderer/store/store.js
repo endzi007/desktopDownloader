@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
-import reducers from '../reducers';
+import reducers from '../../main/reducers';
 
 const initialState = getInitialStateRenderer();
 

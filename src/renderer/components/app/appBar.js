@@ -2,24 +2,32 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import pasteLink from '../../assets/pasteLink.svg';
-import Fab from '@material-ui/core/Fab';
-
+import Icon from '@material-ui/core/Icon';
+import ControlPoint from '@material-ui/icons/ControlPoint';
+import { IconButton } from '@material-ui/core';
+import Build from '@material-ui/icons/Build';
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
+  root:{
+    padding: 0,
+    margin: 0,
   },
-  grow: {
-    flexGrow: 1,
+  flex:{
+    display: "flex",
+    justifyContent: "space-between",
+    flexGrow: 1
   },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-    backgroundColor: theme.palette.primary.dark
+  buttonIcon: {
+    margin: theme.spacing.unit/4
+  },
+  button: {
+    boxShadow: "none",
+    marginLeft: 0,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -28,12 +36,13 @@ function ButtonAppBar(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{"WebkitAppRegion": "drag"}}>
-        <Toolbar>
-          <Fab variant="extended" className={classes.menuButton}>
-            <img src={pasteLink} />
-            Paste Link
-          </Fab>
-          <Button color="inherit">Login</Button>
+        <Toolbar className={classes.flex} variant="dense">
+          <IconButton variant="contained" className={classes.button}>
+            <ControlPoint color="inherit"  />
+          </IconButton>
+          <IconButton>
+          <Build color="inherit" className={classes.buttonIcon} />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>

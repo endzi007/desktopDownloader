@@ -40,7 +40,7 @@ module.exports =
 /******/
 /******/ 	var hotApplyOnUpdate = true;
 /******/ 	// eslint-disable-next-line no-unused-vars
-/******/ 	var hotCurrentHash = "d9ef2520865b61741d64";
+/******/ 	var hotCurrentHash = "fcbab066b69962f1225f";
 /******/ 	var hotRequestTimeout = 10000;
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule;
@@ -790,7 +790,7 @@ eval("\n\n__webpack_require__(/*! source-map-support/source-map-support.js */ \"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store */ \"./src/main/store/store.js\");\n\n\nlet window;\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", () => {\n  window = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    width: 500,\n    height: 400,\n    frame: false\n  });\n  window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvbWFpbi9pbmRleC5qcz9lNTlhIl0sIm5hbWVzIjpbIndpbmRvdyIsImFwcCIsIm9uIiwiQnJvd3NlcldpbmRvdyIsIndpZHRoIiwiaGVpZ2h0IiwiZnJhbWUiLCJsb2FkVVJMIiwicHJvY2VzcyIsImVudiIsIkVMRUNUUk9OX1dFQlBBQ0tfV0RTX1BPUlQiXSwibWFwcGluZ3MiOiJBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFDQTtBQUdBLElBQUlBLE1BQUo7QUFDQUMsNENBQUcsQ0FBQ0MsRUFBSixDQUFPLE9BQVAsRUFBZ0IsTUFBSTtBQUNoQkYsUUFBTSxHQUFHLElBQUlHLHNEQUFKLENBQWtCO0FBQ3ZCQyxTQUFLLEVBQUUsR0FEZ0I7QUFFdkJDLFVBQU0sRUFBRSxHQUZlO0FBR3ZCQyxTQUFLLEVBQUU7QUFIZ0IsR0FBbEIsQ0FBVDtBQUtBTixRQUFNLENBQUNPLE9BQVAsQ0FBZ0Isb0JBQW1CQyxPQUFPLENBQUNDLEdBQVIsQ0FBWUMseUJBQTBCLEVBQXpFO0FBQ0gsQ0FQRCIsImZpbGUiOiIuL3NyYy9tYWluL2luZGV4LmpzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgYXBwLCBCcm93c2VyV2luZG93IH0gZnJvbSAnZWxlY3Ryb24nO1xyXG5pbXBvcnQgc3RvcmUgZnJvbSAnLi9zdG9yZS9zdG9yZSc7XHJcblxyXG5cclxubGV0IHdpbmRvdztcclxuYXBwLm9uKFwicmVhZHlcIiwgKCk9PntcclxuICAgIHdpbmRvdyA9IG5ldyBCcm93c2VyV2luZG93KHtcclxuICAgICAgICB3aWR0aDogNTAwLFxyXG4gICAgICAgIGhlaWdodDogNDAwLFxyXG4gICAgICAgIGZyYW1lOiBmYWxzZVxyXG4gICAgfSk7XHJcbiAgICB3aW5kb3cubG9hZFVSTChgaHR0cDovL2xvY2FsaG9zdDoke3Byb2Nlc3MuZW52LkVMRUNUUk9OX1dFQlBBQ0tfV0RTX1BPUlR9YClcclxufSk7Il0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./src/main/index.js\n");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _store_store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store/store */ \"./src/main/store/store.js\");\n\n\nlet window;\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", () => {\n  window = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    width: 500,\n    height: 400\n  });\n  window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);\n});//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9zcmMvbWFpbi9pbmRleC5qcz9lNTlhIl0sIm5hbWVzIjpbIndpbmRvdyIsImFwcCIsIm9uIiwiQnJvd3NlcldpbmRvdyIsIndpZHRoIiwiaGVpZ2h0IiwibG9hZFVSTCIsInByb2Nlc3MiLCJlbnYiLCJFTEVDVFJPTl9XRUJQQUNLX1dEU19QT1JUIl0sIm1hcHBpbmdzIjoiQUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQ0E7QUFHQSxJQUFJQSxNQUFKO0FBQ0FDLDRDQUFHLENBQUNDLEVBQUosQ0FBTyxPQUFQLEVBQWdCLE1BQUk7QUFDaEJGLFFBQU0sR0FBRyxJQUFJRyxzREFBSixDQUFrQjtBQUN2QkMsU0FBSyxFQUFFLEdBRGdCO0FBRXZCQyxVQUFNLEVBQUU7QUFGZSxHQUFsQixDQUFUO0FBSUFMLFFBQU0sQ0FBQ00sT0FBUCxDQUFnQixvQkFBbUJDLE9BQU8sQ0FBQ0MsR0FBUixDQUFZQyx5QkFBMEIsRUFBekU7QUFDSCxDQU5EIiwiZmlsZSI6Ii4vc3JjL21haW4vaW5kZXguanMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBhcHAsIEJyb3dzZXJXaW5kb3cgfSBmcm9tICdlbGVjdHJvbic7XHJcbmltcG9ydCBzdG9yZSBmcm9tICcuL3N0b3JlL3N0b3JlJztcclxuXHJcblxyXG5sZXQgd2luZG93O1xyXG5hcHAub24oXCJyZWFkeVwiLCAoKT0+e1xyXG4gICAgd2luZG93ID0gbmV3IEJyb3dzZXJXaW5kb3coe1xyXG4gICAgICAgIHdpZHRoOiA1MDAsXHJcbiAgICAgICAgaGVpZ2h0OiA0MDBcclxuICAgIH0pO1xyXG4gICAgd2luZG93LmxvYWRVUkwoYGh0dHA6Ly9sb2NhbGhvc3Q6JHtwcm9jZXNzLmVudi5FTEVDVFJPTl9XRUJQQUNLX1dEU19QT1JUfWApXHJcbn0pOyJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./src/main/index.js\n");
 
 /***/ }),
 
@@ -825,8 +825,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var redu
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Admin\Documents\programiranje\newDesktopDownloader\node_modules\electron-webpack\out\electron-main-hmr\main-hmr */"./node_modules/electron-webpack/out/electron-main-hmr/main-hmr.js");
-module.exports = __webpack_require__(/*! C:\Users\Admin\Documents\programiranje\newDesktopDownloader\src\main\index.js */"./src/main/index.js");
+__webpack_require__(/*! C:\Users\Admin\Documents\programiranje\electronTest\node_modules\electron-webpack\out\electron-main-hmr\main-hmr */"./node_modules/electron-webpack/out/electron-main-hmr/main-hmr.js");
+module.exports = __webpack_require__(/*! C:\Users\Admin\Documents\programiranje\electronTest\src\main\index.js */"./src/main/index.js");
 
 
 /***/ }),

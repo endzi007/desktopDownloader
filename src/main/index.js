@@ -6,8 +6,7 @@ let window;
 app.on("ready", ()=>{
     window = new BrowserWindow({
         width: 500,
-        height: 400,
-        frame: false
+        height: 400
     });
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
 });

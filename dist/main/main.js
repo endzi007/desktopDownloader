@@ -825,8 +825,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var redu
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Admin\Documents\programiranje\electronTest\node_modules\electron-webpack\out\electron-main-hmr\main-hmr */"./node_modules/electron-webpack/out/electron-main-hmr/main-hmr.js");
-module.exports = __webpack_require__(/*! C:\Users\Admin\Documents\programiranje\electronTest\src\main\index.js */"./src/main/index.js");
+__webpack_require__(/*! C:\Users\Admin\Documents\programiranje\newDesktopDownloader\node_modules\electron-webpack\out\electron-main-hmr\main-hmr */"./node_modules/electron-webpack/out/electron-main-hmr/main-hmr.js");
+module.exports = __webpack_require__(/*! C:\Users\Admin\Documents\programiranje\newDesktopDownloader\src\main\index.js */"./src/main/index.js");
 
 
 /***/ }),

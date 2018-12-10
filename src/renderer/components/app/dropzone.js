@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core';
+import * as actions from '../../actions';
 
 class Dropzone extends React.Component{
     constructor(){
@@ -26,11 +28,12 @@ class Dropzone extends React.Component{
         });
         if(droppedItems){
             for(let x of droppedItems){
-                console.log(x.type);
+                if(x.type==="text/plain"){
+                    x.getAsString((s)=>{
+                        this.props.addVideo(s);
+                    });
+                }
             }
-            e.dataTransfer.items[0].getAsString((s)=>{
-                console.log(s);
-            });
         }
 
     }
@@ -87,4 +90,8 @@ function mapStateToProps(store){
         test: store.test
     }
 }
-export default  withStyles(null,{withTheme: true})(connect(mapStateToProps)(Dropzone));
+
+function mapDispatchToProps(dispatch){
+    return bindActionCreators(actions, dispatch);
+}
+export default  withStyles(null,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Dropzone));

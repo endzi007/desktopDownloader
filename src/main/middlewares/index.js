@@ -1,32 +1,34 @@
 import ytdl from 'ytdl-core';
-import ffmpeg from 'fluent-ffmpeg';
 import fs from 'fs';
-ffmpeg.setFfmpegPath("../../../files/ffmpeg");
+import ffmpeg from 'fluent-ffmpeg';
+import appConfig from '../../../appConfig';
+ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
-var command = ffmpeg();
 
 export default (store)=>(next)=>(action)=>{
     switch(action.type){
         case "ADD_VIDEO":
-            let addVideo = new Promise((res, rej)=>{
-                ytdl.getInfo(action.payload, (err, info)=>{
-                   res(info);
-                });
-            });
-            addVideo.then((info)=>{
-                for(let format of info.formats){
-                    if(format.itag === "140"){
-                        ffmpeg(format.url).toFormat("mp3")
-                        .on("progress",(progres)=>{
-                            console.log(progres);
-                        })
-                        .on("end", ()=>{
-                            console.log(end)
-                        })
-                        .save('./hello.mp3');
-                    }
-                }
+            //let writeStream = fs.createWriteStream("enis.mp3");
+            let videoInfo = ytdl.getBasicInfo(action.payload, null, (err, info)=>{
+                let downloaded = 0;
+                let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4', start: downloaded});
+                ffmpeg(video)
+                .format("mp4")
+                .outputFormat("mp3")
+                .on("end", ()=>{
+                    console.log("end");
+                }).on("error", (err)=>{
+                    console.log(err);
+                }).save(`${info.title}.mp3`);
+    
+                video.on('progress', function(byteLength, downloaded, total) {
+                    let onePercent = total/100;
+                    let percent = Math.round(downloaded/onePercent);
+                    console.log(`${percent}%`);
+                  });
             })
+
+
             break;
         default: 
         break;

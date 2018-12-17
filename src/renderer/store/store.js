@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
-import reducers from '../../main/reducers';
-
+import reducers from '../reducers';
+import videoMiddlewares from '../middlewares';
 const initialState = getInitialStateRenderer();
 
 const store = createStore(
@@ -9,6 +9,7 @@ const store = createStore(
   initialState,
   applyMiddleware(
     forwardToMain, // IMPORTANT! This goes first
+    videoMiddlewares
   ),
 );
 

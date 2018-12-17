@@ -8,7 +8,7 @@ let initialState = {
       downloadFormat: "mp4",
       downloadFolder: ""
     },
-    videos: [{url: "1"}, {url: "2"}],
+    videos: [],
     test: "off"
 };
 

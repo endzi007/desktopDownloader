@@ -13,7 +13,7 @@ const test = (state = "off", action)=>{
 const videos = (state=[], action)=>{
     let newState = [...state];
     switch (action.type) {
-        case "ADD_VIDEO":
+        case "ADD_PROCESSED_VIDEO":
             newState.push(action.payload);
             return newState;
         default:

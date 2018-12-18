@@ -4,6 +4,7 @@ import { withStyles, MuiThemeProvider } from '@material-ui/core';
 import ButtonAppBar from './app/appBar';
 import theme from '../helpers/theme.js';
 import Dropzone from './app/dropzone';
+import VideoList from './videos/videoList';
 
 class App extends React.Component{
     constructor(){
@@ -20,6 +21,7 @@ class App extends React.Component{
                 <div>
                     <ButtonAppBar />
                     <Dropzone />
+                    <VideoList />
                 </div>
             </MuiThemeProvider>
         );

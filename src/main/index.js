@@ -5,8 +5,8 @@ import store from './store/store';
 let window;
 app.on("ready", ()=>{
     window = new BrowserWindow({
-        width: 500,
-        height: 400
+        width: 600,
+        height: 768
     });
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
 });

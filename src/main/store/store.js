@@ -23,6 +23,5 @@ const store = createStore(
 );
 
  replayActionMain(store);
- console.log(store.getState());
 
  export default store;

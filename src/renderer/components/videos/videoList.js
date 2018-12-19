@@ -6,17 +6,29 @@ function mapStateToProps (state){
         videos: state.videos
     }
 }
-export default connect(mapStateToProps)(({videos})=>{
-    
-    let noVideos = "No videos found!";
-    let arrOfVideos = [];
-    
-    if(videos.length !== 0 ){
-        videos.forEach((video, i) => {
-            arrOfVideos.push(<Video key={`${video.url}_${i}`} img={video.thumbnail} title={video.title} url={video.url} downloaded={video.downloaded} />);
-        });
+
+class VideoList extends React.Component{
+    constructor(props){
+        super(props);
+        this.handleDelete = this.handleDelete.bind(this)
     }
-    console.log(arrOfVideos, "videos on videoslist");
-    let renderDiv = videos.length === 0? noVideos : arrOfVideos;
-    return (<div style={{padding: "15px"}}>{renderDiv}</div>);
-});
+    handleDelete(url){
+        this.props.dispatch({type: "DELETE_VIDEO", payload: url})
+    }
+
+    render(){
+        let noVideos = "No videos found!";
+        let arrOfVideos = [];
+        const { videos } = this.props;
+        if(videos.length !== 0 ){
+            videos.forEach((video, i) => {
+                arrOfVideos.push(<Video key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
+            });
+        }
+        let renderDiv = videos.length === 0? noVideos : arrOfVideos;
+    
+        return (<div style={{padding: "15px"}}>{renderDiv}</div>);
+    }
+};
+
+export default connect(mapStateToProps)(VideoList);

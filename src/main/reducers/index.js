@@ -16,6 +16,12 @@ const videos = (state=[], action)=>{
         case "ADD_PROCESSED_VIDEO":
             newState.push(action.payload);
             return newState;
+        case "DELETE_VIDEO":
+            let index = newState.findIndex((vid)=>{
+                return vid.url === action.payload;
+            });
+            newState.splice(index, 1);
+            return newState;
         default:
             return newState;
     }

@@ -17,9 +17,14 @@ export default (store)=>(next)=>(action)=>{
                     title: "",
                     thumbnail: "",
                     downloaded: 0,
-                    url: ""
+                    url: "",
+                    duration: ""
                 }
                 ytdl.getBasicInfo(action.payload, (err, info)=>{
+                    let date = new Date(null);
+                    date.setSeconds(info.length_seconds); // specify value for SECONDS here
+                    let duration = date.toISOString().substr(11, 8);
+                    videoObj.duration = duration;
                     videoObj.title = info.title;
                     videoObj.thumbnail = info.thumbnail_url;
                     videoObj.url = action.payload;

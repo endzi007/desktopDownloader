@@ -4,3 +4,10 @@ export const addVideo = (url)=>{
         payload: url
     }
 }
+
+export const deleteVideo = (url)=>{
+    return {
+        type: "DELETE_VIDEO",
+        payload: url
+    }
+}

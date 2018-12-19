@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent, CardMedia, LinearProgress } from '@material-ui/core';
+import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const styles = (theme) => ({
     card: { 
@@ -17,23 +18,33 @@ const styles = (theme) => ({
         display: "flex",
         justifyContent: "space-between",
         width: "100%",
-        alignContent: "flex-start"
+        alignContent: "center",
+        padding: "0 20px"
     },
     progress:{
         position: "absolute",
         bottom: 0,
         width: "100%"
+    },
+    margin: {
+        padding: 0,
+        marginTop: "15px"
     }
 });
 
-const SingleVideo = ({ img, title, url, downloaded, handleDelete, classes})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration})=>{
     return (
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="primary" variant="determinate" value={20} />
-            <CardMedia className={classes.cover} image={img} title={title}/>
+            <CardMedia className={classes.cover} image={thumbnail} title={title}/>
             <CardContent className={classes.content}>
-                <Typography>{title}</Typography>
-                <Typography>Delete</Typography>
+                <div>
+                    <Typography>{title}</Typography>
+                    <Typography>Video duration: {duration}</Typography>
+                </div>
+                <IconButton aria-label="Delete" className={classes.margin}>
+                    <DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" />
+                </IconButton>
             </CardContent>
         </Card>
     );

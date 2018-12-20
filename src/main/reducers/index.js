@@ -22,6 +22,8 @@ const videos = (state=[], action)=>{
             });
             newState.splice(index, 1);
             return newState;
+        case "DOWNLOAD_COUNTER": 
+            newState[action.payload.index].downloaded = action.payload.value;
         default:
             return newState;
     }

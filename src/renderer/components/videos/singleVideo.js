@@ -35,7 +35,7 @@ const styles = (theme) => ({
 const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration})=>{
     return (
         <Card className={classes.card}>
-            <LinearProgress className={classes.progress} color="primary" variant="determinate" value={20} />
+            <LinearProgress className={classes.progress} color="primary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title}/>
             <CardContent className={classes.content}>
                 <div>

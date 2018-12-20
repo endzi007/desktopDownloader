@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import ControlPoint from '@material-ui/icons/ControlPoint';
 import { IconButton } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
+import { connect } from 'react-redux';
 const styles = theme => ({
   root:{
     padding: 0,
@@ -34,7 +35,9 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
       <AppBar position="static" style={{"WebkitAppRegion": "drag"}}>
         <Toolbar className={classes.flex} variant="dense">
-          <IconButton variant="contained" className={classes.button}>
+          <IconButton variant="contained" onClick={()=>{
+            props.dispatch({ type: "DOWNLOAD_VIDEO", payload: props.videos[0].url})
+          }} className={classes.button}>
             <ControlPoint color="inherit"  />
           </IconButton>
           <IconButton>
@@ -46,5 +49,10 @@ function ButtonAppBar(props) {
   );
 }
 
+function mapStateToProps(store){
+    return {
+      videos: store.videos
+    }
+}
 
-export default withStyles(styles)(ButtonAppBar);
+export default withStyles(styles)(connect(mapStateToProps)(ButtonAppBar));

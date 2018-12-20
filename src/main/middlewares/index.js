@@ -10,6 +10,7 @@ export default (store)=>(next)=>(action)=>{
         case "ADD_VIDEO":
             //let writeStream = fs.createWriteStream("enis.mp3");
             //check if is valid url 
+            let formatForDownload = store.getState().options.downloadFormat;
             let validateUrl = ytdl.validateURL(action.payload);
             if(validateUrl){
                 //let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4'});
@@ -18,9 +19,10 @@ export default (store)=>(next)=>(action)=>{
                     thumbnail: "",
                     downloaded: 0,
                     url: "",
-                    duration: ""
+                    duration: "",
+                    downloadLinks: []
                 }
-                ytdl.getBasicInfo(action.payload, (err, info)=>{
+                ytdl.getInfo(action.payload, (err, info)=>{
                     let date = new Date(null);
                     date.setSeconds(info.length_seconds); // specify value for SECONDS here
                     let duration = date.toISOString().substr(11, 8);
@@ -29,8 +31,10 @@ export default (store)=>(next)=>(action)=>{
                     videoObj.thumbnail = info.thumbnail_url;
                     videoObj.url = action.payload;
                     action.payload = videoObj;
-                    action.type = "ADD_PROCESSED_VIDEO"
+                    console.log(info.formats);
+                    action.type = "ADD_PROCESSED_VIDEO",
                     next(action);
+
                 });
             } else {
                 action.type = "CANCELED_ACTION";
@@ -38,7 +42,8 @@ export default (store)=>(next)=>(action)=>{
             next(action);
             break;
         case "DOWNLOAD_VIDEO":
-            /* let downloaded = 0;
+            
+            let downloaded = 0;
             let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4', start: downloaded});
 
             ffmpeg(video)
@@ -48,13 +53,17 @@ export default (store)=>(next)=>(action)=>{
                 console.log("end");
             }).on("error", (err)=>{
                 console.log(err);
-            }).save(`${info.title}.mp3`);
+            }).save(`enis.mp3`);
 
             video.on('progress', function(byteLength, downloaded, total) {
                 let onePercent = total/100;
                 let percent = Math.round(downloaded/onePercent);
                 console.log(`${percent}%`);
-            }); */
+                let video = store.getState().videos.findIndex((vid)=>{
+                    return vid.url === action.payload;
+                });
+                store.dispatch({type: "DOWNLOAD_COUNTER", payload: {index: video, value: percent}})
+            });
             break;            
         default: 
         break;

@@ -2,6 +2,7 @@ import { createStore, applyMiddleware} from 'redux';
 import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
 import reducers from '../reducers';
 import videoMiddlewares from '../middlewares';
+import uiMiddleware from '../middlewares/uiMiddleware';
 
 let initialState = {
     options: {
@@ -9,7 +10,10 @@ let initialState = {
       downloadFolder: ""
     },
     videos: [],
-    test: "off"
+    test: "off",
+    uiConfig: {
+      showConfig: false
+    }
 };
 
 const store = createStore(
@@ -18,6 +22,7 @@ const store = createStore(
   applyMiddleware(
     triggerAlias, // optional, see below
     videoMiddlewares,
+    uiMiddleware,
     forwardToRenderer, // IMPORTANT! This goes last
   ),
 );

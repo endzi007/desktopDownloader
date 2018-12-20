@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
+import uiReducer from './uiReducer';
+import optionsReducer from './optionsReducer';
 
 const test = (state = "off", action)=>{
     switch (action.type) {
@@ -36,13 +38,17 @@ const options = (state ={
     switch (action.type) {
         case "CONFIGURE_OPTIONS":
             return state;
-    
         default:
             return state;
     }
 }
+
+
+
 export default combineReducers({
     test: test,
     videos: videos,
-    options: options
+    options: options,
+    uiConfig: uiReducer,
+    options: optionsReducer
 });

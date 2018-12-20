@@ -41,7 +41,9 @@ function ButtonAppBar(props) {
             <ControlPoint color="inherit"  />
           </IconButton>
           <IconButton>
-          <Build color="inherit" className={classes.buttonIcon} />
+          <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
+            props.dispatch({type: "SHOW_CONFIG", payload: true, meta: {scope: "local"}})
+          }} />
           </IconButton>
         </Toolbar>
       </AppBar>

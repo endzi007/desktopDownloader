@@ -2,6 +2,7 @@ import ytdl from 'ytdl-core';
 import fs from 'fs';
 import ffmpeg from 'fluent-ffmpeg';
 import appConfig from '../appConfig';
+import { app } from 'electron';
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
 
@@ -42,10 +43,12 @@ export default (store)=>(next)=>(action)=>{
             next(action);
             break;
         case "DOWNLOAD_VIDEO":
-            
+            let state = store.getState();
             let downloaded = 0;
             let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4', start: downloaded});
-
+            let videoInStoreIndex = store.getState().videos.findIndex((vid)=>{
+                return vid.url === action.payload;
+            });
             ffmpeg(video)
             .format("mp4")
             .outputFormat("mp3")
@@ -53,16 +56,12 @@ export default (store)=>(next)=>(action)=>{
                 console.log("end");
             }).on("error", (err)=>{
                 console.log(err);
-            }).save(`enis.mp3`);
+            }).save(`${state.options.downloadFolder}\\${store.getState().videos[videoInStoreIndex].title}.mp3`);
 
             video.on('progress', function(byteLength, downloaded, total) {
                 let onePercent = total/100;
                 let percent = Math.round(downloaded/onePercent);
-                console.log(`${percent}%`);
-                let video = store.getState().videos.findIndex((vid)=>{
-                    return vid.url === action.payload;
-                });
-                store.dispatch({type: "DOWNLOAD_COUNTER", payload: {index: video, value: percent}})
+                store.dispatch({type: "DOWNLOAD_COUNTER", payload: {index: videoInStoreIndex, value: percent}})
             });
             break;            
         default: 

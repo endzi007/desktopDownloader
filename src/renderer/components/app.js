@@ -5,7 +5,7 @@ import ButtonAppBar from './app/appBar';
 import theme from '../helpers/theme.js';
 import Dropzone from './app/dropzone';
 import VideoList from './videos/videoList';
-
+import ConfigModal from './app/configModal';
 class App extends React.Component{
     constructor(){
         super();
@@ -22,6 +22,7 @@ class App extends React.Component{
                     <ButtonAppBar />
                     <Dropzone />
                     <VideoList />
+                    <ConfigModal />
                 </div>
             </MuiThemeProvider>
         );

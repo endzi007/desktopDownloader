@@ -1,22 +1,25 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
 import reducers from '../../main/reducers';
-//import middlewares from '../../main/middlewares';
+import { createLogger } from 'redux-logger';
 const initialState = getInitialStateRenderer();
 
+const logger = createLogger({
+  collapsed: true
+});
 const store = createStore(
   reducers,
   initialState,
   applyMiddleware(
-    forwardToMain // IMPORTANT! This goes first
-    ),
+    forwardToMain, // IMPORTANT! This goes first,
+    logger
+    )
 );
 
 store.subscribe(()=>{
-    console.log("store updated", store.getState());
+
 });
 
-console.log(store.getState(), "initial state");
 
 replayActionRenderer(store);
 

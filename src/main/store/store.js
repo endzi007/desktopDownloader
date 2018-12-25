@@ -6,8 +6,12 @@ import uiMiddleware from '../middlewares/uiMiddleware';
 
 let initialState = {
     options: {
-      downloadFormat: "mp4",
-      downloadFolder: ""
+      downloadFormat: "mp3",
+      downloadFolder: "",
+      parallelDownloads: {
+        limit: 5, 
+        inProgress: 0
+      }
     },
     videos: [],
     test: "off",

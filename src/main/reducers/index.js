@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import uiReducer from './uiReducer';
 import optionsReducer from './optionsReducer';
+import { ADD_VIDEO_TO_PLAYLIST, REMOVE_VIDEO_FROM_PLAYLIST, DOWNLOAD_PROGRESS_COUNTER} from '../actions';
 
 const test = (state = "off", action)=>{
     switch (action.type) {
@@ -15,16 +16,16 @@ const test = (state = "off", action)=>{
 const videos = (state=[], action)=>{
     let newState = [...state];
     switch (action.type) {
-        case "ADD_PROCESSED_VIDEO":
+        case `${ADD_VIDEO_TO_PLAYLIST}_PROCESSED`:
             newState.push(action.payload);
             return newState;
-        case "DELETE_VIDEO":
+        case REMOVE_VIDEO_FROM_PLAYLIST:
             let index = newState.findIndex((vid)=>{
                 return vid.url === action.payload;
             });
             newState.splice(index, 1);
             return newState;
-        case "DOWNLOAD_COUNTER": 
+        case DOWNLOAD_PROGRESS_COUNTER: 
             newState[action.payload.index].downloaded = action.payload.value;
         default:
             return newState;

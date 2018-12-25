@@ -1,8 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Button, Dialog, ListItemText, ListItem, List, Divider, AppBar, Toolbar, IconButton, Typography, Slide } from '@material-ui/core';
+import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
+import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
+import { showOpenDialog, showConfigPanel } from '../../../main/actions/uiActions';
+
 
 
 const styles = {
@@ -12,6 +16,11 @@ const styles = {
   flex: {
     flex: 1,
   },
+  listItem: {
+    display: "grid",
+    gridTemplateColumns: "60px auto",
+    gridGap: "20px"
+  }
 };
 
 function Transition(props) {
@@ -25,11 +34,11 @@ class ConfigModal extends React.Component {
     }
 
   handleClose () {
-    this.props.dispatch({type: "SHOW_CONFIG", payload: false, meta: {scope: "local"}})
+    this.props.showConfigPanel(false);
   };
 
   render() {
-      console.log(this.props, "props on configModal");
+
     const { classes } = this.props;
     return (
       <div>
@@ -53,15 +62,24 @@ class ConfigModal extends React.Component {
             </Toolbar>
           </AppBar>
           <List>
-            <ListItem button onClick={()=>{
-                this.props.dispatch({type: "SHOW_OPEN_DIALOG", payload: true})
-              }}>
-              <ListItemText  primary="Phone ringtone" secondary="Titania" />
+            <ListItem className={classes.listItem}>
+              <Button  onClick={()=>{
+                this.props.showOpenDialog(true);
+              }} variant="contained" size="small">
+                  <FolderIcon className={classes.icon}/>
+              </Button>
+              {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
             </ListItem>
             <Divider />
-            <ListItem button>
-              <ListItemText primary="Default notification ringtone" secondary="Tethys" />
+            <ListItem className={classes.listItem}>
+              <Button  onClick={()=>{
+                this.props.showOpenDialog(true);
+              }} variant="contained" size="small">
+                  <FolderIcon className={classes.icon}/>
+              </Button>
+              {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
             </ListItem>
+
           </List>
         </Dialog>
       </div>
@@ -76,7 +94,15 @@ ConfigModal.propTypes = {
 
 function mapStateToProps(state){
     return {
-        uiConfig: state.uiConfig
+        uiConfig: state.uiConfig,
+        options: state.options
     }
 }
-export default withStyles(styles)(connect(mapStateToProps)(ConfigModal));
+
+const mapDispatchToProps = {
+    showOpenDialog: showOpenDialog,
+    showConfigPanel: showConfigPanel
+}
+
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ConfigModal));

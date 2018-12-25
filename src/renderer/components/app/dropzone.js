@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { withStyles } from '@material-ui/core';
-import * as actions from '../../actions';
+import { addVideoToPlaylist } from '../../../main/actions';
 
 class Dropzone extends React.Component{
     constructor(){
@@ -30,7 +29,7 @@ class Dropzone extends React.Component{
             for(let x of droppedItems){
                 if(x.type==="text/plain"){
                     x.getAsString((s)=>{
-                        this.props.addVideo(s);
+                        this.props.addVideoToPlaylist(s)
                     });
                 }
             }
@@ -38,7 +37,6 @@ class Dropzone extends React.Component{
 
     }
     onDragStart(e){
-        console.log("on drag stgart");
 
     }
     onDragOver(e){
@@ -58,7 +56,6 @@ class Dropzone extends React.Component{
         });
     }
     onDragLeave(e){
-        console.log("on drag leave");
         e.preventDefault();
         this.setState((old, newState)=>{
             return {
@@ -91,7 +88,7 @@ function mapStateToProps(store){
     }
 }
 
-function mapDispatchToProps(dispatch){
-    return bindActionCreators(actions, dispatch);
+const mapDispatchToProps = {
+    addVideoToPlaylist
 }
 export default  withStyles(null,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Dropzone));

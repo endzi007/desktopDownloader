@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
+import { REMOVE_VIDEO_FROM_PLAYLIST } from '../../../main/actions';
 function mapStateToProps (state){
     return {
         videos: state.videos
@@ -13,7 +14,7 @@ class VideoList extends React.Component{
         this.handleDelete = this.handleDelete.bind(this)
     }
     handleDelete(url){
-        this.props.dispatch({type: "DELETE_VIDEO", payload: url})
+        this.props.dispatch({type: REMOVE_VIDEO_FROM_PLAYLIST, payload: url})
     }
 
     render(){

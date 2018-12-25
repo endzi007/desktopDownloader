@@ -6,6 +6,8 @@ import ControlPoint from '@material-ui/icons/ControlPoint';
 import { IconButton } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
 import { connect } from 'react-redux';
+import { startVideoDownload } from '../../../main/actions';
+import { showConfigPanel } from '../../../main/actions/uiActions';
 const styles = theme => ({
   root:{
     padding: 0,
@@ -36,13 +38,13 @@ function ButtonAppBar(props) {
       <AppBar position="static" style={{"WebkitAppRegion": "drag"}}>
         <Toolbar className={classes.flex} variant="dense">
           <IconButton variant="contained" onClick={()=>{
-            props.dispatch({ type: "DOWNLOAD_VIDEO", payload: props.videos[0].url})
+            props.startVideoDownload(props.videos[0].url);
           }} className={classes.button}>
-            <ControlPoint color="inherit"  />
+            <ControlPoint color="inherit" />
           </IconButton>
           <IconButton>
           <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
-            props.dispatch({type: "SHOW_CONFIG", payload: true, meta: {scope: "local"}})
+            props.showConfigPanel(true, "local");
           }} />
           </IconButton>
         </Toolbar>
@@ -56,5 +58,11 @@ function mapStateToProps(store){
       videos: store.videos
     }
 }
+const  mapDispatchToProps = {
+  showConfigPanel,
+  startVideoDownload
+};
+  
 
-export default withStyles(styles)(connect(mapStateToProps)(ButtonAppBar));
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ButtonAppBar));

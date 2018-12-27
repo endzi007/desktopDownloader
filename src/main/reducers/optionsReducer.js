@@ -1,4 +1,4 @@
-import { PARALLEL_DOWNLOADS_CHANGE, CHANGE_SAVE_FOLDER } from '../actions/optionsActions';
+import { PARALLEL_DOWNLOADS_CHANGE, CHANGE_SAVE_FOLDER, CHANGE_DOWNLOAD_FORMAT } from '../actions/optionsActions';
 let defaultState = {
     downloadFormat: "mp3",
     downloadFolder: "",
@@ -15,7 +15,10 @@ export default (state = defaultState, action)=>{
             return newState;
         case  PARALLEL_DOWNLOADS_CHANGE:
             action.payload === "INC"? newState.parallel.inProgress++: newState.parallel.inProgress--;
-            return newState; 
+            return newState;
+        case  CHANGE_DOWNLOAD_FORMAT: 
+            newState.downloadFormat = action.payload;
+            return newState;
         default:
             return newState;
     }

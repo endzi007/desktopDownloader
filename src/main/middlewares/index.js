@@ -10,9 +10,7 @@ ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 export default (store)=>(next)=>(action)=>{
     switch(action.type){
         case ADD_VIDEO_TO_PLAYLIST:
-            //let writeStream = fs.createWriteStream("enis.mp3");
             //check if is valid url 
-            let formatForDownload = store.getState().options.downloadFormat;
             let validateUrl = ytdl.validateURL(action.payload);
             if(validateUrl){
                 //let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4'});
@@ -34,6 +32,16 @@ export default (store)=>(next)=>(action)=>{
                     videoObj.url = action.payload;
                     action.payload = videoObj;
                     action.type = `${ADD_VIDEO_TO_PLAYLIST}_PROCESSED`,
+                    info.formats.forEach((format)=>{
+                        if(format.container === "mp4"){ 
+                            console.log("audioBitrate", format.audioBitrate);
+                            console.log("itag", format.itag);
+                            console.log("encoding", format.encoding);
+                            console.log("type", format.type);
+                            console.log("container", format.container);
+                            console.log("========================");
+                        }
+                    });
                     next(action);
 
                 });

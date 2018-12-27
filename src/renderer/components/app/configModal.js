@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Button, Dialog, ListItemText, ListItem, List, Divider, AppBar, Toolbar, IconButton, Typography, Slide } from '@material-ui/core';
+import { withStyles, Button, Dialog, Select, ListItem, MenuItem, List, Divider, AppBar, Toolbar, IconButton, Typography, Slide } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
 import { showOpenDialog, showConfigPanel } from '../../../main/actions/uiActions';
+import { changeDownloadFormat } from '../../../main/actions/optionsActions';
 
 
 
@@ -31,11 +32,16 @@ class ConfigModal extends React.Component {
     constructor(props){
         super(props);
         this.handleClose = this.handleClose.bind(this);
-    }
+        this.handleChange = this.handleChange.bind(this);
+      }
 
   handleClose () {
     this.props.showConfigPanel(false);
   };
+
+  handleChange(e){
+    this.props.changeDownloadFormat(e.target.value);
+  }
 
   render() {
 
@@ -72,12 +78,17 @@ class ConfigModal extends React.Component {
             </ListItem>
             <Divider />
             <ListItem className={classes.listItem}>
-              <Button  onClick={()=>{
-                this.props.showOpenDialog(true);
-              }} variant="contained" size="small">
-                  <FolderIcon className={classes.icon}/>
-              </Button>
-              {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
+              Download format: 
+              <Select
+                value={this.props.options.downloadFormat}
+                onChange={this.handleChange}
+              >
+                <MenuItem value="">
+                  <em>Select format</em>
+                </MenuItem>
+                <MenuItem value="mp3">MP3</MenuItem>
+                <MenuItem value="mp4">MP4</MenuItem>
+              </Select>
             </ListItem>
 
           </List>
@@ -101,7 +112,9 @@ function mapStateToProps(state){
 
 const mapDispatchToProps = {
     showOpenDialog: showOpenDialog,
-    showConfigPanel: showConfigPanel
+    showConfigPanel: showConfigPanel,
+    changeDownloadFormat: changeDownloadFormat
+
 }
 
 

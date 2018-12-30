@@ -51,7 +51,9 @@ export default (store)=>(next)=>(action)=>{
             next(action);
             break;
         case START_VIDEO_DOWNLOAD:
-            downloadAndConvert(store, action);
+            for(let i = 0; i<store.getState().videos.length; i++){
+                downloadAndConvert(store, i);
+            }
             break;            
         default: 
         break;

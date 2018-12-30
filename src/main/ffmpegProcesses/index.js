@@ -5,18 +5,16 @@ import { DOWNLOAD_PROGRESS_COUNTER } from '../actions';
 import fs from 'fs';
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
-export default (store, action)=>{
+export default (store, index)=>{
         let state = store.getState();
+        let storeVideo = state.videos[index];
         let downloaded = 0;
         let typeOfFormat = "";
 
-        let videoInStoreIndex = state.videos.findIndex((vid)=>{
-            return vid.url === action.payload;
-        });
-        let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4', start: downloaded});
+        let video = ytdl(storeVideo.url, { filter: (format) => format.container === 'mp4', start: downloaded});
         if(state.options.downloadFormat !== "mp3"){
             let ddd = fs.createWriteStream(
-                `${state.options.downloadFolder}\\${state.videos[videoInStoreIndex].title}.mp4`
+                `${state.options.downloadFolder}\\${storeVideo.title}.mp4`
             );
             video.on("data", (chunk)=>{
                 ddd.write(chunk, ()=>{});
@@ -32,12 +30,16 @@ export default (store, action)=>{
                 console.log("finished");
             }).on("error", (err)=>{
                 console.log(err);
-            }).save(`${state.options.downloadFolder}\\${state.videos[videoInStoreIndex].title}.mp3`);            
+            }).save(`${state.options.downloadFolder}\\${storeVideo.title}.mp3`);            
         } 
-
+        let downloadedContent = 0;
         video.on('progress', function(byteLength, downloaded, total) {
-            let onePercent = total/100;
-            let percent = Math.round(downloaded/onePercent);
-            store.dispatch({type: DOWNLOAD_PROGRESS_COUNTER, payload: {index: videoInStoreIndex, value: percent}})
+                downloadedContent++;
+                if(downloadedContent === 10){
+                    store.dispatch({type: DOWNLOAD_PROGRESS_COUNTER, payload: {index: index, value: (downloaded/total)*100}});
+                    downloadedContent = 0;
+                } else if (downloaded === total){
+                    store.dispatch({type: DOWNLOAD_PROGRESS_COUNTER, payload: {index: index, value: (downloaded/total)*100}});
+                }
         });
 }

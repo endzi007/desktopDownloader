@@ -1,14 +1,14 @@
-export const PARALLEL_DOWNLOADS_CHANGE = "PARALLEL_DOWNLOAD_CHANGE";
+export const INCREASE_LIMIT = "INCREASE_LIMIT";
 export const CHANGE_SAVE_FOLDER = "CHANGE_SAVE_FOLDER";
 export const SHOW_OPEN_DIALOG = "SHOW_OPEN_DIALOG";
 export const CHANGE_DOWNLOAD_FORMAT = "CHANGE_DOWNLOAD_FORMAT";
+export const SAVE_TO_LOCALSTORAGE = "SAVE_TO_LOCALSTORAGE";
 
 
-export const parallelDownloadChange = (val)=>{
+export const increaseLimit = ()=>{
     //val should be INC or DEC to increment or decrement queque
     return {
-        type: PARALLEL_DOWNLOADS_CHANGE, 
-        payload: val
+        type: INCREASE_LIMIT, 
     }
 }
 
@@ -29,5 +29,12 @@ export const changeDownloadFormat = (format)=>{
     return {
         type: CHANGE_DOWNLOAD_FORMAT,
         payload: format
+    }
+}
+
+export const saveToLocalStorage = (state)=>{
+    return {
+        type: SAVE_TO_LOCALSTORAGE, 
+        payload: state
     }
 }

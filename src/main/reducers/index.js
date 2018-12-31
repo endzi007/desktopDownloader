@@ -27,6 +27,7 @@ const videos = (state=[], action)=>{
             return newState;
         case DOWNLOAD_PROGRESS_COUNTER: 
             newState[action.payload.index].downloaded = action.payload.value;
+            
         default:
             return newState;
     }

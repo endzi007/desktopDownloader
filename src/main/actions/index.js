@@ -2,6 +2,7 @@ export const ADD_VIDEO_TO_PLAYLIST = "ADD_VIDEO_TO_PLAYLIST";
 export const REMOVE_VIDEO_FROM_PLAYLIST = "REMOVE_VIDEO";
 export const DOWNLOAD_PROGRESS_COUNTER = "DOWNLOAD_PROGRESS_COUNTER";
 export const START_VIDEO_DOWNLOAD = "START_VIDEO_DOWNLOAD";
+export const DOWNLOAD_NEXT_VIDEO = "DOWNLOAD_NEXT_VIDEO";
 
 export const addVideoToPlaylist = (url)=>{
     return {
@@ -24,9 +25,14 @@ export const downloadProgressCounter = (url)=>{
     }
 }
 
-export const startVideoDownload = (index)=>{
+export const startVideoDownload = ()=>{
     return {
-        type: START_VIDEO_DOWNLOAD,
-        payload: index
+        type: START_VIDEO_DOWNLOAD
+    }
+}
+
+export const downloadNextVideo = ()=>{
+    return {
+        type: DOWNLOAD_NEXT_VIDEO
     }
 }

@@ -8,9 +8,10 @@ let initialState = {
     options: {
       downloadFormat: "mp3",
       downloadFolder: "",
-      parallelDownloads: {
-        limit: 5, 
-        inProgress: 0
+      parallel: {
+          limit: 3, 
+          inProgress: 0,
+          index: 0
       }
     },
     videos: [],
@@ -31,6 +32,9 @@ const store = createStore(
   ),
 );
 
+store.subscribe((e)=>{
+  console.log(e);
+});
  replayActionMain(store);
 
  export default store;

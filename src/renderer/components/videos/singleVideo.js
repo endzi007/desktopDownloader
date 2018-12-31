@@ -36,12 +36,12 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes,
     let modifiedTitle = title.length > 50 ? `${title.substr(0, 47)}...`: title;
     return (
         <Card className={classes.card}>
-            <LinearProgress className={classes.progress} color="primary" variant="determinate" value={downloaded} />
+            <LinearProgress className={classes.progress} color="primary" variant="determinate" value={downloaded.percent} />
             <CardMedia className={classes.cover} image={thumbnail} title={title}/>
             <CardContent className={classes.content}>
                 <div>
                     <Typography>{modifiedTitle}</Typography>
-                    <Typography>Video duration: {duration}</Typography>
+                    <Typography>{duration} | { `${Math.round(downloaded.downloaded/1000) || ""} / ${Math.round(downloaded.total/1000) || ""}`}</Typography>
                 </div>
                 <IconButton aria-label="Delete" className={classes.margin}>
                     <DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" />

@@ -1,10 +1,11 @@
-import { PARALLEL_DOWNLOADS_CHANGE, CHANGE_SAVE_FOLDER, CHANGE_DOWNLOAD_FORMAT } from '../actions/optionsActions';
+import { INCREASE_LIMIT, CHANGE_SAVE_FOLDER, CHANGE_DOWNLOAD_FORMAT } from '../actions/optionsActions';
 let defaultState = {
     downloadFormat: "mp3",
     downloadFolder: "",
     parallel: {
-        limit: 5, 
-        inProgress: 0
+        limit: 3, 
+        inProgress: 0,
+        index: 0
     }
   };
 export default (state = defaultState, action)=>{
@@ -13,8 +14,8 @@ export default (state = defaultState, action)=>{
         case CHANGE_SAVE_FOLDER:
             newState.downloadFolder = action.payload; 
             return newState;
-        case  PARALLEL_DOWNLOADS_CHANGE:
-            action.payload === "INC"? newState.parallel.inProgress++: newState.parallel.inProgress--;
+        case  INCREASE_LIMIT:
+             newState.parallel.index++;
             return newState;
         case  CHANGE_DOWNLOAD_FORMAT: 
             newState.downloadFormat = action.payload;

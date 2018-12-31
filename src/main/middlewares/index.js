@@ -2,12 +2,14 @@ import ytdl from 'ytdl-core';
 import ffmpeg from 'fluent-ffmpeg';
 import appConfig from '../appConfig';
 import downloadAndConvert from '../ffmpegProcesses';
-import { ADD_VIDEO_TO_PLAYLIST, DOWNLOAD_PROGRESS_COUNTER, START_VIDEO_DOWNLOAD } from '../actions';
+import { ADD_VIDEO_TO_PLAYLIST, DOWNLOAD_PROGRESS_COUNTER, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
+import { INCREASE_LIMIT } from '../actions/optionsActions';
 
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
 
 export default (store)=>(next)=>(action)=>{
+    let state = store.getState();
     switch(action.type){
         case ADD_VIDEO_TO_PLAYLIST:
             //check if is valid url 
@@ -32,18 +34,8 @@ export default (store)=>(next)=>(action)=>{
                     videoObj.url = action.payload;
                     action.payload = videoObj;
                     action.type = `${ADD_VIDEO_TO_PLAYLIST}_PROCESSED`,
-                    info.formats.forEach((format)=>{
-                        if(format.container === "mp4"){ 
-                            console.log("audioBitrate", format.audioBitrate);
-                            console.log("itag", format.itag);
-                            console.log("encoding", format.encoding);
-                            console.log("type", format.type);
-                            console.log("container", format.container);
-                            console.log("========================");
-                        }
-                    });
+                    console.log(info);
                     next(action);
-
                 });
             } else {
                 action.type = "CANCELED_ACTION";
@@ -51,10 +43,20 @@ export default (store)=>(next)=>(action)=>{
             next(action);
             break;
         case START_VIDEO_DOWNLOAD:
-            for(let i = 0; i<store.getState().videos.length; i++){
-                downloadAndConvert(store, i);
+            for(let i = state.options.parallel.index; i<state.options.parallel.limit; i++){
+                downloadAndConvert(store, i).then(()=>{
+                    store.dispatch({ type: DOWNLOAD_NEXT_VIDEO });
+                });
             }
-            break;            
+            break;  
+        
+        case DOWNLOAD_NEXT_VIDEO:
+            if(state.options.parallel.index <= state.videos.length){
+                downloadAndConvert(store, i).then(()=>{
+                    store.dispatch({ type: DOWNLOAD_NEXT_VIDEO });
+                });
+            }
+            break;
         default: 
         break;
     }

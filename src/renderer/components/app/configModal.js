@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
 import { showOpenDialog, showConfigPanel } from '../../../main/actions/uiActions';
-import { changeDownloadFormat } from '../../../main/actions/optionsActions';
+import { changeDownloadFormat, saveToLocalStorage } from '../../../main/actions/optionsActions';
 
 
 
@@ -35,8 +35,18 @@ class ConfigModal extends React.Component {
         this.handleChange = this.handleChange.bind(this);
       }
 
-  handleClose () {
-    this.props.showConfigPanel(false);
+  handleClose (setStorage) {
+    if(setStorage){
+      this.props.showConfigPanel(false);
+      try {
+        console.log(this.props);
+        localStorage.setItem("options", JSON.stringify(this.props.options));
+      } catch (error) {
+        console.log(error, "my error");
+      }
+    } else {
+      this.props.showConfigPanel(false);
+    }
   };
 
   handleChange(e){
@@ -62,7 +72,7 @@ class ConfigModal extends React.Component {
               <Typography variant="h6" color="inherit" className={classes.flex}>
                 Config
               </Typography>
-              <Button color="inherit" onClick={this.handleClose}>
+              <Button color="inherit" onClick={this.handleClose.bind(null, true)}>
                 save
               </Button>
             </Toolbar>
@@ -106,14 +116,16 @@ ConfigModal.propTypes = {
 function mapStateToProps(state){
     return {
         uiConfig: state.uiConfig,
-        options: state.options
+        options: state.options,
+        store: state
     }
 }
 
 const mapDispatchToProps = {
     showOpenDialog: showOpenDialog,
     showConfigPanel: showConfigPanel,
-    changeDownloadFormat: changeDownloadFormat
+    changeDownloadFormat: changeDownloadFormat,
+    saveToLocalStorage: saveToLocalStorage
 
 }
 

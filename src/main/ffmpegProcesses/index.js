@@ -2,10 +2,13 @@ import ytdl from 'ytdl-core';
 import ffmpeg from 'fluent-ffmpeg';
 import appConfig from '../appConfig';
 import { DOWNLOAD_PROGRESS_COUNTER } from '../actions';
+import { INCREASE_LIMIT } from '../actions/optionsActions';
 import fs from 'fs';
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
 export default (store, index)=>{
+    return new Promise((resolve, reject)=>{
+        store.dispatch({ type: INCREASE_LIMIT})
         let state = store.getState();
         let storeVideo = state.videos[index];
         let downloaded = 0;
@@ -21,13 +24,14 @@ export default (store, index)=>{
             })
             video.on("end", ()=>{
                 ddd.end();
+                resolve();
             })
         } else {
             ffmpeg(video)
             .format("mp4")
             .outputFormat("mp3")
             .on("end", ()=>{
-                console.log("finished");
+                resolve();
             }).on("error", (err)=>{
                 console.log(err);
             }).save(`${state.options.downloadFolder}\\${storeVideo.title}.mp3`);            
@@ -36,10 +40,32 @@ export default (store, index)=>{
         video.on('progress', function(byteLength, downloaded, total) {
                 downloadedContent++;
                 if(downloadedContent === 10){
-                    store.dispatch({type: DOWNLOAD_PROGRESS_COUNTER, payload: {index: index, value: (downloaded/total)*100}});
+                    store.dispatch({
+                        type: DOWNLOAD_PROGRESS_COUNTER, 
+                        payload: {
+                            index: index, 
+                            value: {
+                                percent: (downloaded/total)*100, 
+                                total: total, 
+                                downloaded: downloaded
+                            }
+                        }
+                    });
                     downloadedContent = 0;
                 } else if (downloaded === total){
-                    store.dispatch({type: DOWNLOAD_PROGRESS_COUNTER, payload: {index: index, value: (downloaded/total)*100}});
+                    store.dispatch({
+                        type: DOWNLOAD_PROGRESS_COUNTER, 
+                        payload: {
+                            index: index, 
+                            value: {
+                                percent: (downloaded/total)*100, 
+                                total: total, 
+                                downloaded: downloaded
+                            }
+                        }
+                    });
                 }
         });
+    });
+       
 }

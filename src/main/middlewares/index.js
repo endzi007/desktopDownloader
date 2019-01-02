@@ -1,46 +1,32 @@
-import ytdl from 'ytdl-core';
 import ffmpeg from 'fluent-ffmpeg';
 import appConfig from '../appConfig';
 import downloadAndConvert from '../ffmpegProcesses';
-import { ADD_VIDEO_TO_PLAYLIST, DOWNLOAD_PROGRESS_COUNTER, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
-import { INCREASE_LIMIT } from '../actions/optionsActions';
+import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
+import { clipboard } from 'electron';
+import { ADD_VIDEO_TO_PLAYLIST, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
 
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
-
 
 export default (store)=>(next)=>(action)=>{
     let state = store.getState();
     switch(action.type){
         case ADD_VIDEO_TO_PLAYLIST:
-            //check if is valid url 
-            let validateUrl = ytdl.validateURL(action.payload);
-            if(validateUrl){
-                //let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4'});
-                let videoObj = {
-                    title: "",
-                    thumbnail: "",
-                    downloaded: 0,
-                    url: "",
-                    duration: "",
-                    downloadLinks: []
+            //check if action is called from DROPZONE or CLIPBOARD
+            //if string is empty we should check clipboard for url
+            if(action.payload === ""){
+                action.payload = clipboard.readText();
+                //check if video exists in playlist 
+                let index = state.videos.findIndex((element)=>{
+                    return element.url === action.payload;
+                })
+                if(index === -1){
+                    ytdlAddToPlaylist(action).then((newAction)=>{
+                        next(newAction);
+                    });
+                } else {
+                    action.type = "CANCELED_ACTION";
                 }
-                ytdl.getInfo(action.payload, (err, info)=>{
-                    let date = new Date(null);
-                    date.setSeconds(info.length_seconds); // specify value for SECONDS here
-                    let duration = date.toISOString().substr(11, 8);
-                    videoObj.duration = duration;
-                    videoObj.title = info.title;
-                    videoObj.thumbnail = info.thumbnail_url;
-                    videoObj.url = action.payload;
-                    action.payload = videoObj;
-                    action.type = `${ADD_VIDEO_TO_PLAYLIST}_PROCESSED`,
-                    console.log(info);
-                    next(action);
-                });
-            } else {
-                action.type = "CANCELED_ACTION";
             }
-            next(action);
             break;
         case START_VIDEO_DOWNLOAD:
             for(let i = state.options.parallel.index; i<state.options.parallel.limit; i++){
@@ -52,7 +38,7 @@ export default (store)=>(next)=>(action)=>{
         
         case DOWNLOAD_NEXT_VIDEO:
             if(state.options.parallel.index <= state.videos.length){
-                downloadAndConvert(store, i).then(()=>{
+                downloadAndConvert(store, state.options.parallel.index).then(()=>{
                     store.dispatch({ type: DOWNLOAD_NEXT_VIDEO });
                 });
             }

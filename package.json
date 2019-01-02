@@ -1,19 +1,20 @@
 {
-  "name": "electrontest",
+  "name": "ng-youtube-downloader",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Youtube mp3, mp4 multiple downloader",
+  "main": "src/main/index.js",
   "scripts": {
-    "start": "electron-webpack dev"
+    "start": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "yarn compile && electron-builder"
   },
   "keywords": [],
-  "author": "",
+  "author": "Enis Jašarović",
   "license": "ISC",
   "dependencies": {
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",
     "attr-accept": "^1.1.3",
-    "electron": "^3.0.10",
     "electron-redux": "^1.3.1",
     "electron-webpack": "^2.6.1",
     "ffmpeg-static": "^2.4.0",
@@ -29,6 +30,20 @@
     "ytdl": "^0.10.4"
   },
   "devDependencies": {
-    "@babel/preset-react": "^7.0.0"
+    "electron": "^3.0.10",
+    "@babel/preset-react": "^7.0.0",
+    "electron-builder": "^20.38.4"
+  },
+  "build":{
+    "appId": "com.decom.ytdownload",
+    "productName": "NG YouTube Downloader",
+    "target": "NSIS",
+    "directory":{
+      "output": "build"
+    }
+  },
+  "nsis":{
+    "allowToChangeInstallationDirectory": true,
+    "oneClick": false
   }
 }

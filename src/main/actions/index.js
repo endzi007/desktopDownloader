@@ -7,7 +7,7 @@ export const DOWNLOAD_NEXT_VIDEO = "DOWNLOAD_NEXT_VIDEO";
 export const addVideoToPlaylist = (url)=>{
     return {
         type: ADD_VIDEO_TO_PLAYLIST,
-        payload: url
+        payload: url || "" //empty string if is called from clipboard and not from drag and drop
     }
 }
 

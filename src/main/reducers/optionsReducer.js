@@ -3,7 +3,7 @@ let defaultState = {
     downloadFormat: "mp3",
     downloadFolder: "",
     parallel: {
-        limit: 3, 
+        limit: 7, 
         inProgress: 0,
         index: 0
     }

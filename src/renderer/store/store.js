@@ -23,8 +23,10 @@ store.subscribe(()=>{
 });
 
 let localStorageItems = JSON.parse(localStorage.getItem("options"));
-store.dispatch({ type: CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder});
-store.dispatch({ type: CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat});
+
+store.dispatch({ type: CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder || ""});
+store.dispatch({ type: CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat || "mp3"});
+
 
 replayActionRenderer(store);
 

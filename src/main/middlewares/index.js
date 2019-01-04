@@ -15,17 +15,17 @@ export default (store)=>(next)=>(action)=>{
             //if string is empty we should check clipboard for url
             if(action.payload === ""){
                 action.payload = clipboard.readText();
-                //check if video exists in playlist 
-                let index = state.videos.findIndex((element)=>{
-                    return element.url === action.payload;
-                })
-                if(index === -1){
-                    ytdlAddToPlaylist(action).then((newAction)=>{
-                        next(newAction);
-                    });
-                } else {
-                    action.type = "CANCELED_ACTION";
-                }
+            }
+            //check if video exists in playlist 
+            let index = state.videos.findIndex((element)=>{
+                return element.url === action.payload;
+            })
+            if(index === -1){
+                ytdlAddToPlaylist(action).then((newAction)=>{
+                    next(newAction);
+                });
+            } else {
+                action.type = "CANCELED_ACTION";
             }
             break;
         case START_VIDEO_DOWNLOAD:

@@ -5,9 +5,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import ControlPoint from '@material-ui/icons/ControlPoint';
 import { IconButton } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
+import Cached from '@material-ui/icons/Cached';
 import { connect } from 'react-redux';
 import { addVideoToPlaylist } from '../../../main/actions';
 import { showConfigPanel } from '../../../main/actions/uiActions';
+import { resetLimit } from '../../../main/actions/optionsActions';
 
 const styles = theme => ({
   root:{
@@ -44,6 +46,11 @@ function ButtonAppBar(props) {
             <ControlPoint color="inherit" />
           </IconButton>
           <IconButton>
+          <Cached color="inherit" className={classes.buttonIcon} onClick={()=>{
+            props.resetLimit();
+          }} />
+          </IconButton>
+          <IconButton>
           <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
             props.showConfigPanel(true, "local");
           }} />
@@ -61,7 +68,8 @@ function mapStateToProps(store){
 }
 const  mapDispatchToProps = {
   addVideoToPlaylist,
-  showConfigPanel
+  showConfigPanel,
+  resetLimit
 };
   
 

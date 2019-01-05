@@ -10,7 +10,7 @@ let initialState = {
       downloadFolder: "",
       parallel: {
           limit: 7, 
-          inProgress: 0,
+          inProgress: "NO",
           index: 0
       }
     },

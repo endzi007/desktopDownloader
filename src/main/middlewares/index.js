@@ -4,6 +4,7 @@ import downloadAndConvert from '../ffmpegProcesses';
 import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import { clipboard } from 'electron';
 import { ADD_VIDEO_TO_PLAYLIST, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
+import { RESET_LIMIT } from '../actions/optionsActions'; 
 
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 

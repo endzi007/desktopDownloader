@@ -4,13 +4,13 @@ import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
 import store from './store/store';
+import appRootDir from 'app-root-dir';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let window;
 
   
-
 // quit application when all windows are closed
 app.on('window-all-closed', () => {
   // on macOS it is common for applications to stay open until the user explicitly quits
@@ -19,12 +19,12 @@ app.on('window-all-closed', () => {
   }
 });
 
-/* app.on('activate', () => {
+app.on('activate', () => {
   // on macOS it is common to re-create a window even after all windows have been closed
   if (mainWindow === null) {
     mainWindow = createMainWindow();
   }
-}) */
+})
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
@@ -39,7 +39,7 @@ app.on('ready', () => {
   }
   else {
     window.loadURL(formatUrl({
-      pathname: path.join(__dirname, 'index.html'),
+      pathname: path.join(appRootDir.get(), 'index.html'),
       protocol: 'file',
       slashes: true
     }))

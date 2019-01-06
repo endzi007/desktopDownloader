@@ -1,10 +1,11 @@
 'use strict'
-
 import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
 import store from './store/store';
 import appRootDir from 'app-root-dir';
+import debug from 'electron-debug';
+debug();
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
@@ -26,11 +27,15 @@ app.on('activate', () => {
   }
 })
 
+process.on('uncaughtException', function (err) {
+  alert(err);
+})
+
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
   window = new BrowserWindow();
 
-  if (isDevelopment) {
+  if (!isDevelopment) {
     window.webContents.openDevTools();
   }
 
@@ -39,8 +44,8 @@ app.on('ready', () => {
   }
   else {
     window.loadURL(formatUrl({
-      pathname: path.join(appRootDir.get(), 'index.html'),
-      protocol: 'file',
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
       slashes: true
     }))
   }

@@ -39,13 +39,19 @@
   "build": {
     "appId": "com.decom.ytdownload",
     "productName": "NG YouTube Downloader",
-    "target": "NSIS",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
+    },
     "directories": {
       "output": "build"
-    },
-    "asarUnpack": [
-      "**/app/node_modules/ffmpeg-static/*"
-    ]
+    }
   },
   "nsis": {
     "allowToChangeInstallationDirectory": true,

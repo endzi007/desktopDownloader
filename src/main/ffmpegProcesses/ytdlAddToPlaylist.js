@@ -31,7 +31,6 @@ export default (action)=>{
                 videoObj.url = action.payload;
                 action.payload = videoObj;
                 action.type = `${action.type}_PROCESSED`,
-    
                 resolve(action);
             });
         } else {

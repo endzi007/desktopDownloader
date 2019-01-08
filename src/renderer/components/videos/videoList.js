@@ -18,7 +18,7 @@ class VideoList extends React.Component{
     }
 
     render(){
-        let noVideos = "No videos found!";
+        let noVideos = "Drag and Drop YouTube video";
         let arrOfVideos = [];
         const { videos } = this.props;
         if(videos.length !== 0 ){
@@ -26,9 +26,22 @@ class VideoList extends React.Component{
                 arrOfVideos.push(<Video key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
             });
         }
+
+        let styles = {
+            justifyContent: "center",
+            alignContent: "center",
+            alignItems: "center",
+            color: "darkgray",
+            fontSize: "2em",
+            height: videos.length === 0? window.innerHeight-96+"px": "auto",
+            display: videos.length === 0? "flex": "block",
+            padding: 15
+        };
+
         let renderDiv = videos.length === 0? noVideos : arrOfVideos;
     
-        return (<div style={{padding: "15px"}}>{renderDiv}</div>);
+        return (
+        <div style={styles}>{renderDiv}</div>);
     }
 };
 

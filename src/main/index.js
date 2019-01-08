@@ -3,9 +3,7 @@ import { app, BrowserWindow } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
 import store from './store/store';
-import appRootDir from 'app-root-dir';
-import debug from 'electron-debug';
-debug();
+
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)

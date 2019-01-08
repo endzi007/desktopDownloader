@@ -18,6 +18,11 @@ let initialState = {
     test: "off",
     uiConfig: {
       showConfig: false
+    },
+    appState: {
+      connection: null,
+      downloading: null,
+      error: null
     }
 };
 

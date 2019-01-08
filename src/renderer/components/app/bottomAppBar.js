@@ -2,8 +2,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Fab } from '@material-ui/core';
-import Build from '@material-ui/icons/Build';
+import { Fab, Tooltip } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { startVideoDownload } from '../../../main/actions';
 import { showConfigPanel } from '../../../main/actions/uiActions';
@@ -28,11 +27,13 @@ function BottomAppBar(props) {
   const { classes } = props;
   return (
       <AppBar position="fixed" className={classes.root}>
+        <Tooltip title= "Download All" aria-label="Download All">
           <Fab onClick={()=>{
                 props.startVideoDownload(props.videos[0].url);
           }} color="secondary" className={classes.fabButton}>
             <SaveAltIcon />
           </Fab>
+        </Tooltip>
         <Toolbar className={classes.flex} variant="dense">
         </Toolbar>
       </AppBar>

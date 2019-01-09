@@ -5,6 +5,7 @@ import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import { clipboard } from 'electron';
 import { ADD_VIDEO_TO_PLAYLIST, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
 import { RESET_LIMIT } from '../actions/optionsActions'; 
+import ytdlCommand from '../ffmpegProcesses/ytdlCommandPT';
 
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
@@ -22,15 +23,18 @@ export default (store)=>(next)=>(action)=>{
                 return element.url === action.payload;
             })
             if(index === -1){
-                ytdlAddToPlaylist(action).then((newAction)=>{
-                    next(newAction);
+                ytdlCommand(action.payload).then(()=>{
+                    console.log("finished");
+                }).catch((err)=>{
+                    console.log(err);
                 });
             } else {
                 action.type = "CANCELED_ACTION";
             }
             break;
         case START_VIDEO_DOWNLOAD:
-            for(let i = state.options.parallel.index; i<state.options.parallel.limit; i++){
+            let loopLength = state.videos.length<state.options.parallel.limit? state.videos.length: state.options.parallel.limit;
+            for(let i = state.options.parallel.index; i<loopLength; i++){
                 downloadAndConvert(store, i).then(()=>{
                     store.dispatch({ type: DOWNLOAD_NEXT_VIDEO });
                 });
@@ -38,7 +42,7 @@ export default (store)=>(next)=>(action)=>{
             break;  
         
         case DOWNLOAD_NEXT_VIDEO:
-            if(state.options.parallel.index <= state.videos.length){
+            if(state.options.parallel.index < state.videos.length){
                 downloadAndConvert(store, state.options.parallel.index).then(()=>{
                     store.dispatch({ type: DOWNLOAD_NEXT_VIDEO });
                 });

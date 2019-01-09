@@ -26,7 +26,7 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  alert(err);
+  console.log(err);
 })
 
 // create main BrowserWindow when electron is ready

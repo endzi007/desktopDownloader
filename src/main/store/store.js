@@ -37,9 +37,6 @@ const store = createStore(
   ),
 );
 
-store.subscribe((e)=>{
-  console.log(e);
-});
  replayActionMain(store);
 
  export default store;

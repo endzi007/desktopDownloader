@@ -4,19 +4,14 @@ import { clipboard } from 'electron';
 export default (action)=>{
 
     return new Promise((resolve, reject)=>{
-
         //check if is valid url 
         let validateUrl = ytdl.validateURL(action.payload);
-        if(validateUrl){
+        if(true){
             //let video = ytdl(action.payload, { filter: (format) => format.container === 'mp4'});
             let videoObj = {
                 title: "",
                 thumbnail: "",
-                downloaded: {
-                    percent: 0, 
-                    total: 0, 
-                    downloaded: 0
-                },
+                downloaded: 0,
                 url: "",
                 duration: "",
                 downloadLinks: []

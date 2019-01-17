@@ -36,7 +36,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes,
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     return (
         <Card className={classes.card}>
-            <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded.percent} />
+            <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title}/>
             <CardContent className={classes.content}>
                 <div>

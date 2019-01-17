@@ -9,7 +9,7 @@ let initialState = {
       downloadFormat: "mp3",
       downloadFolder: "",
       parallel: {
-          limit: 7, 
+          limit: 5, 
           inProgress: "NO",
           index: 0
       }
@@ -37,9 +37,6 @@ const store = createStore(
   ),
 );
 
-store.subscribe((e)=>{
-  console.log(e);
-});
  replayActionMain(store);
 
  export default store;

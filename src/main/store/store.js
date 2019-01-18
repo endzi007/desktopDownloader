@@ -22,7 +22,8 @@ let initialState = {
     appState: {
       connection: null,
       downloading: null,
-      error: null
+      error: null,
+      parsingData: null
     }
 };
 

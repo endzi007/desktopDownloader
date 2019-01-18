@@ -4,7 +4,7 @@ import downloadAndConvert from '../ffmpegProcesses';
 import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import { clipboard } from 'electron';
 import { ADD_VIDEO_TO_PLAYLIST, START_VIDEO_DOWNLOAD, DOWNLOAD_NEXT_VIDEO } from '../actions';
-import { RESET_LIMIT } from '../actions/optionsActions'; 
+import { showVideoLoader } from '../actions/uiActions';
 
 ffmpeg.setFfmpegPath(appConfig.ffmpegPath);
 
@@ -22,7 +22,9 @@ export default (store)=>(next)=>(action)=>{
                 return element.url === action.payload;
             })
             if(index === -1){
+                store.dispatch(showVideoLoader(true));
                 ytdlAddToPlaylist(action).then((newAction)=>{
+                    store.dispatch(showVideoLoader(false));
                     next(newAction);
                 });
             } else {

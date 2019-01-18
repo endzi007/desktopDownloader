@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import uiReducer from './uiReducer';
 import optionsReducer from './optionsReducer';
+import appStateReducer from './appStateReducer';
 import { ADD_VIDEO_TO_PLAYLIST, REMOVE_VIDEO_FROM_PLAYLIST, DOWNLOAD_PROGRESS_COUNTER} from '../actions';
 
 const test = (state = "off", action)=>{
@@ -52,5 +53,6 @@ export default combineReducers({
     videos: videos,
     options: options,
     uiConfig: uiReducer,
-    options: optionsReducer
+    options: optionsReducer,
+    appState: appStateReducer
 });

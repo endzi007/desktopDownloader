@@ -1,3 +1,7 @@
-export const INVALID_URL = "INVALID_URL";
-export const COULD_NOT_CONVERT_VIDEO = "COULD_NOT_CONVERT_VIDEO";
-export const NO_INTERNET_CONNECTION = "NO_INTERNET_CONNECTION";
+export const ERROR_HANDLER = "ERROR_HANDLER";
+export const errorHandler = (message)=>{
+    return {
+        type: ERROR_HANDLER,
+        payload: message
+    }
+}

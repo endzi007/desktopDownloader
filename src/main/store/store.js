@@ -1,8 +1,7 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
 import reducers from '../reducers';
-import videoMiddlewares from '../middlewares';
-import uiMiddleware from '../middlewares/uiMiddleware';
+import allMiddlewares from '../middlewares';
 
 let initialState = {
     options: {
@@ -32,8 +31,7 @@ const store = createStore(
   initialState, // optional
   applyMiddleware(
     triggerAlias, // optional, see below
-    videoMiddlewares,
-    uiMiddleware,
+    ...allMiddlewares,
     forwardToRenderer, // IMPORTANT! This goes last
   ),
 );

@@ -5,6 +5,7 @@ export const CHANGE_DOWNLOAD_FORMAT = "CHANGE_DOWNLOAD_FORMAT";
 export const SAVE_TO_LOCALSTORAGE = "SAVE_TO_LOCALSTORAGE";
 export const RESET_LIMIT = "RESET_LIMIT";
 export const GET_SAVE_FOLDER = "GET_SAVE_FOLDER";
+export const CHANGE_DOWNLOAD_QUALITY = "CHANGE_DOWNLOAD_QUALITY";
 
 export const increaseLimit = ()=>{
     //val should be INC or DEC to increment or decrement queque
@@ -53,5 +54,12 @@ export const getSaveFolder = ()=>{
     return {
         type: GET_SAVE_FOLDER, 
         payload: null
+    }
+}
+
+export const changeDownloadQuality = (quality)=>{
+    return {
+        type: CHANGE_DOWNLOAD_QUALITY,
+        payload: quality
     }
 }

@@ -5,7 +5,12 @@ import allMiddlewares from '../middlewares';
 
 let initialState = {
     options: {
-      downloadFormat: "mp3",
+      downloadFormat: {
+        type: "mp3",
+        quality: "best",
+        mp3:  ["low", "medium", "best"],
+        mp4:  ["360", "720", "1080"]
+      },
       downloadFolder: "",
       parallel: {
           limit: 5, 

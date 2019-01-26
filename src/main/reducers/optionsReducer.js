@@ -1,6 +1,11 @@
-import { INCREASE_LIMIT, CHANGE_SAVE_FOLDER, CHANGE_DOWNLOAD_FORMAT, RESET_LIMIT } from '../actions/optionsActions';
+import { INCREASE_LIMIT, CHANGE_SAVE_FOLDER, CHANGE_DOWNLOAD_FORMAT, RESET_LIMIT, CHANGE_DOWNLOAD_QUALITY } from '../actions/optionsActions';
 let defaultState = {
-    downloadFormat: "mp3",
+    downloadFormat: {
+        type: "mp3",
+        quality: "best",
+        mp3:  ["low", "medium", "best"],
+        mp4:  ["360", "720", "1080"]
+    },
     downloadFolder: "",
     parallel: {
         limit: 7, 
@@ -21,7 +26,10 @@ export default (state = defaultState, action)=>{
             newState.parallel.index = 0;
             return newState;
         case  CHANGE_DOWNLOAD_FORMAT: 
-            newState.downloadFormat = action.payload;
+            newState.downloadFormat.type = action.payload;
+            return newState;
+            case  CHANGE_DOWNLOAD_QUALITY: 
+            newState.downloadFormat.quality = action.payload;
             return newState;
         default:
             return newState;

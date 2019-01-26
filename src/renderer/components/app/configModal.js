@@ -6,7 +6,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
 import { showOpenDialog, showConfigPanel } from '../../../main/actions/uiActions';
-import { changeDownloadFormat, saveToLocalStorage } from '../../../main/actions/optionsActions';
+import { changeDownloadFormat, saveToLocalStorage, changeDownloadQuality } from '../../../main/actions/optionsActions';
 
 
 
@@ -21,6 +21,12 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "60px auto",
     gridGap: "20px"
+  },
+  format:{
+    display: "grid",
+    gridTemplateColumns: "60px 100px auto",
+    gridGap: "20px"
+
   }
 };
 
@@ -32,7 +38,8 @@ class ConfigModal extends React.Component {
     constructor(props){
         super(props);
         this.handleClose = this.handleClose.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChangeFormat = this.handleChangeFormat.bind(this);
+        this.handleChangeQuality = this.handleChangeQuality.bind(this);
       }
 
   handleClose (setStorage) {
@@ -49,13 +56,21 @@ class ConfigModal extends React.Component {
     }
   };
 
-  handleChange(e){
+  handleChangeFormat(e){
     this.props.changeDownloadFormat(e.target.value);
   }
 
-  render() {
+  handleChangeQuality(e){
+    this.props.changeDownloadQuality(e.target.value);
+  }
 
+  
+  render() {
     const { classes } = this.props;
+    const { downloadFormat } = this.props.options;
+    let quality = downloadFormat[downloadFormat.type].map((quality)=>{
+      return <MenuItem value={quality}>{quality}</MenuItem>
+    });
     return (
       <div>
         <Dialog
@@ -87,11 +102,11 @@ class ConfigModal extends React.Component {
               {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
             </ListItem>
             <Divider />
-            <ListItem className={classes.listItem}>
+            <ListItem className={classes.format}>
               Download format: 
               <Select
-                value={this.props.options.downloadFormat}
-                onChange={this.handleChange}
+                value={downloadFormat.type}
+                onChange={this.handleChangeFormat}
               >
                 <MenuItem value="">
                   <em>Select format</em>
@@ -99,8 +114,16 @@ class ConfigModal extends React.Component {
                 <MenuItem value="mp3">MP3</MenuItem>
                 <MenuItem value="mp4">MP4</MenuItem>
               </Select>
+              <Select
+                  value={downloadFormat.quality}
+                  onChange={this.handleChangeQuality}
+              >
+                <MenuItem value="">
+                  <em>Select quality</em>
+                </MenuItem>
+                {quality}
+              </Select>
             </ListItem>
-
           </List>
         </Dialog>
       </div>
@@ -125,8 +148,8 @@ const mapDispatchToProps = {
     showOpenDialog: showOpenDialog,
     showConfigPanel: showConfigPanel,
     changeDownloadFormat: changeDownloadFormat,
-    saveToLocalStorage: saveToLocalStorage
-
+    saveToLocalStorage: saveToLocalStorage,
+    changeDownloadQuality: changeDownloadQuality
 }
 
 

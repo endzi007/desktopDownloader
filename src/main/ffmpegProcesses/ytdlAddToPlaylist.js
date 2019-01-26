@@ -15,7 +15,6 @@ export default (action)=>{
         }
 
         video.stdout.on("data", (info)=>{
-            console.log(info, "info")
             let infoData = JSON.parse(info);
             videoObj.title = infoData.title;
             videoObj.thumbnail = infoData.thumbnail;
@@ -25,6 +24,12 @@ export default (action)=>{
             let duration = date.toISOString().substr(11, 8);
             videoObj.duration = duration;
             action.type = `${action.type}_PROCESSED`;
+            infoData.formats.forEach(format => {
+                console.log(format.format);
+                console.log(format.format_id);
+                console.log(format.ext);
+                console.log("=================");
+            });
             action.payload = videoObj;
             resolve(action);
         });

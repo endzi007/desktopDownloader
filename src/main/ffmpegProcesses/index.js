@@ -1,4 +1,3 @@
-import ffmpeg from 'fluent-ffmpeg';
 import appConfig from '../appConfig';
 import { INCREASE_LIMIT } from '../actions/optionsActions';
 import { DOWNLOAD_PROGRESS_COUNTER } from '../actions';
@@ -17,22 +16,38 @@ export default (store, index)=>{
             "-o", 
             `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s` 
         ];
-        let mp3Args = [
+        let qualitySelect = {
+            mp3:{
+                "low": ["worstaudio/m4a"],
+                "medium": ["m4a/webm/18"],
+                "best": ["bestaudio/m4a/webm", "--audio-quality", "0"]
+            }, 
+            mp4: {
+                "360": ["134/18/135"],
+                "720": ["22/397/mp4"],
+                "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format" ]
+            }
+        }
+        const { downloadFormat } = state.options;
+        console.log(qualitySelect[downloadFormat.type][downloadFormat.quality]);
+
+        let args;
+        if(downloadFormat.type === "mp3"){
+            args = ["-x", "--audio-format", "mp3", "-f", ...qualitySelect[downloadFormat.type][downloadFormat.quality]]
+        } else {
+            args = ["-f", ...qualitySelect[downloadFormat.type][downloadFormat.quality]];
+        }
+        console.log([...args]);
+        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), 
+        [
+            "-v",
             storeVideo.url,
             "--ffmpeg-location",
             appConfig.ffmpegPath,
-            "--format",
-            "m4a",
-            "--audio-quality",
-            "0",
-            "-x",
-            "--audio-format",
-            "mp3",
+            ...args,
             "-o", 
-            `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s`,
-        ]
-        let chooseMode = state.options.downloadFormat === "mp3"? mp3Args : videoArgs;
-        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), [...chooseMode]);
+            `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s`
+        ]);
         
         video.stdout.on("data", (data)=>{
             let info = data.toString().replace(/\s\s+/g, " ").split(" ");

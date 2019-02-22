@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
 import { REMOVE_VIDEO_FROM_PLAYLIST } from '../../../main/actions';
+import { Card, Typography } from '@material-ui/core';
 function mapStateToProps (state){
     return {
-        videos: state.videos
+        videos: state.videos,
+        appState: state.appState
     }
 }
 
@@ -23,10 +25,22 @@ class VideoList extends React.Component{
         const { videos } = this.props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
+                arrOfVideos.push(<Video parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
             });
         }
-
+        if(this.props.appState.parsingData){
+            arrOfVideos.push(
+                <Card style={{
+                    display: "flex",
+                    marginBottom: "5px",
+                    flexGrow: "1",
+                    maxHeight: "60px",
+                    position: "relative"
+                }}>
+                    <Typography variant="body1"> Getting info...</Typography>
+                </Card>
+            )
+        }
         let styles = {
             justifyContent: "center",
             alignContent: "center",
@@ -38,7 +52,7 @@ class VideoList extends React.Component{
             padding: 15
         };
 
-        let renderDiv = videos.length === 0? noVideos : arrOfVideos;
+        let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;
     
         return (
         <div style={styles}>{renderDiv}</div>);

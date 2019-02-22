@@ -23,12 +23,11 @@ store.subscribe(()=>{
 });
 
 let localStorageItems = JSON.parse(localStorage.getItem("options"));
-if(localStorageItems === null){
-  store.dispatch({ type: GET_SAVE_FOLDER});
-
-} else {
+if(localStorageItems !== null){
   store.dispatch({ type: CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder || ""});
   store.dispatch({ type: CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat || "mp3"});
+} else {
+  store.dispatch({ type: GET_SAVE_FOLDER});
 }
 
 

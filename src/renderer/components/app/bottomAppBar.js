@@ -11,7 +11,8 @@ const styles = theme => ({
   root:{
     top: "auto",
     bottom: 0,
-    textAlign: "center"
+    textAlign: "center",
+    backgroundColor: theme.palette.background.default
   },
   fabButton: {
     position: 'absolute',

@@ -10,9 +10,10 @@ import { changeDownloadFormat, saveToLocalStorage, changeDownloadQuality } from 
 
 
 
-const styles = {
+const styles = theme => ({
   appBar: {
     position: 'relative',
+    backgroundColor: theme.palette.background.default
   },
   flex: {
     flex: 1,
@@ -28,7 +29,7 @@ const styles = {
     gridGap: "20px"
 
   }
-};
+});
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -46,10 +47,8 @@ class ConfigModal extends React.Component {
     if(setStorage){
       this.props.showConfigPanel(false);
       try {
-        console.log(this.props);
         localStorage.setItem("options", JSON.stringify(this.props.options));
       } catch (error) {
-        console.log(error, "my error");
       }
     } else {
       this.props.showConfigPanel(false);
@@ -81,13 +80,13 @@ class ConfigModal extends React.Component {
         >
           <AppBar className={classes.appBar}>
             <Toolbar>
-              <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+              <IconButton  onClick={this.handleClose} aria-label="Close">
                 <CloseIcon />
               </IconButton>
-              <Typography variant="h6" color="inherit" className={classes.flex}>
+              <Typography variant="h6"  className={classes.flex}>
                 Config
               </Typography>
-              <Button color="inherit" onClick={this.handleClose.bind(null, true)}>
+              <Button onClick={this.handleClose.bind(null, true)}>
                 save
               </Button>
             </Toolbar>
@@ -99,11 +98,13 @@ class ConfigModal extends React.Component {
               }} variant="contained" size="small">
                   <FolderIcon className={classes.icon}/>
               </Button>
-              {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
+              <Typography variant="body1">
+                {this.props.options.downloadFolder || "Choose folder where items will be downloaded"}
+              </Typography>
             </ListItem>
             <Divider />
             <ListItem className={classes.format}>
-              Download format: 
+            <Typography variant="body1">Download format: </Typography>
               <Select
                 value={downloadFormat.type}
                 onChange={this.handleChangeFormat}

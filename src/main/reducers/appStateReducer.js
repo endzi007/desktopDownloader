@@ -1,4 +1,4 @@
-import { SHOW_VIDEO_LOADER } from '../actions/uiActions';
+import { PARSING_DATA } from '../actions/appStateActions';
 
 let defaultState = {
     connection: null,
@@ -10,9 +10,8 @@ let defaultState = {
 export default (state = defaultState, action)=>{
     let newState = {...state};
     switch (action.type) {
-        case SHOW_VIDEO_LOADER:
+        case PARSING_DATA: 
             newState.parsingData = action.payload;
-            return newState;
         default:
             return newState;
     }

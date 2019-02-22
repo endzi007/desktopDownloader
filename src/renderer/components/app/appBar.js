@@ -14,7 +14,10 @@ import { resetLimit } from '../../../main/actions/optionsActions';
 const styles = theme => ({
   root:{
     padding: 0,
-    margin: 0,
+    margin: 0
+  },
+  appBar: {
+    backgroundColor: theme.palette.background.default
   },
   flex:{
     display: "flex",
@@ -38,7 +41,7 @@ function ButtonAppBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{"WebkitAppRegion": "drag"}}>
+      <AppBar className={classes.appBar} position="static" style={{"WebkitAppRegion": "drag"}}>
         <Toolbar className={classes.flex} variant="dense">
           <Tooltip title="Paste link" aria-label="Paste URL from Clipboard" placement="bottom">
             <IconButton variant="contained" onClick={()=>{

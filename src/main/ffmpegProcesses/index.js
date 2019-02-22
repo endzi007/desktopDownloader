@@ -18,14 +18,14 @@ export default (store, index)=>{
         ];
         let qualitySelect = {
             mp3:{
-                "low": ["worstaudio/m4a"],
-                "medium": ["m4a/webm/18"],
-                "best": ["bestaudio/m4a/webm", "--audio-quality", "0"]
+                "low": ["worstaudio/m4a/mp4"],
+                "medium": ["m4a/webm/18/mp4"],
+                "best": ["bestaudio/m4a/webm/mp4", "--audio-quality", "0"]
             }, 
             mp4: {
-                "360": ["134/18/135"],
+                "360": ["134/18/135/mp4"],
                 "720": ["22/397/mp4"],
-                "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format" ]
+                "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format" , "mp4"]
             }
         }
         const { downloadFormat } = state.options;
@@ -43,7 +43,7 @@ export default (store, index)=>{
             "-v",
             storeVideo.url,
             "--ffmpeg-location",
-            appConfig.ffmpegPath,
+            path.resolve(__dirname, "../../static/ffmpeg.exe"),
             ...args,
             "-o", 
             `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s`
@@ -51,6 +51,7 @@ export default (store, index)=>{
         
         video.stdout.on("data", (data)=>{
             let info = data.toString().replace(/\s\s+/g, " ").split(" ");
+            console.log(info);
             //whet info.lengt is 9 means that it sends infos about download percent
             //when info.lengt is 7 it means that download is finished
             if(info.length === 9){

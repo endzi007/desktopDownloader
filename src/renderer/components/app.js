@@ -6,7 +6,7 @@ import theme from '../helpers/theme.js';
 import VideoList from './videos/videoList';
 import ConfigModal from './app/configModal';
 import BottomAppBar from './app/bottomAppBar';
-import { addVideoToPlaylist } from '../../main/actions/index';
+import { creators as videoActions } from '../../main/videos/videoDuck';
 
 class App extends React.Component{
     constructor(){
@@ -87,6 +87,6 @@ function mapStateToProps(store){
 }
 
 const mapDispatchToProps = {
-    addVideoToPlaylist
+    addVideoToPlaylist: videoActions.addVideoToPlaylist
 }
 export default  withStyles(null,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(App));

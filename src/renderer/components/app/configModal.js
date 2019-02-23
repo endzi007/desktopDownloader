@@ -5,8 +5,8 @@ import SaveIcon from '@material-ui/icons/Save';
 import CloseIcon from '@material-ui/icons/Close';
 import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
-import { showOpenDialog, showConfigPanel } from '../../../main/actions/uiActions';
-import { changeDownloadFormat, saveToLocalStorage, changeDownloadQuality } from '../../../main/actions/optionsActions';
+import { creators as uiActions } from '../../../main/ui/uiDuck';
+import { creators as optionsActions } from '../../../main/options/optionsDuck';
 
 
 
@@ -146,11 +146,11 @@ function mapStateToProps(state){
 }
 
 const mapDispatchToProps = {
-    showOpenDialog: showOpenDialog,
-    showConfigPanel: showConfigPanel,
-    changeDownloadFormat: changeDownloadFormat,
-    saveToLocalStorage: saveToLocalStorage,
-    changeDownloadQuality: changeDownloadQuality
+    showOpenDialog: uiActions.showOpenDialog,
+    showConfigPanel: uiActions.showConfigPanel,
+    changeDownloadFormat: optionsActions.changeDownloadFormat,
+    saveToLocalStorage: optionsActions.saveToLocalStorage,
+    changeDownloadQuality: optionsActions.changeDownloadQuality
 }
 
 

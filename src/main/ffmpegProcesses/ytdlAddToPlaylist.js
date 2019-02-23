@@ -1,9 +1,9 @@
 import { execFile } from 'child_process';
 import path from 'path';
-import { ERROR_HANDLER } from '../actions/errorActions';
+import { types as errorsTypes } from '../errors/errorsDuck';
 export default (action)=>{
     return new Promise((resolve, reject)=>{
-        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), [action.payload, "--dump-json"]);
+        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), [action.payload, "--dump-json", "--no-playlist"]);
         let videoObj = {
             title: "",
             thumbnail: "",
@@ -30,10 +30,10 @@ export default (action)=>{
         video.stderr.on("data", (err)=>{
             console.log("err", err);
             if(err.indexOf("URL")!==-1){
-                action.type = ERROR_HANDLER;
+                action.type = errorsTypes.ERROR_HANDLER;
                 action.payload = "Unsuported or unvalid URL";
             } else if(err.indexOf("Unable to download")!==-1){
-                action.type = ERROR_HANDLER;
+                action.type = errorsTypes.ERROR_HANDLER;
                 action.payload = "Unable to download. Check internet connection.";
             }
             resolve(action);

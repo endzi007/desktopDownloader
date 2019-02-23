@@ -1,21 +1,13 @@
-import appConfig from '../appConfig';
-import { INCREASE_LIMIT } from '../actions/optionsActions';
-import { DOWNLOAD_PROGRESS_COUNTER } from '../actions';
+import { types as optionsTypes} from '../options/optionsDuck';
+import { types as videosTypes} from '../videos/videoDuck';
 import path from 'path';
 import { execFile } from 'child_process';
 
 export default (store, index)=>{
     return new Promise((resolve, reject)=>{
-        store.dispatch({ type: INCREASE_LIMIT})
+        store.dispatch({ type: optionsTypes.INCREASE_LIMIT})
         let state = store.getState();
         let storeVideo = state.videos[index];
-        let videoArgs = [
-            "-i", 
-            storeVideo.url, 
-            "--format=18", 
-            "-o", 
-            `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s` 
-        ];
         let qualitySelect = {
             mp3:{
                 "low": ["worstaudio/m4a/mp4"],
@@ -37,11 +29,11 @@ export default (store, index)=>{
         } else {
             args = ["-f", ...qualitySelect[downloadFormat.type][downloadFormat.quality]];
         }
-        console.log([...args]);
         let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), 
         [
             "-v",
             storeVideo.url,
+            "--no-playlist",
             "--ffmpeg-location",
             path.resolve(__dirname, "../../static/ffmpeg.exe"),
             ...args,
@@ -56,7 +48,7 @@ export default (store, index)=>{
             //when info.lengt is 7 it means that download is finished
             if(info.length === 9){
                 store.dispatch({ 
-                    type: DOWNLOAD_PROGRESS_COUNTER,
+                    type: videosTypes.COUNTER,
                     payload: {
                         value: parseFloat(info[1].slice(0, -1)),
                         index: index
@@ -70,7 +62,7 @@ export default (store, index)=>{
 
         video.on("close", ()=>{ 
             store.dispatch({ 
-                type: DOWNLOAD_PROGRESS_COUNTER,
+                type: videosTypes.COUNTER,
                 payload: {
                     value: 100,
                     index: index

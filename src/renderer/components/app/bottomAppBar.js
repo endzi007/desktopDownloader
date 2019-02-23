@@ -4,8 +4,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Fab, Tooltip } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { startVideoDownload } from '../../../main/actions';
-import { showConfigPanel } from '../../../main/actions/uiActions';
+import { creators as videoActions } from '../../../main/videos/videoDuck';
+import { creators as uiActions } from '../../../main/ui/uiDuck';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 const styles = theme => ({
   root:{
@@ -47,8 +47,8 @@ function mapStateToProps(store){
     }
 }
 const  mapDispatchToProps = {
-  showConfigPanel,
-  startVideoDownload
+  showConfigPanel: uiActions.showConfigPanel,
+  startVideoDownload: videoActions.startVideoDownload
 };
   
 

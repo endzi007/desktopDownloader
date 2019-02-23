@@ -7,9 +7,9 @@ import { IconButton, Tooltip } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
 import Cached from '@material-ui/icons/Cached';
 import { connect } from 'react-redux';
-import { addVideoToPlaylist } from '../../../main/actions';
-import { showConfigPanel } from '../../../main/actions/uiActions';
-import { resetLimit } from '../../../main/actions/optionsActions';
+import { creators as videoActions } from '../../../main/videos/videoDuck';
+import { creators as uiActions } from '../../../main/ui/uiDuck';
+import { creators as optionsActions } from '../../../main/options/optionsDuck';
 
 const styles = theme => ({
   root:{
@@ -74,9 +74,9 @@ function mapStateToProps(store){
     }
 }
 const  mapDispatchToProps = {
-  addVideoToPlaylist,
-  showConfigPanel,
-  resetLimit
+  addVideoToPlaylist: videoActions.addVideoToPlaylist,
+  showConfigPanel: uiActions.showConfigPanel,
+  resetLimit: optionsActions.resetLimit
 };
   
 

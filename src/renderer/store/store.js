@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
-import reducers from '../../main/reducers';
+import reducers from '../../main/store/reducers';
 import { createLogger } from 'redux-logger';
-import { CHANGE_DOWNLOAD_FORMAT, CHANGE_SAVE_FOLDER, GET_SAVE_FOLDER } from '../../main/actions/optionsActions';
+import { types as optionsTypes } from '../../main/options/optionsDuck';
 const initialState = getInitialStateRenderer();
 
 const logger = createLogger({
@@ -24,10 +24,10 @@ store.subscribe(()=>{
 
 let localStorageItems = JSON.parse(localStorage.getItem("options"));
 if(localStorageItems !== null){
-  store.dispatch({ type: CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder || ""});
-  store.dispatch({ type: CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat || "mp3"});
+  store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder || ""});
+  store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat || "mp3"});
 } else {
-  store.dispatch({ type: GET_SAVE_FOLDER});
+  store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
 }
 
 

@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware} from 'redux';
 import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
-import reducers from '../reducers';
-import allMiddlewares from '../middlewares';
+import reducers from './reducers';
+import allMiddlewares from './middlewares';
 
 let initialState = {
     options: {

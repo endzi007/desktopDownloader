@@ -1,4 +1,15 @@
-import { PARSING_DATA } from '../actions/appStateActions';
+export const types = {
+    PARSING_DATA: "appState/PARSING_DATA"
+}
+
+export const creators = {
+    parsingData: (bool)=>{
+        return {
+            type: types.PARSING_DATA,
+            payload: bool
+        }
+    }
+}
 
 let defaultState = {
     connection: null,
@@ -10,7 +21,7 @@ let defaultState = {
 export default (state = defaultState, action)=>{
     let newState = {...state};
     switch (action.type) {
-        case PARSING_DATA: 
+        case types.PARSING_DATA: 
             newState.parsingData = action.payload;
         default:
             return newState;

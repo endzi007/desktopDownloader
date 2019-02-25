@@ -101,10 +101,11 @@ export default (state = defaultState, action)=>{
             newState.parallel.index = 0;
             return newState;
         case types.CHANGE_DOWNLOAD_FORMAT: 
-            newState.downloadFormat.type = action.payload.type;
+            let payloadValue = typeof action.payload === "string"? action.payload: "mp3";
+            newState.downloadFormat.type = payloadValue;
             return newState;
         case  types.CHANGE_DOWNLOAD_QUALITY: 
-            newState.downloadFormat.quality = action.payload.quality;
+            newState.downloadFormat.quality = action.payload;
             return newState;
         case types.AUTO_NUMBERING: 
             newState.autoNumbering = action.payload;

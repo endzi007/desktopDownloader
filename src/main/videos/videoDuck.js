@@ -1,9 +1,10 @@
 export const types = {
-    REMOVE : "types/REMOVE_VIDEO",
-    ADD : "types/ADD_VIDEO_TO_PLAYLIST",
-    COUNTER : "types/DOWNLOAD_PROGRESS_COUNTER",
-    START_DOWNLOAD : "types/START_VIDEO_DOWNLOAD",
-    DOWNLOAD_NEXT : "types/DOWNLOAD_NEXT_VIDEO",
+    REMOVE : "videos/REMOVE_VIDEO",
+    ADD : "videos/ADD_VIDEO_TO_PLAYLIST",
+    COUNTER : "videos/DOWNLOAD_PROGRESS_COUNTER",
+    START_DOWNLOAD : "videos/START_VIDEO_DOWNLOAD",
+    DOWNLOAD_NEXT : "videos/DOWNLOAD_NEXT_VIDEO",
+    CLEAR_ALL: "videos/CLEAR_ALL"
 }
 
 export const creators = {
@@ -34,6 +35,11 @@ export const creators = {
         return {
             type: types.DOWNLOAD_NEXT
         }
+    },
+    clearAll: ()=>{
+        return {
+            type: types.CLEAR_ALL
+        }
     }
 }
 
@@ -51,7 +57,10 @@ export default (state=[], action)=>{
             return newState;
         case types.COUNTER: 
             newState[action.payload.index].downloaded = action.payload.value;
-            
+            return newState;
+        case types.CLEAR_ALL:
+            newState = [];
+            return newState;
         default:
             return newState;
     }

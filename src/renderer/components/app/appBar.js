@@ -5,6 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import ControlPoint from '@material-ui/icons/ControlPoint';
 import { IconButton, Tooltip } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
+import ClearAll from '@material-ui/icons/ClearAll'
 import Cached from '@material-ui/icons/Cached';
 import { connect } from 'react-redux';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
@@ -55,13 +56,22 @@ function ButtonAppBar(props) {
             props.resetLimit();
           }} />
           </IconButton>
-          <Tooltip title="Open config" aria-label="Open config" placement="bottom">
-            <IconButton>
-            <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
-              props.showConfigPanel(true, "local");
-            }} />
-            </IconButton>
-          </Tooltip>
+          <div>
+          <Tooltip title="Clear All" aria-label="Clear All" placement="bottom">
+              <IconButton>
+              <ClearAll color="inherit" className={classes.buttonIcon} onClick={()=>{
+                props.clearAll();
+              }} />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Open config" aria-label="Open config" placement="bottom">
+              <IconButton>
+              <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
+                props.showConfigPanel(true, "local");
+              }} />
+              </IconButton>
+            </Tooltip>
+          </div>
         </Toolbar>
       </AppBar>
     </div>
@@ -76,7 +86,9 @@ function mapStateToProps(store){
 const  mapDispatchToProps = {
   addVideoToPlaylist: videoActions.addVideoToPlaylist,
   showConfigPanel: uiActions.showConfigPanel,
-  resetLimit: optionsActions.resetLimit
+  resetLimit: optionsActions.resetLimit,
+  autoNumbering: optionsActions.autoNumbering,
+  clearAll: videoActions.clearAll
 };
   
 

@@ -1,12 +1,13 @@
 export const types = {
-    INCREASE_LIMIT: "types/INCREASE_LIMIT",
-    CHANGE_SAVE_FOLDER: "types/CHANGE_SAVE_FOLDER",
-    SHOW_OPEN_DIALOG: "types/SHOW_OPEN_DIALOG",
-    CHANGE_DOWNLOAD_FORMAT: "types/CHANGE_DOWNLOAD_FORMAT",
-    SAVE_TO_LOCALSTORAGE: "types/SAVE_TO_LOCALSTORAGE",
-    RESET_LIMIT: "types/RESET_LIMIT",
-    GET_SAVE_FOLDER: "types/GET_SAVE_FOLDER",
-    CHANGE_DOWNLOAD_QUALITY: "types/CHANGE_DOWNLOAD_QUALITY",
+    INCREASE_LIMIT: "options/INCREASE_LIMIT",
+    CHANGE_SAVE_FOLDER: "options/CHANGE_SAVE_FOLDER",
+    SHOW_OPEN_DIALOG: "options/SHOW_OPEN_DIALOG",
+    CHANGE_DOWNLOAD_FORMAT: "options/CHANGE_DOWNLOAD_FORMAT",
+    SAVE_TO_LOCALSTORAGE: "options/SAVE_TO_LOCALSTORAGE",
+    RESET_LIMIT: "options/RESET_LIMIT",
+    GET_SAVE_FOLDER: "options/GET_SAVE_FOLDER",
+    CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
+    AUTO_NUMBERING: "options/AUTO_NUMBERING"
 }
 
 export const creators = {
@@ -26,7 +27,6 @@ export const creators = {
     showOpenDialog: ()=>{
         return {
             type: types.SHOW_OPEN_DIALOG,
-            payload: ""
         }
     },
     changeDownloadFormat: (format)=>{
@@ -58,6 +58,15 @@ export const creators = {
             type: types.CHANGE_DOWNLOAD_QUALITY,
             payload: quality
         }
+    },
+    autoNumbering: (val)=>{
+        return {
+            type: types.AUTO_NUMBERING,
+            payload: {
+                numbering: val.numbering,
+                value: val.value
+            }
+        }
     }
 }
 
@@ -73,6 +82,10 @@ let defaultState = {
         limit: 7, 
         inProgress: "NO",
         index: 0
+    },
+    autoNumbering: {
+        numbering: false,
+        value: 0
     }
   };
 export default (state = defaultState, action)=>{
@@ -88,10 +101,13 @@ export default (state = defaultState, action)=>{
             newState.parallel.index = 0;
             return newState;
         case types.CHANGE_DOWNLOAD_FORMAT: 
-            newState.downloadFormat.type = action.payload;
+            newState.downloadFormat.type = action.payload.type;
             return newState;
-            case  types.CHANGE_DOWNLOAD_QUALITY: 
-            newState.downloadFormat.quality = action.payload;
+        case  types.CHANGE_DOWNLOAD_QUALITY: 
+            newState.downloadFormat.quality = action.payload.quality;
+            return newState;
+        case types.AUTO_NUMBERING: 
+            newState.autoNumbering = action.payload;
             return newState;
         default:
             return newState;

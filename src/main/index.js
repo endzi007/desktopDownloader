@@ -1,8 +1,8 @@
 'use strict'
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
-import store from './store/store';
+import { creators as uiActions } from './ui/uiDuck';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -33,7 +33,7 @@ process.on('uncaughtException', function (err) {
 app.on('ready', () => {
   window = new BrowserWindow();
 
-  if (!isDevelopment) {
+  if (isDevelopment) {
     window.webContents.openDevTools();
   }
 
@@ -47,6 +47,24 @@ app.on('ready', () => {
       slashes: true
     }))
   }
+
+  const template = [
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "Save current project",
+          click() {
+            uiActions.showOpenDialog(true)
+          }
+        },
+        {label: "Load saved project"},
+        {label: "exit"}
+      ]
+    }
+  ];
+  const menu = Menu.buildFromTemplate(template);
+  Menu.setApplicationMenu(menu);
 
   window.on('closed', () => {
     window = null;

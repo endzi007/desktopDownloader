@@ -26,6 +26,7 @@ let localStorageItems = JSON.parse(localStorage.getItem("options"));
 if(localStorageItems !== null){
   store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder || ""});
   store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat || "mp3"});
+  store.dispatch({ type: optionsTypes.AUTO_NUMBERING, payload:localStorageItems.autoNumbering || {numbering: false, value: 0}});
 } else {
   store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
 }

@@ -21,7 +21,6 @@ export default (store, index)=>{
             }
         }
         const { downloadFormat } = state.options;
-        console.log(qualitySelect[downloadFormat.type][downloadFormat.quality]);
 
         let args;
         if(downloadFormat.type === "mp3"){
@@ -29,6 +28,13 @@ export default (store, index)=>{
         } else {
             args = ["-f", ...qualitySelect[downloadFormat.type][downloadFormat.quality]];
         }
+        const { autoNumbering } = state.options;
+
+        //handling if value of numbering box is === "" than use zero instead of it
+        let autoNumVal = autoNumbering.value === ""? 0: autoNumbering.value;
+
+        let autoNumValue = Number.parseInt(index)+Number.parseInt(autoNumVal);
+        let outputTemplate = autoNumbering.numbering === true? `${autoNumValue}.%(title)s.%(ext)s`: `%(title)s.%(ext)s`;
         let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), 
         [
             "-v",
@@ -38,12 +44,11 @@ export default (store, index)=>{
             path.resolve(__dirname, "../../static/ffmpeg.exe"),
             ...args,
             "-o", 
-            `${state.options.downloadFolder}\\${index+1}.%(title)s.%(ext)s`
+            `${state.options.downloadFolder}\\${outputTemplate}`
         ]);
         
         video.stdout.on("data", (data)=>{
             let info = data.toString().replace(/\s\s+/g, " ").split(" ");
-            console.log(info);
             //whet info.lengt is 9 means that it sends infos about download percent
             //when info.lengt is 7 it means that download is finished
             if(info.length === 9){

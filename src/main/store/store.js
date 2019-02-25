@@ -16,6 +16,10 @@ let initialState = {
           limit: 5, 
           inProgress: "NO",
           index: 0
+      },
+      autoNumbering: {
+        numbering: false,
+        value: 0
       }
     },
     videos: [],

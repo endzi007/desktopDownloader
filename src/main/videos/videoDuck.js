@@ -4,7 +4,9 @@ export const types = {
     COUNTER : "videos/DOWNLOAD_PROGRESS_COUNTER",
     START_DOWNLOAD : "videos/START_VIDEO_DOWNLOAD",
     DOWNLOAD_NEXT : "videos/DOWNLOAD_NEXT_VIDEO",
-    CLEAR_ALL: "videos/CLEAR_ALL"
+    CLEAR_ALL: "videos/CLEAR_ALL",
+    SAVE_PLAYLIST: "videos/SAVE_PLAYLIST",
+    LOAD_PLAYLIST: "videos/LOAD_PLAYLIST"
 }
 
 export const creators = {
@@ -40,6 +42,17 @@ export const creators = {
         return {
             type: types.CLEAR_ALL
         }
+    },
+    savePlaylist: ()=>{
+        return {
+            type: types.SAVE_PLAYLIST
+        }
+    },
+    loadPlaylist: ()=>{
+        return {
+            type: types.LOAD_PLAYLIST,
+            payload: []
+        }
     }
 }
 
@@ -60,6 +73,10 @@ export default (state=[], action)=>{
             return newState;
         case types.CLEAR_ALL:
             newState = [];
+            return newState;
+        case `${types.LOAD_PLAYLIST}_PROCESSED`:
+            console.log("called", action.payload);
+            newState = action.payload;
             return newState;
         default:
             return newState;

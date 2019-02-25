@@ -6,6 +6,8 @@ import ControlPoint from '@material-ui/icons/ControlPoint';
 import { IconButton, Tooltip } from '@material-ui/core';
 import Build from '@material-ui/icons/Build';
 import ClearAll from '@material-ui/icons/ClearAll'
+import Save from '@material-ui/icons/Save'
+import Open from '@material-ui/icons/FolderOpen'
 import Cached from '@material-ui/icons/Cached';
 import { connect } from 'react-redux';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
@@ -57,12 +59,26 @@ function ButtonAppBar(props) {
           }} />
           </IconButton>
           <div>
-          <Tooltip title="Clear All" aria-label="Clear All" placement="bottom">
-              <IconButton>
-              <ClearAll color="inherit" className={classes.buttonIcon} onClick={()=>{
-                props.clearAll();
-              }} />
-              </IconButton>
+            <Tooltip title="Save" aria-label="Save" placement="bottom">
+                <IconButton>
+                <Save color="inherit" className={classes.buttonIcon} onClick={()=>{
+                  props.savePlaylist();
+                }} />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Open" aria-label="Open" placement="bottom">
+                <IconButton>
+                <Open color="inherit" className={classes.buttonIcon} onClick={()=>{
+                  props.loadPlaylist();
+                }} />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title="Clear All" aria-label="Clear All" placement="bottom">
+                <IconButton>
+                <ClearAll color="inherit" className={classes.buttonIcon} onClick={()=>{
+                  props.clearAll();
+                }} />
+                </IconButton>
             </Tooltip>
             <Tooltip title="Open config" aria-label="Open config" placement="bottom">
               <IconButton>
@@ -88,7 +104,9 @@ const  mapDispatchToProps = {
   showConfigPanel: uiActions.showConfigPanel,
   resetLimit: optionsActions.resetLimit,
   autoNumbering: optionsActions.autoNumbering,
-  clearAll: videoActions.clearAll
+  clearAll: videoActions.clearAll,
+  savePlaylist: videoActions.savePlaylist,
+  loadPlaylist: videoActions.loadPlaylist
 };
   
 

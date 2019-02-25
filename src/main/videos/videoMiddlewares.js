@@ -3,7 +3,8 @@ import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import { clipboard } from 'electron';
 import { types  } from './videoDuck';
 import { creators as appStateActions } from '../appState/appStateDuck';
-
+import { dialog } from 'electron';
+import fs from 'fs';
 export default (store)=>(next)=>(action)=>{
     let state = store.getState();
     switch(action.type){
@@ -42,6 +43,24 @@ export default (store)=>(next)=>(action)=>{
                     store.dispatch({ type: types.DOWNLOAD_NEXT });
                 });
             }
+            break;
+        
+        case types.SAVE_PLAYLIST: 
+            dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["enis"]}]}, (filename)=>{
+                fs.writeFile(filename, JSON.stringify(state.videos), (err)=>{
+                    if(err){
+                        console.log("error happened while saving file");
+                    } 
+                    console.log("saved correctlly");
+                })
+            });
+            break;
+
+        case types.LOAD_PLAYLIST: 
+            dialog.showOpenDialog(null, {filters:[{name: "JSON File", extensions: ["enis"]}]}, (fn)=>{
+                let data = fs.readFileSync(fn[0]);
+                store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
+            });
             break;
         default: 
         break;

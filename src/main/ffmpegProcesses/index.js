@@ -35,13 +35,13 @@ export default (store, index)=>{
 
         let autoNumValue = Number.parseInt(index)+Number.parseInt(autoNumVal);
         let outputTemplate = autoNumbering.numbering === true? `${autoNumValue}.%(title)s.%(ext)s`: `%(title)s.%(ext)s`;
-        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), 
+        let video = execFile(path.resolve(__static, "youtube-dl.exe"), 
         [
             "-v",
             storeVideo.url,
             "--no-playlist",
             "--ffmpeg-location",
-            path.resolve(__dirname, "../../static/ffmpeg.exe"),
+            path.resolve(__static, "ffmpeg.exe"),
             ...args,
             "-o", 
             `${state.options.downloadFolder}\\${outputTemplate}`

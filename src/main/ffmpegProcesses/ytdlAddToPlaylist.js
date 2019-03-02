@@ -3,7 +3,8 @@ import path from 'path';
 import { types as errorsTypes } from '../errors/errorsDuck';
 export default (action)=>{
     return new Promise((resolve, reject)=>{
-        let video = execFile(path.resolve(__dirname, "../../static/youtube-dl.exe"), [action.payload, "--dump-json", "--no-playlist"]);
+        console.log(path.resolve(__static, "youtube-dl.exe"));
+        let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--dump-json", "--no-playlist"]);
         let videoObj = {
             title: "",
             thumbnail: "",

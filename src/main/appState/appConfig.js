@@ -1,4 +1,6 @@
-import ffmpeg from 'ffmpeg-static';
+import { app } from 'electron';
+import path from 'path';
+
 export default {
-    ffmpegPath: ffmpeg.path.replace('app.asar', 'app.asar.unpacked')
+    ffmpegPath: path.resolve(app.getAppPath(), "static", "ffmpeg.exe")
 }

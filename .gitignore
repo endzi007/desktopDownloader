@@ -2,4 +2,6 @@
 /node_modules/
 /dist/
 /build/
-/src/static/
+/static/ffmpeg.exe
+/static/ffprobe.exe
+/static/youtube-dl.exe

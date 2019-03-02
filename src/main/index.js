@@ -32,12 +32,7 @@ process.on('uncaughtException', function (err) {
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  window = new BrowserWindow();
-
-  if (isDevelopment) {
-    window.webContents.openDevTools();
-  }
-
+  window = new BrowserWindow({show: false});
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   }
@@ -48,6 +43,23 @@ app.on('ready', () => {
       slashes: true
     }))
   }
+
+  if (isDevelopment) {
+    window.webContents.openDevTools();
+  }
+
+  let loading = new BrowserWindow({show: false, frame: false, transparent: true})
+
+  loading.once('show', () => {
+    window.webContents.once('dom-ready', () => {
+      console.log('window loaded')
+      window.show()
+      loading.hide()
+      loading.close()
+    })
+  })
+  loading.loadURL(path.resolve(__static, 'loading.html'));
+  loading.show()
 
   const template = [
     {

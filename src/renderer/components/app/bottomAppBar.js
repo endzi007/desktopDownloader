@@ -2,11 +2,12 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import { Fab, Tooltip } from '@material-ui/core';
+import { Fab, Tooltip, IconButton } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import KeyIcon from '@material-ui/icons/VpnKey';
 const styles = theme => ({
   root:{
     top: "auto",
@@ -36,6 +37,9 @@ function BottomAppBar(props) {
           </Fab>
         </Tooltip>
         <Toolbar className={classes.flex} variant="dense">
+        <IconButton>
+          <KeyIcon />
+        </IconButton>
         </Toolbar>
       </AppBar>
   );

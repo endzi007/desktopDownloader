@@ -6,6 +6,8 @@ import theme from '../helpers/theme.js';
 import VideoList from './videos/videoList';
 import ConfigModal from './app/configModal';
 import BottomAppBar from './app/bottomAppBar';
+import ProFeatureDialog from "./app/proFeatureDialog";
+
 import { creators as videoActions } from '../../main/videos/videoDuck';
 
 class App extends React.Component{
@@ -75,6 +77,7 @@ class App extends React.Component{
                     <VideoList />
                     <ConfigModal />
                     <BottomAppBar />
+                    <ProFeatureDialog />
                 </div>
             </MuiThemeProvider>
         );
@@ -82,7 +85,7 @@ class App extends React.Component{
 }
 function mapStateToProps(store){
     return{
-        test: store.test
+        ui: store.uiConfig 
     }
 }
 

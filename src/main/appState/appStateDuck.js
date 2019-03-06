@@ -1,5 +1,8 @@
 export const types = {
-    PARSING_DATA: "appState/PARSING_DATA"
+    PARSING_DATA: "appState/PARSING_DATA",
+    CHECK_LICENCE: "appState/CHECK_LICENCE",
+    REGISTER_LICENCE: "appState/REGISTER_LICENCE",
+    CHECK_PRO_FEATURES: "appState/CHECK_PRO_FEATURES"
 }
 
 export const creators = {
@@ -15,7 +18,12 @@ let defaultState = {
     connection: null,
     downloading: null,
     error: null,
-    parsingData: null
+    parsingData: null,
+    licence: false,
+    proFeatures: {
+        videosLength: 5, 
+        quality: "1080"
+    }
   }
 
 export default (state = defaultState, action)=>{
@@ -23,6 +31,10 @@ export default (state = defaultState, action)=>{
     switch (action.type) {
         case types.PARSING_DATA: 
             newState.parsingData = action.payload;
+            return newState;
+        case types.REGISTER_LICENCE: 
+            newState.licence = action.payload; 
+            return newState; 
         default:
             return newState;
     }

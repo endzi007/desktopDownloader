@@ -23,15 +23,20 @@ let initialState = {
       }
     },
     videos: [],
-    test: "off",
     uiConfig: {
-      showConfig: false
+        showConfig: false, 
+        showProFeatureDialog: false
     },
     appState: {
       connection: null,
       downloading: null,
       error: null,
-      parsingData: null
+      parsingData: null,
+      licence: false,
+      proFeatures: {
+          videosLength: 5, 
+          quality: "1080"
+      }
     }
 };
 

@@ -31,7 +31,10 @@ let initialState = {
       connection: null,
       downloading: null,
       error: null,
-      parsingData: null,
+      parsingData: {
+        bool: null,
+        count: 0
+      },
       licence: false,
       proFeatures: {
           videosLength: 5, 

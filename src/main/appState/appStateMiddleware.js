@@ -8,7 +8,7 @@ export default (store)=>(next)=>(action)=>{
     if(!state.appState.licence){
         switch (action.type) {
             case videoTypes.ADD: 
-                if(state.videos.length >= state.appState.proFeatures.videosLength){
+                if(state.videos.length + state.appState.parsingData.count >= state.appState.proFeatures.videosLength){
                     action.type = uiTypes.SHOW_PRO_FEATURE;
                     action.payload = {open: true, message: "To download more then 20 videos please consider to buy a pro licence"};
                 }

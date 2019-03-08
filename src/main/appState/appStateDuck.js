@@ -18,7 +18,10 @@ let defaultState = {
     connection: null,
     downloading: null,
     error: null,
-    parsingData: null,
+    parsingData: {
+        bool: null,
+        count: 0
+    },
     licence: false,
     proFeatures: {
         videosLength: 5, 
@@ -30,7 +33,8 @@ export default (state = defaultState, action)=>{
     let newState = {...state};
     switch (action.type) {
         case types.PARSING_DATA: 
-            newState.parsingData = action.payload;
+            newState.parsingData.bool = action.payload;
+            newState.parsingData.count = action.payload? newState.parsingData.count+1: newState.parsingData.count-1;
             return newState;
         case types.REGISTER_LICENCE: 
             newState.licence = action.payload; 

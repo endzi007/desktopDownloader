@@ -28,7 +28,7 @@ class VideoList extends React.Component{
                 arrOfVideos.push(<Video parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
             });
         }
-        if(this.props.appState.parsingData){
+        if(this.props.appState.parsingData.bool){
             arrOfVideos.push(
                 <Card style={{
                     display: "flex",

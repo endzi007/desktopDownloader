@@ -25,7 +25,7 @@ class VideoList extends React.Component{
         const { videos } = this.props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
+                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
             });
         }
         if(this.props.appState.parsingData.bool){

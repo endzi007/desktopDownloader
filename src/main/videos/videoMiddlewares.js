@@ -1,9 +1,8 @@
 import downloadAndConvert from '../ffmpegProcesses';
 import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
-import { clipboard } from 'electron';
-import { types  } from './videoDuck';
+import { clipboard, ipcMain, dialog } from 'electron';
+import { types } from './videoDuck';
 import { creators as appStateActions } from '../appState/appStateDuck';
-import { dialog } from 'electron';
 import fs from 'fs';
 export default (store)=>(next)=>(action)=>{
     let state = store.getState();

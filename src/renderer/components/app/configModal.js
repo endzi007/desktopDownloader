@@ -92,10 +92,9 @@ class ConfigModal extends React.Component {
     const { classes } = this.props;
     const { downloadFormat } = this.props.options;
     let quality = "";
-    console.log(downloadFormat, "quality");
     if(downloadFormat[downloadFormat.type] !== null){
       quality = downloadFormat[downloadFormat.type].map((quality)=>{
-        return <MenuItem value={quality}>{quality}</MenuItem>
+        return <MenuItem value={quality}>{quality} <span style={{marginLeft: "7px", fontStyle: "italic"}}>{quality==="1080"? "Pro": ""}</span> </MenuItem>
       });
     }
     return (
@@ -155,7 +154,7 @@ class ConfigModal extends React.Component {
             </ListItem>
             <Divider />
             <ListItem className={classes.listItem}>
-              <Typography variant="caption">Automatic numbering: </Typography>
+              <Typography variant="body1">Automatic numbering: </Typography>
               <Switch id="autoNumberingSwitch" 
               onChange={this.handleAutoNumbering} checked={this.props.options.autoNumbering.numbering}/>
                 <Input

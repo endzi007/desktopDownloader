@@ -52,6 +52,7 @@ export default (store, index)=>{
             //whet info.lengt is 9 means that it sends infos about download percent
             //when info.lengt is 7 it means that download is finished
             if(info.length === 9){
+                
                 store.dispatch({ 
                     type: videosTypes.COUNTER,
                     payload: {
@@ -60,6 +61,11 @@ export default (store, index)=>{
                     }
                 })
             }
+            if(info[1].slice(0, -1)=== "100.0"){
+                console.log("converting");
+            }
+            
+
         });
         video.stderr.on("data", (err)=>{
             console.log(err, "my err");

@@ -3,6 +3,7 @@ import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'el
 import reducers from '../../main/store/reducers';
 import { createLogger } from 'redux-logger';
 import { types as optionsTypes } from '../../main/options/optionsDuck';
+import { ipcRenderer } from 'electron';
 const initialState = getInitialStateRenderer();
 
 const logger = createLogger({
@@ -18,9 +19,6 @@ const store = createStore(
     )
 );
 
-store.subscribe(()=>{
-
-});
 
 let localStorageItems = JSON.parse(localStorage.getItem("options"));
 if(localStorageItems !== null){
@@ -30,6 +28,23 @@ if(localStorageItems !== null){
 } else {
   store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
 }
+
+ipcRenderer.on('videos/SAVE_PLAYLIST', (event)=>{
+  store.dispatch({type: 'videos/SAVE_PLAYLIST'});
+})
+ipcRenderer.on('videos/LOAD_PLAYLIST', (event)=>{
+  store.dispatch({type: 'videos/LOAD_PLAYLIST'});
+})
+ipcRenderer.on('ui/SHOW_CONFIG_PANEL', (event)=>{
+  store.dispatch({type: 'ui/SHOW_CONFIG_PANEL', payload: true});
+})
+ipcRenderer.on('videos/CLEAR_ALL', (event)=>{
+  store.dispatch({type: 'videos/CLEAR_ALL', payload: true});
+})
+
+ipcRenderer.on('videos/ADD_VIDEO_TO_PLAYLIST', (event)=>{
+  store.dispatch({type: 'videos/ADD_VIDEO_TO_PLAYLIST', payload: ""});
+})
 
 
 

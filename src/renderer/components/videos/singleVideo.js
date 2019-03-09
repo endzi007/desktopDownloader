@@ -32,9 +32,11 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     return (
+    <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
+        <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title}/>
@@ -48,6 +50,8 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes,
                 </IconButton>
             </CardContent>
         </Card>
+    </div>
+     
     );
 };
 

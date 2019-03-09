@@ -66,19 +66,67 @@ app.on('ready', () => {
       label: "File",
       submenu: [
         {
-          label: "Save current project",
+          label: "Save project",
           click() {
-            uiActions.showOpenDialog(true)
+            window.webContents.send('videos/SAVE_PLAYLIST');
+          },
+          accelerator: 'Ctrl+S'
+        },
+        {
+          label: "Load project",
+          click() {
+            window.webContents.send('videos/LOAD_PLAYLIST');
+          },
+          accelerator: 'Ctrl+O'
+        },
+        {type: 'separator'},
+        {
+          label: "Preferences",
+          click() {
+            window.webContents.send('ui/SHOW_CONFIG_PANEL');
+          },
+          accelerator: 'Ctrl+M'
+        },
+        {
+          label: "Exit",
+          click(){ app.quit() }  
+        }
+      ]
+    },
+    {
+      label: "Downloads",
+      submenu: [
+        {
+          label: "Paste", accelerator: "CmdOrCtrl+P", selector: "paste:",
+          click(){
+            window.webContents.send("videos/ADD_VIDEO_TO_PLAYLIST")
           }
         },
-        {label: "Load saved project"},
-        {label: "exit"}
+        {
+          label: "Stop",
+          click(){
+            console.log("Stop download")
+          }
+        },
+        {
+          label: "Clear all",
+          click(){
+            window.webContents.send("videos/CLEAR_ALL")
+          }
+        }
+      ]
+    },
+    {
+      label: "Help",
+      submenu:[
+        {label: "Activate"},
+        {label: "About"}
       ]
     }
   ];
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
-
+  
   window.on('closed', () => {
     window = null;
   });
@@ -89,5 +137,4 @@ app.on('ready', () => {
       window.focus();
     })
   });
-  
 });

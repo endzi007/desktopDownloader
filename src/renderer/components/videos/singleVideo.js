@@ -1,7 +1,9 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
+import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton, CircularProgress } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import DoneIcon from '@material-ui/icons/Done';
+import { FadeLoader  } from 'react-spinners';
 
 const styles = (theme) => ({
     card: { 
@@ -28,12 +30,30 @@ const styles = (theme) => ({
     },
     margin: {
         padding: 0,
-        marginTop: "15px"
+        width: "15px",
+    },
+    FadeLoader:{
+        borderColor: theme.palette.primary.dark
+    },
+    divSt: {
+        width: "20px",
+        height: "20px",
+        position: "relative",
+        padding: "0",
+        marginRight: "10px"
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition, theme})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
+    let buttonToDisplay; 
+    if(downloaded === 101){
+        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Done"><DoneIcon /></IconButton>
+    } else if (downloaded === 100){
+        buttonToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "7px!important"}} color={theme.palette.secondary.main} loading={true}/>
+    } else {
+        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton> 
+    }
     return (
     <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
@@ -45,9 +65,10 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes,
                     <Typography>{modifiedTitle}</Typography>
                     <Typography>{duration}</Typography>
                 </div>
-                <IconButton aria-label="Delete" className={classes.margin}>
-                    <DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" />
-                </IconButton>
+                <div className={classes.divSt}>
+                    {buttonToDisplay} 
+                
+                </div>
             </CardContent>
         </Card>
     </div>
@@ -55,4 +76,4 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes,
     );
 };
 
-export default withStyles(styles)(SingleVideo)
+export default withStyles(styles, {withTheme: true})(SingleVideo)

@@ -2,7 +2,8 @@
 import { app, BrowserWindow, Menu } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
-import { creators as uiActions } from './ui/uiDuck';
+import { autoUpdater } from 'electron-updater';
+
 import store from './store/store';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -56,6 +57,7 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
+      autoUpdater.checkForUpdatesAndNotify()
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));
@@ -138,3 +140,16 @@ app.on('ready', () => {
     })
   });
 });
+
+autoUpdater.on("checking-for-updates", ()=>{
+    console.log("checking for updates...");
+});
+
+autoUpdater.on("update-available", (info)=>{
+    console.log("update available")
+})
+
+autoUpdater.on("update-not-available", (info)=>{
+  console.log("update not available")
+})
+

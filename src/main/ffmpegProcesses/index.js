@@ -79,11 +79,20 @@ export default (store, index)=>{
                     index: index
                 }
             })
+            setTimeout(()=>{
+                store.dispatch({ 
+                    type: videosTypes.COUNTER,
+                    payload: {
+                        value: 101,
+                        index: index
+                    }
+                })
+            }, 500);
             resolve()
         })
 
         video.on("exit", ()=>{
-            console.log("exited");
+
         })
     });
     

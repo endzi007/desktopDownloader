@@ -3,7 +3,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton, CircularProgress } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
+import PauseIcon from '@material-ui/icons/Pause';
 import { FadeLoader  } from 'react-spinners';
+import { ipcRenderer } from 'electron';
 
 const styles = (theme) => ({
     card: { 
@@ -44,30 +46,46 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition, theme})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition, theme, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay; 
-    if(downloaded === 101){
-        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Done"><DoneIcon /></IconButton>
-    } else if (downloaded === 100){
-        buttonToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "7px!important"}} color={theme.palette.secondary.main} loading={true}/>
+    let statusToDisplay;
+
+    if(status === "downloading"){
+        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Done" onClick={()=>{ ipcRenderer.send("PAUSE_VIDEO", iPosition)}}><PauseIcon /></IconButton>
     } else {
         buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton> 
+    }
+    if(status === "converting"){
+        statusToDisplay = <FadeLoader css={{
+            transform: "scale(0.5)", 
+            position: "absolute!important", 
+            top: "7px!important", 
+            left: "-20px!important",
+            display: status === "converting"? "block": "none"
+            }} 
+            color={theme.palette.secondary.main} 
+            loading={true}
+        />
+    } else if (status === "converting"){
+        statusToDisplay = <DoneIcon />;
+    } else {
+        statusToDisplay = "";
     }
     return (
     <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
-            <CardMedia className={classes.cover} image={thumbnail} title={title}/>
+            <CardMedia className={classes.cover} image={thumbnail} title={title} />
             <CardContent className={classes.content}>
                 <div>
                     <Typography>{modifiedTitle}</Typography>
                     <Typography>{duration}</Typography>
                 </div>
                 <div className={classes.divSt}>
+                    {statusToDisplay}
                     {buttonToDisplay} 
-                
                 </div>
             </CardContent>
         </Card>

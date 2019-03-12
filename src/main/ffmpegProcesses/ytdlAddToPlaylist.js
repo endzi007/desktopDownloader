@@ -1,6 +1,7 @@
 import { execFile } from 'child_process';
 import path from 'path';
 import { types as errorsTypes } from '../errors/errorsDuck';
+
 export default (action)=>{
     return new Promise((resolve, reject)=>{
         console.log(path.resolve(__static, "youtube-dl.exe"));
@@ -11,7 +12,8 @@ export default (action)=>{
             downloaded: 0,
             url: "",
             duration: "",
-            downloadLinks: []
+            downloadLinks: [],
+            status: ""
         }
 
         video.stdout.on("data", (info)=>{

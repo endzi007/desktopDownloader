@@ -43,7 +43,11 @@ export default (store)=>(next)=>(action)=>{
                 });
             }
             break;
-        
+        case types.RESUME_VIDEO_DOWNLOAD: 
+            downloadAndConvert(store, action.payload, true).then(()=>{
+                console.log("downloading resumed");
+            });
+            break;
         case types.SAVE_PLAYLIST: 
             dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["enis"]}]}, (filename)=>{
                 fs.writeFile(filename, JSON.stringify(state.videos), (err)=>{
@@ -61,6 +65,7 @@ export default (store)=>(next)=>(action)=>{
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
             break;
+        
         default: 
         break;
     }

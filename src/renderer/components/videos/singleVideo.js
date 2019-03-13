@@ -1,8 +1,12 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton, CircularProgress } from '@material-ui/core';
+import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
+import PauseIcon from '@material-ui/icons/Pause';
+import ReplayIcon from '@material-ui/icons/Replay';
+
 import { FadeLoader  } from 'react-spinners';
 
 const styles = (theme) => ({
@@ -41,33 +45,54 @@ const styles = (theme) => ({
         position: "relative",
         padding: "0",
         marginRight: "10px"
+    },
+    stateToDisplay: {
+        left: "-20px"
+    },
+    buttonToDisplay: {
+        position: "absolute", 
+        top: "1px",
+        left: "10px"
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition, theme})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
-    let buttonToDisplay; 
-    if(downloaded === 101){
-        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Done"><DoneIcon /></IconButton>
-    } else if (downloaded === 100){
-        buttonToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "7px!important"}} color={theme.palette.secondary.main} loading={true}/>
-    } else {
-        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton> 
+    let buttonToDisplay = <IconButton className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton>
+    let stateToDisplay = ""; 
+    switch (status) {
+        case "DONE":
+            stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
+            buttonToDisplay = <IconButton className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton>
+            break;
+        case "CONVERTING": 
+            stateToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
+            break; 
+        case "DOWNLOADING":
+            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><PauseIcon fontSize="small" /></IconButton>
+            break; 
+        case "PAUSED":
+            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, false, iPosition)} aria-label="Delete"><ReplayIcon fontSize="small" /></IconButton>
+            break; 
+        default:
+            break;
     }
+
     return (
     <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
-            <CardMedia className={classes.cover} image={thumbnail} title={title}/>
+            <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>
                     <Typography>{modifiedTitle}</Typography>
                     <Typography>{duration}</Typography>
                 </div>
                 <div className={classes.divSt}>
+
+                    {stateToDisplay}
                     {buttonToDisplay} 
-                
                 </div>
             </CardContent>
         </Card>

@@ -11,7 +11,8 @@ export default (action)=>{
             downloaded: 0,
             url: "",
             duration: "",
-            downloadLinks: []
+            downloadLinks: [],
+            status: "NOT_STARTED"
         }
 
         video.stdout.on("data", (info)=>{

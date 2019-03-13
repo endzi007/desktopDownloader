@@ -6,54 +6,22 @@ export const types = {
     DOWNLOAD_NEXT : "videos/DOWNLOAD_NEXT_VIDEO",
     CLEAR_ALL: "videos/CLEAR_ALL",
     SAVE_PLAYLIST: "videos/SAVE_PLAYLIST",
-    LOAD_PLAYLIST: "videos/LOAD_PLAYLIST"
+    LOAD_PLAYLIST: "videos/LOAD_PLAYLIST",
+    RESUME_VIDEO_DOWNLOAD: "videos/RESUME_VIDEO_DOWNLOAD",
+    PAUSE_VIDEO_DOWNLOAD: "",
+    CHANGE_VIDEO_STATUS: "videos/CHANGE_VIDEO_STATUS"
 }
 
 export const creators = {
-    addVideoToPlaylist: (url)=>{
-        return {
-            type: types.ADD,
-            payload: url || "" //empty string if is called from clipboard and not from drag and drop
-        }
-    },
-    removeVideoFromPlaylist: (url)=>{
-        return {
-            type: types.REMOVE,
-            payload: url
-        }
-    },
-    downloadProgressCounter: (url)=>{
-        return {
-            type: types.COUNTER,
-            payload: url
-        }
-    },
-    startVideoDownload: ()=>{
-        return {
-            type: types.START_DOWNLOAD
-        }
-    },
-    downloadNextVideo: ()=>{
-        return {
-            type: types.DOWNLOAD_NEXT
-        }
-    },
-    clearAll: ()=>{
-        return {
-            type: types.CLEAR_ALL
-        }
-    },
-    savePlaylist: ()=>{
-        return {
-            type: types.SAVE_PLAYLIST
-        }
-    },
-    loadPlaylist: ()=>{
-        return {
-            type: types.LOAD_PLAYLIST,
-            payload: []
-        }
-    }
+    addVideoToPlaylist: (url)=>({type: types.ADD, payload: url || "" }), //empty string if is called from clipboard and not from drag and drop ,
+    removeVideoFromPlaylist: (url)=>({ type: types.REMOVE, payload: url }),
+    downloadProgressCounter: (url)=>({ type: types.COUNTER, payload: url }),
+    startVideoDownload: ()=>({ type: types.START_DOWNLOAD }),
+    downloadNextVideo: ()=>({ type: types.DOWNLOAD_NEXT }),
+    clearAll: ()=> ({ type: types.CLEAR_ALL }),
+    savePlaylist: ()=> ({ type: types.SAVE_PLAYLIST }),
+    loadPlaylist: ()=> ({ type: types.LOAD_PLAYLIST, payload: []}),
+    changeVideoStatus: (obj)=>({ type: types.CHANGE_VIDEO_STATUS, payload: { index: obj.index, status: obj.status}})
 }
 
 export default (state=[], action)=>{
@@ -75,9 +43,11 @@ export default (state=[], action)=>{
             newState = [];
             return newState;
         case `${types.LOAD_PLAYLIST}_PROCESSED`:
-            console.log("called", action.payload);
             newState = action.payload;
             return newState;
+        case types.CHANGE_VIDEO_STATUS: 
+            newState[action.payload.index].status = action.payload.status;
+            return newState; 
         default:
             return newState;
     }

@@ -5,7 +5,7 @@ import { types as uiTypes } from '../ui/uiDuck';
 
 export default (store)=>(next)=>(action)=>{
     const state = store.getState();
-    if(!state.appState.licence){
+    if(state.appState.licence){
         switch (action.type) {
             case videoTypes.ADD: 
                 if(state.videos.length + state.appState.parsingData.count >= state.appState.proFeatures.videosLength){

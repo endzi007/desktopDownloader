@@ -1,11 +1,16 @@
 import { types as optionsTypes} from '../options/optionsDuck';
 import { types as videosTypes} from '../videos/videoDuck';
+import { ipcMain } from 'electron';
 import path from 'path';
 import { execFile } from 'child_process';
 
-export default (store, index)=>{
+export default (store, index, resume)=>{
     return new Promise((resolve, reject)=>{
-        store.dispatch({ type: optionsTypes.INCREASE_LIMIT})
+        if(!resume){
+            store.dispatch({ type: optionsTypes.INCREASE_LIMIT});
+        }
+        store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DOWNLOADING" }})
+
         let state = store.getState();
         let storeVideo = state.videos[index];
         let qualitySelect = {
@@ -62,7 +67,7 @@ export default (store, index)=>{
                 })
             }
             if(info[1].slice(0, -1)=== "100.0"){
-                console.log("converting");
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "CONVERTING" }})
             }
             
 
@@ -72,27 +77,26 @@ export default (store, index)=>{
         })
 
         video.on("close", ()=>{ 
-            store.dispatch({ 
-                type: videosTypes.COUNTER,
-                payload: {
-                    value: 100,
-                    index: index
-                }
-            })
-            setTimeout(()=>{
-                store.dispatch({ 
-                    type: videosTypes.COUNTER,
-                    payload: {
-                        value: 101,
-                        index: index
-                    }
-                })
-            }, 500);
             resolve()
         })
 
         video.on("exit", ()=>{
+            if(storeVideo.status !== "PAUSED"){
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DONE" }})
+            }
+        })
 
+        ipcMain.on("PAUSE_VIDEO", (event, i)=>{
+            if(i === index){
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "PAUSED" }})
+                video.kill();
+            }
+        })
+        ipcMain.on("STOP_VIDEO", (event, i)=>{
+            if(i === index){
+                resolve();
+                video.kill();
+            }
         })
     });
     

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Video from './singleVideo';
 import { types as videoTypes } from '../../../main/videos/videoDuck';
 import { Card, Typography } from '@material-ui/core';
+import { ipcRenderer } from 'electron';
 function mapStateToProps (state){
     return {
         videos: state.videos,
@@ -14,9 +15,17 @@ class VideoList extends React.Component{
     constructor(props){
         super(props);
         this.handleDelete = this.handleDelete.bind(this)
+        this.handlePauseResume = this.handlePauseResume.bind(this);
     }
     handleDelete(url){
         this.props.dispatch({type: videoTypes.REMOVE, payload: url})
+    }
+    handlePauseResume(pause, i){
+        if(pause){
+            ipcRenderer.send("PAUSE_VIDEO", i);
+        } else {
+            this.props.dispatch({type: videoTypes.RESUME_VIDEO_DOWNLOAD, payload: i})
+        }
     }
 
     render(){
@@ -25,7 +34,7 @@ class VideoList extends React.Component{
         const { videos } = this.props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete}/>);
+                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete} handlePauseResume={this.handlePauseResume}/>);
             });
         }
         if(this.props.appState.parsingData.bool){

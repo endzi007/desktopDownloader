@@ -7,12 +7,16 @@ export const types = {
     CLEAR_ALL: "videos/CLEAR_ALL",
     SAVE_PLAYLIST: "videos/SAVE_PLAYLIST",
     LOAD_PLAYLIST: "videos/LOAD_PLAYLIST",
+<<<<<<< HEAD
     RESUME_VIDEO_DOWNLOAD: "videos/RESUME_VIDEO_DOWNLOAD",
     PAUSE_VIDEO_DOWNLOAD: "",
+=======
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
     CHANGE_VIDEO_STATUS: "videos/CHANGE_VIDEO_STATUS"
 }
 
 export const creators = {
+<<<<<<< HEAD
     addVideoToPlaylist: (url)=>({type: types.ADD, payload: url || "" }), //empty string if is called from clipboard and not from drag and drop ,
     removeVideoFromPlaylist: (url)=>({ type: types.REMOVE, payload: url }),
     downloadProgressCounter: (url)=>({ type: types.COUNTER, payload: url }),
@@ -22,6 +26,17 @@ export const creators = {
     savePlaylist: ()=> ({ type: types.SAVE_PLAYLIST }),
     loadPlaylist: ()=> ({ type: types.LOAD_PLAYLIST, payload: []}),
     changeVideoStatus: (obj)=>({ type: types.CHANGE_VIDEO_STATUS, payload: { index: obj.index, status: obj.status}})
+=======
+    addVideoToPlaylist: (url)=>({ type: types.ADD, payload: url || "" }), //empty string if is called from clipboard and not from drag and drop
+    removeVideoFromPlaylist: (url)=>({type: types.REMOVE, payload: url}),
+    downloadProgressCounter: (url)=>({type: types.COUNTER, payload: url}),
+    startVideoDownload: ()=>({type: types.START_DOWNLOAD}),
+    downloadNextVideo: ()=>({type: types.DOWNLOAD_NEXT}),
+    clearAll: ()=>({type: types.CLEAR_ALL}),
+    savePlaylist: ()=>({type: types.SAVE_PLAYLIST}),
+    loadPlaylist: () => ({type: types.LOAD_PLAYLIST, payload: []}),
+    changeVideoStatus: obj => ({type: types.CHANGE_VIDEO_STATUS, payload: {index: obj.index, status: obj.status} })
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
 }
 
 export default (state=[], action)=>{
@@ -47,7 +62,11 @@ export default (state=[], action)=>{
             return newState;
         case types.CHANGE_VIDEO_STATUS: 
             newState[action.payload.index].status = action.payload.status;
+<<<<<<< HEAD
             return newState; 
+=======
+            return newState;
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
         default:
             return newState;
     }

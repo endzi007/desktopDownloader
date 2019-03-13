@@ -5,9 +5,13 @@ import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import PauseIcon from '@material-ui/icons/Pause';
+<<<<<<< HEAD
 import ReplayIcon from '@material-ui/icons/Replay';
 
+=======
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
 import { FadeLoader  } from 'react-spinners';
+import { ipcRenderer } from 'electron';
 
 const styles = (theme) => ({
     card: { 
@@ -56,6 +60,7 @@ const styles = (theme) => ({
     }
 });
 
+<<<<<<< HEAD
 const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton>
@@ -78,20 +83,56 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             break;
     }
 
+=======
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, classes, duration, iPosition, theme, status})=>{
+    let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
+    let buttonToDisplay; 
+    let statusToDisplay;
+
+    if(status === "downloading"){
+        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Done" onClick={()=>{ ipcRenderer.send("PAUSE_VIDEO", iPosition)}}><PauseIcon /></IconButton>
+    } else {
+        buttonToDisplay = <IconButton style={{ position: "absolute"}} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton> 
+    }
+    if(status === "converting"){
+        statusToDisplay = <FadeLoader css={{
+            transform: "scale(0.5)", 
+            position: "absolute!important", 
+            top: "7px!important", 
+            left: "-20px!important",
+            display: status === "converting"? "block": "none"
+            }} 
+            color={theme.palette.secondary.main} 
+            loading={true}
+        />
+    } else if (status === "converting"){
+        statusToDisplay = <DoneIcon />;
+    } else {
+        statusToDisplay = "";
+    }
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
     return (
     <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
+<<<<<<< HEAD
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
+=======
+            <CardMedia className={classes.cover} image={thumbnail} title={title} />
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
             <CardContent className={classes.content}>
                 <div>
                     <Typography>{modifiedTitle}</Typography>
                     <Typography>{duration}</Typography>
                 </div>
                 <div className={classes.divSt}>
+<<<<<<< HEAD
 
                     {stateToDisplay}
+=======
+                    {statusToDisplay}
+>>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
                     {buttonToDisplay} 
                 </div>
             </CardContent>

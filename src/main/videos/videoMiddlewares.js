@@ -50,7 +50,14 @@ export default (store)=>(next)=>(action)=>{
             break;
         case types.SAVE_PLAYLIST: 
             dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["enis"]}]}, (filename)=>{
-                fs.writeFile(filename, JSON.stringify(state.videos), (err)=>{
+                let modifiedVideos = [];
+                state.videos.forEach(video => {
+                    video.status = "NOT_STARTED";
+                    video.downloaded = 0;
+                    modifiedVideos.push(video);
+                });
+
+                fs.writeFile(filename, JSON.stringify(modifiedVideos), (err)=>{
                     if(err){
                         console.log("error happened while saving file");
                     } 
@@ -62,6 +69,7 @@ export default (store)=>(next)=>(action)=>{
         case types.LOAD_PLAYLIST: 
             dialog.showOpenDialog(null, {filters:[{name: "JSON File", extensions: ["enis"]}]}, (fn)=>{
                 let data = fs.readFileSync(fn[0]);
+                console.log(JSON.parse(data));
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
             break;

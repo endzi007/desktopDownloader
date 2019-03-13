@@ -63,31 +63,23 @@ function ButtonAppBar(props) {
           </IconButton>
           <div>
             <Tooltip title="Save" aria-label="Save" placement="bottom">
-                <IconButton>
-                <Save color="inherit" className={classes.buttonIcon} onClick={()=>{
-                  props.savePlaylist();
-                }} />
+                <IconButton onClick={()=>{props.savePlaylist(); }} >
+                <Save color="inherit" className={classes.buttonIcon} />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Open" aria-label="Open" placement="bottom">
-                <IconButton>
-                <Open color="inherit" className={classes.buttonIcon} onClick={()=>{
-                  props.loadPlaylist();
-                }} />
+                <IconButton onClick={()=>{ props.loadPlaylist(); }} >
+                <Open color="inherit" className={classes.buttonIcon} />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Clear All" aria-label="Clear All" placement="bottom">
-                <IconButton>
-                <ClearAll color="inherit" className={classes.buttonIcon} onClick={()=>{
-                  props.clearAll();
-                }} />
+                <IconButton onClick={()=>{ props.clearAll(); }}>
+                <ClearAll color="inherit" className={classes.buttonIcon} />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Open config" aria-label="Open config" placement="bottom">
-              <IconButton>
-              <Build color="inherit" className={classes.buttonIcon} onClick={()=>{
-                props.showConfigPanel(true, "local");
-              }} />
+              <IconButton onClick={()=>{ props.showConfigPanel(true, "local");}}>
+              <Build color="inherit" className={classes.buttonIcon} />
               </IconButton>
             </Tooltip>
           </div>

@@ -13,11 +13,7 @@ export default (action)=>{
             url: "",
             duration: "",
             downloadLinks: [],
-<<<<<<< HEAD
             status: "NOT_STARTED"
-=======
-            status: ""
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
         }
 
         video.stdout.on("data", (info)=>{

@@ -7,16 +7,11 @@ import { ipcMain } from 'electron';
 
 export default (store, index, resume)=>{
     return new Promise((resolve, reject)=>{
-<<<<<<< HEAD
         if(!resume){
             store.dispatch({ type: optionsTypes.INCREASE_LIMIT});
         }
         store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DOWNLOADING" }})
 
-=======
-        store.dispatch({ type: optionsTypes.INCREASE_LIMIT})
-        store.dispatch({type: videosTypes.CHANGE_VIDEO_STATUS, payload: {index: index, status: "downloading"}})
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
         let state = store.getState();
         let storeVideo = state.videos[index];
         let qualitySelect = {
@@ -72,11 +67,7 @@ export default (store, index, resume)=>{
                 })
             }
             if(info[1].slice(0, -1)=== "100.0"){
-<<<<<<< HEAD
                 store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "CONVERTING" }})
-=======
-                store.dispatch({type: videosTypes.CHANGE_VIDEO_STATUS, payload: {index: index, status: "converting"}})
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
             }
             
 
@@ -86,33 +77,17 @@ export default (store, index, resume)=>{
         })
 
         video.on("close", ()=>{ 
-<<<<<<< HEAD
-=======
-            store.dispatch({ 
-                type: videosTypes.COUNTER,
-                payload: {
-                    value: 100,
-                    index: index
-                }
-            })
-            store.dispatch({type: videosTypes.CHANGE_VIDEO_STATUS, payload: {index: index, status: "done"}})
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
             resolve()
         })
 
         video.on("exit", ()=>{
-<<<<<<< HEAD
             if(storeVideo.status !== "PAUSED"){
                 store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DONE" }})
             }
-=======
-            store.dispatch({type: videosTypes.CHANGE_VIDEO_STATUS, payload: {index: index, status: ""}})
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
         })
 
         ipcMain.on("PAUSE_VIDEO", (event, i)=>{
             if(i === index){
-<<<<<<< HEAD
                 store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "PAUSED" }})
                 video.kill();
             }
@@ -120,9 +95,6 @@ export default (store, index, resume)=>{
         ipcMain.on("STOP_VIDEO", (event, i)=>{
             if(i === index){
                 resolve();
-=======
-                store.dispatch({type: videosTypes.CHANGE_VIDEO_STATUS, payload: {index: index, status: "paused"}})
->>>>>>> e351e67c766bf51b8c9f450af2650a2938d8ef55
                 video.kill();
             }
         })

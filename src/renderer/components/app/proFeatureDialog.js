@@ -24,7 +24,7 @@ class ProFeatureDialog extends React.Component {
     return (
       <div>
         <Dialog
-          open={this.props.uiConfig.showProFeatureDialog.open}
+          open={this.props.uiConfig.showProFeatureDialog}
           TransitionComponent={Transition}
           keepMounted
           onClose={this.handleClose.bind(this)}

@@ -58,7 +58,7 @@ class VideoList extends React.Component{
             fontSize: "2em",
             height: videos.length === 0? window.innerHeight-96+"px": "auto",
             display: videos.length === 0? "flex": "block",
-            padding: 15
+            paddingLeft: 15, paddingRight: 15, paddingTop: 70, paddingBottom: 70
         };
 
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;

@@ -47,7 +47,7 @@ function ButtonAppBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static" style={{"WebkitAppRegion": "drag"}}>
+      <AppBar className={classes.appBar} position="fixed" style={{"WebkitAppRegion": "drag"}}>
         <Toolbar className={classes.flex} variant="dense">
           <Tooltip title="Paste link" aria-label="Paste URL from Clipboard" placement="bottom">
             <IconButton variant="contained" onClick={()=>{

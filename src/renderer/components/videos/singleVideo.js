@@ -58,12 +58,12 @@ const styles = (theme) => ({
 
 const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
-    let buttonToDisplay = <IconButton className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton>
+    let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = ""; 
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
-            buttonToDisplay = <IconButton className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon onClick ={handleDelete.bind(null, url)} fontSize="small" /></IconButton>
+            buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)}  className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
             break;
         case "CONVERTING": 
             stateToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
@@ -80,14 +80,14 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
 
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
-        <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
+        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>
-                    <Typography>{modifiedTitle}</Typography>
-                    <Typography>{duration}</Typography>
+                    <Typography variant="body1">{modifiedTitle}</Typography>
+                    <Typography variant="body1">{duration}</Typography>
                 </div>
                 <div className={classes.divSt}>
 

@@ -93,10 +93,11 @@ class ConfigModal extends React.Component {
     const { downloadFormat } = this.props.options;
     let quality = "";
     if(downloadFormat[downloadFormat.type] !== null){
-      quality = downloadFormat[downloadFormat.type].map((quality)=>{
-        return <MenuItem value={quality}>{quality} <span style={{marginLeft: "7px", fontStyle: "italic"}}>{quality==="1080"? "Pro": ""}</span> </MenuItem>
+      quality = downloadFormat[downloadFormat.type].map((quality, i)=>{
+        return <MenuItem key={`${quality}_${i}`} value={quality}>{quality} <span style={{marginLeft: "7px", fontStyle: "italic"}}>{quality==="1080"? "Pro": ""}</span> </MenuItem>
       });
     }
+    
     return (
       <div>
         <Dialog

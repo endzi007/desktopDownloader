@@ -79,7 +79,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
     }
 
     return (
-    <div style={{display: "grid", gridTemplateColumns: "15px auto"}}>
+    <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subheading" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />

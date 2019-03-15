@@ -11,63 +11,22 @@ export const types = {
 }
 
 export const creators = {
-    increaseLimit: ()=>{
-        //val should be INC or DEC to increment or decrement queque
-        return {
-            type: types.INCREASE_LIMIT, 
-            payload: ""
-        }
-    },
-    changeSaveFolder: (path)=>{
-        return {
-            type: types.CHANGE_SAVE_FOLDER, 
-            payload: path
-        }
-    },
-    showOpenDialog: ()=>{
-        return {
-            type: types.SHOW_OPEN_DIALOG,
-        }
-    },
-    changeDownloadFormat: (format)=>{
-        return {
-            type: types.CHANGE_DOWNLOAD_FORMAT,
-            payload: format
-        }
-    },
-    saveToLocalStorage: (state)=>{
-        return {
-            type: types.SAVE_TO_LOCALSTORAGE, 
-            payload: state
-        }
-    },
-    resetLimit: ()=>{
-        return {
-            type: types.RESET_LIMIT,
-            payload: ""
-        }
-    },
-    getSaveFolder: ()=>{
-        return {
-            type: types.GET_SAVE_FOLDER, 
-            payload: null
-        }
-    },
-    changeDownloadQuality: (quality)=>{
-        return {
-            type: types.CHANGE_DOWNLOAD_QUALITY,
-            payload: quality
-        }
-    },
-    autoNumbering: (val)=>{
-        return {
+    //val should be INC or DEC to increment or decrement queque
+    increaseLimit: ()=>({ type: types.INCREASE_LIMIT, payload: "" }),
+    changeSaveFolder: path=>({ type: types.CHANGE_SAVE_FOLDER, payload: path }),
+    showOpenDialog: ()=>({ type: types.SHOW_OPEN_DIALOG }),
+    changeDownloadFormat: format=>({ type: types.CHANGE_DOWNLOAD_FORMAT, payload: format }),
+    saveToLocalStorage: state=>({ type: types.SAVE_TO_LOCALSTORAGE, payload: state }),
+    resetLimit: ()=>({ type: types.RESET_LIMIT, payload: "" }),
+    getSaveFolder: ()=>({type: types.GET_SAVE_FOLDER,  payload: null }),
+    changeDownloadQuality: quality=>({ type: types.CHANGE_DOWNLOAD_QUALITY, payload: quality }),
+    autoNumbering: (val)=>({
             type: types.AUTO_NUMBERING,
             payload: {
                 numbering: val.numbering,
                 value: val.value
             }
-        }
-    }
+    })
 }
 
 let defaultState = {

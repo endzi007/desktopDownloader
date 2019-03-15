@@ -2,16 +2,13 @@ export const types = {
     PARSING_DATA: "appState/PARSING_DATA",
     CHECK_LICENCE: "appState/CHECK_LICENCE",
     REGISTER_LICENCE: "appState/REGISTER_LICENCE",
-    CHECK_PRO_FEATURES: "appState/CHECK_PRO_FEATURES"
+    CHECK_PRO_FEATURES: "appState/CHECK_PRO_FEATURES",
+    DOWNLOADING: "appState/DOWNLOADING"
 }
 
 export const creators = {
-    parsingData: (bool)=>{
-        return {
-            type: types.PARSING_DATA,
-            payload: bool
-        }
-    }
+    parsingData: bool =>({ type: types.PARSING_DATA, payload: bool }),
+    downloading: bool =>({ type: types.DOWNLOADING, payload: bool})
 }
 
 let defaultState = {
@@ -38,7 +35,10 @@ export default (state = defaultState, action)=>{
             return newState;
         case types.REGISTER_LICENCE: 
             newState.licence = action.payload; 
-            return newState; 
+            return newState;
+        case types.DOWNLOADING:
+            newState.downloading = action.payload;
+            return newState;
         default:
             return newState;
     }

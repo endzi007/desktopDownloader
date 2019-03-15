@@ -56,11 +56,7 @@ function ButtonAppBar(props) {
               <ControlPoint color="inherit" />
             </IconButton>
           </Tooltip>
-          <IconButton>
-          <Cached color="inherit" className={classes.buttonIcon} onClick={()=>{
-            props.resetLimit();
-          }} />
-          </IconButton>
+
           <div>
             <Tooltip title="Save" aria-label="Save" placement="bottom">
                 <IconButton onClick={()=>{props.savePlaylist(); }} >
@@ -73,7 +69,10 @@ function ButtonAppBar(props) {
                 </IconButton>
             </Tooltip>
             <Tooltip title="Clear All" aria-label="Clear All" placement="bottom">
-                <IconButton onClick={()=>{ props.clearAll(); }}>
+                <IconButton onClick={()=>{ 
+                  props.clearAll(); 
+                  props.resetLimit();
+                  }}>
                 <ClearAll color="inherit" className={classes.buttonIcon} />
                 </IconButton>
             </Tooltip>
@@ -101,7 +100,7 @@ const  mapDispatchToProps = {
   autoNumbering: optionsActions.autoNumbering,
   clearAll: videoActions.clearAll,
   savePlaylist: videoActions.savePlaylist,
-  loadPlaylist: videoActions.loadPlaylist
+  loadPlaylist: videoActions.loadPlaylist,
 };
   
 

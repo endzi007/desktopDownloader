@@ -25,7 +25,10 @@ let initialState = {
     videos: [],
     uiConfig: {
         showConfig: false, 
-        showProFeatureDialog: false
+        showProFeatureDialog: {
+          open: false,
+          message: ""
+        }
     },
     appState: {
       connection: null,
@@ -37,7 +40,7 @@ let initialState = {
       },
       licence: false,
       proFeatures: {
-          videosLength: 5, 
+          videosLength: 20, 
           quality: "1080"
       }
     }

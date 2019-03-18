@@ -30,7 +30,8 @@ export default (state={showConfig: false, showProFeatureDialog: false}, action)=
             newState.showConfig = action.payload;
             return newState;
         case types.SHOW_PRO_FEATURE: 
-            newState.showProFeatureDialog = action.payload.open; 
+            newState.showProFeatureDialog.open = action.payload.open; 
+            newState.showProFeatureDialog.message = action.payload.message;
             return newState; 
         default:
             return newState;

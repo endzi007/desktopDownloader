@@ -19,14 +19,18 @@ const store = createStore(
     )
 );
 
-
-let localStorageItems = JSON.parse(localStorage.getItem("options"));
-if(localStorageItems !== null){
-  store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder});
-  store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat});
-  store.dispatch({ type: optionsTypes.AUTO_NUMBERING, payload:localStorageItems.autoNumbering || {numbering: false, value: 0}});
-} else {
-  store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
+try {
+  let localStorageItems = JSON.parse(localStorage.getItem("options"));
+  if(localStorageItems !== null){
+    store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder});
+    store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat.type});
+    store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_QUALITY, payload:localStorageItems.downloadFormat.quality});
+    store.dispatch({ type: optionsTypes.AUTO_NUMBERING, payload:localStorageItems.autoNumbering || {numbering: false, value: 0}});
+  } else {
+    store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
+  }
+} catch (error) {
+  console.log("error loading local storage", error);
 }
 
 ipcRenderer.on('videos/SAVE_PLAYLIST', (event)=>{

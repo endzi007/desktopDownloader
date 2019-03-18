@@ -20,6 +20,8 @@
     "dotenv": "^6.2.0",
     "electron-redux": "^1.3.1",
     "electron-updater": "^4.0.6",
+    "node-fetch": "^2.3.0",
+    "node-machine-id": "^1.1.10",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-dropzone": "^7.0.1",
@@ -36,18 +38,11 @@
     "electron-webpack": "^2.6.1",
     "uglifyjs-webpack-plugin": "^2.1.2"
   },
-  "electronWebpack": {
-    "main": {
-      "webpackConfig": "custom.webpack.additions.js"
-    },
-    "renderer": {
-      "webpackConfig": "custom.webpack.additions.js"
-    }
-  },
   "build": {
     "appId": "com.decom.ytdownload",
     "productName": "NG YouTube Downloader",
     "win": {
+      "icon": "static/assets/Logo.ico",
       "target": [
         {
           "target": "nsis",

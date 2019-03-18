@@ -1,5 +1,5 @@
 'use strict'
-import { app, BrowserWindow, Menu } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, shell } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
@@ -28,28 +28,29 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  console.log(err);
+  console.log("error");
 })
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.png")});
+  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader"});
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   }
   else {
     window.loadURL(formatUrl({
-      pathname: path.join(__dirname, 'assets/index.html'),
+      pathname: path.join(__dirname, 'index.html'),
       protocol: 'file:',
       slashes: true
     }))
   }
 
-  if (isDevelopment) {
+ if (isDevelopment) {
     window.webContents.openDevTools();
-  }
+  } 
 
-  let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.png")})
+
+  let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})
 
   loading.once('show', () => {
     window.webContents.once('dom-ready', () => {
@@ -153,3 +154,6 @@ autoUpdater.on("update-not-available", (info)=>{
   console.log("update not available")
 })
 
+ipcMain.on("GO_TO_WEBSITE", (e, url)=>{
+    shell.openExternal(url, {activate: true});
+});

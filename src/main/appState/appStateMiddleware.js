@@ -2,10 +2,12 @@ import { types as appStateTypes } from './appStateDuck';
 import { types as videoTypes } from '../videos/videoDuck';
 import { types as optionsTypes } from "../options/optionsDuck";
 import { types as uiTypes } from '../ui/uiDuck';
+import fetch from 'node-fetch';
+import { ipcMain, webContents } from 'electron';
 
 export default (store)=>(next)=>(action)=>{
     const state = store.getState();
-    if(state.appState.licence){
+    if(!state.appState.licence){
         switch (action.type) {
             case videoTypes.ADD: 
                 if(state.videos.length + state.appState.parsingData.count >= state.appState.proFeatures.videosLength){
@@ -20,9 +22,8 @@ export default (store)=>(next)=>(action)=>{
                     action.payload = {open: true, message: "To download HD videos please consider to buy pro licence"};
                 }
             break;
-            case `${videoTypes.add}_PROCESSED`:
-                console.log("processed in middleware"); 
-                break;
+            case appStateTypes.REGISTER_LICENCE: 
+                
             default: 
                 break; 
         }

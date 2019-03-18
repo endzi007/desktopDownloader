@@ -8,7 +8,8 @@ export const types = {
 
 export const creators = {
     parsingData: bool =>({ type: types.PARSING_DATA, payload: bool }),
-    downloading: bool =>({ type: types.DOWNLOADING, payload: bool})
+    downloading: bool =>({ type: types.DOWNLOADING, payload: bool}),
+    registerLicence: url => ({ type: types.REGISTER_LICENCE, payload: url })
 }
 
 let defaultState = {
@@ -21,7 +22,7 @@ let defaultState = {
     },
     licence: false,
     proFeatures: {
-        videosLength: 5, 
+        videosLength: 20, 
         quality: "1080"
     }
   }

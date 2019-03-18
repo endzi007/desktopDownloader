@@ -1,15 +1,18 @@
 {
-  "name": "ng-youtube-downloader",
+  "name": "dedex-video-downloader",
   "version": "1.0.0",
-  "description": "Youtube mp3, mp4 multiple downloader",
+  "description": "Audio and video downloader, YouTube, 100+ sites",
   "main": "src/main/index.js",
+  "repository": "https://github.com/endzi007/desktopDownloader",
   "homepage": "./",
   "scripts": {
     "start": "electron-webpack dev",
     "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder"
+    "dist": "yarn compile && electron-builder",
+    "build": "build --win", 
+    "ship": "build --win -p always"
   },
-  "keywords": [],
+  "keywords": ["YouTube", "video", "downloader", "playlist", "multiple", "converter", "mp4", "mp3"],
   "author": "Enis Jašarović",
   "license": "ISC",
   "dependencies": {
@@ -39,8 +42,8 @@
     "uglifyjs-webpack-plugin": "^2.1.2"
   },
   "build": {
-    "appId": "com.decom.ytdownload",
-    "productName": "NG YouTube Downloader",
+    "appId": "com.decom.dedexdownloader",
+    "productName": "DeDex Video Downloader",
     "win": {
       "icon": "static/assets/Logo.ico",
       "target": [

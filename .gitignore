@@ -5,3 +5,4 @@
 /static/ffmpeg.exe
 /static/ffprobe.exe
 /static/youtube-dl.exe
+electron-builder.yml

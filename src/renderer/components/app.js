@@ -7,21 +7,25 @@ import VideoList from './videos/videoList';
 import ConfigModal from './app/configModal';
 import BottomAppBar from './app/bottomAppBar';
 import ProFeatureDialog from "./app/proFeatureDialog";
+import UpdateNotification from './app/updateNotification';
 
 import { creators as videoActions } from '../../main/videos/videoDuck';
+import { ipcRenderer } from 'electron';
 
 class App extends React.Component{
     constructor(){
         super();
         this.state = {
             mode: "off",
-            outline: "hide"
+            outline: "hide",
+            updateNotification: true
         }
         this.onDrop = this.onDrop.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
         this.onDragEnter = this.onDragEnter.bind(this);
         this.onDragStart = this.onDragStart.bind(this);
         this.onDragLeave = this.onDragLeave.bind(this);
+        this.handleCloseUpdate = this.handleCloseUpdate.bind(this);
     }
     onDrop(e){
         let droppedItems = e.dataTransfer.items;
@@ -62,6 +66,14 @@ class App extends React.Component{
             }
         });
     }
+    componentDidMount(){
+        ipcRenderer.on("UPDATE_AVAILABLE", (e)=>{
+            this.setState({updateNotification: true})
+        })
+    }
+    handleCloseUpdate(bool){
+        this.setState({updateNotification: bool})
+    }
     render(){
         const { classes } = this.props;
         return (
@@ -78,6 +90,8 @@ class App extends React.Component{
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />
+                    <UpdateNotification open={this.state.updateNotification} handleClose={this.handleCloseUpdate}/>
+
                 </div>
             </MuiThemeProvider>
         );

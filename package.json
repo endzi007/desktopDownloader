@@ -8,9 +8,7 @@
   "scripts": {
     "start": "electron-webpack dev",
     "compile": "electron-webpack",
-    "dist": "yarn compile && electron-builder",
-    "build": "build --win", 
-    "ship": "build --win -p always"
+    "dist": "yarn compile && electron-builder --win -p always"
   },
   "keywords": ["YouTube", "video", "downloader", "playlist", "multiple", "converter", "mp4", "mp3"],
   "author": "Enis Jašarović",

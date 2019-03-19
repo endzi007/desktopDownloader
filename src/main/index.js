@@ -142,12 +142,13 @@ app.on('ready', () => {
   });
 });
 
-autoUpdater.on("checking-for-updates", ()=>{
-    console.log("checking for updates...");
-});
+ipcMain.on("QUIT_AND_INSTALL", (e)=>{
+  autoUpdater.quitAndInstall();
+})
+
 
 autoUpdater.on("update-available", (info)=>{
-    console.log("update available")
+  window.webContents.send("UPDATE_AVAILABLE");
 })
 
 autoUpdater.on("update-not-available", (info)=>{

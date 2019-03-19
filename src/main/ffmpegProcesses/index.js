@@ -51,8 +51,6 @@ export default (store, index, resume)=>{
             "--ffmpeg-location",
             path.resolve(__static, "ffmpeg.exe"),
             ...args,
-            "--postprocessor-args",
-            "-no-post-overwrites",
             "-o", 
             `${state.options.downloadFolder}\\${outputTemplate}`
         ]);

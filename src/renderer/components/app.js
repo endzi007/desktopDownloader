@@ -18,7 +18,7 @@ class App extends React.Component{
         this.state = {
             mode: "off",
             outline: "hide",
-            updateNotification: true
+            updateNotification: false
         }
         this.onDrop = this.onDrop.bind(this);
         this.onDragOver = this.onDragOver.bind(this);
@@ -52,6 +52,7 @@ class App extends React.Component{
         e.preventDefault();
     }
     onDragEnter(e){ 
+        e.stopPropagation();
         this.setState((old, newState)=>{
             return {
                 outline: "show"
@@ -80,9 +81,12 @@ class App extends React.Component{
             <MuiThemeProvider theme={theme}>
                 <div style={{
                     outlineOffset: "-4px", 
-                    minHeight: 
-                    `${window.innerHeight}px`, 
-                    outline: this.state.outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none"
+                    height: 
+                    `${window.innerHeight-105}px`, 
+                    outline: this.state.outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
+                    marginTop: "55px",
+                    overflowY: "scroll"
+
                 }}
                 onDrop={this.onDrop} onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDragLeave = {this.onDragLeave}>
                     <ButtonAppBar />

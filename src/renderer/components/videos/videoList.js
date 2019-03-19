@@ -39,7 +39,9 @@ class VideoList extends React.Component{
         }
         if(this.props.appState.parsingData.bool){
             arrOfVideos.push(
-                <Card style={{
+                <Card 
+                    key="gettingInfoCard"
+                    style={{
                     display: "flex",
                     marginBottom: "5px",
                     flexGrow: "1",
@@ -58,7 +60,7 @@ class VideoList extends React.Component{
             fontSize: "2em",
             height: videos.length === 0? window.innerHeight-96+"px": "auto",
             display: videos.length === 0? "flex": "block",
-            paddingLeft: 15, paddingRight: 15, paddingTop: 70, paddingBottom: 70
+            paddingLeft: 15, paddingRight: 15, paddingTop: 0, paddingBottom: 0
         };
 
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;

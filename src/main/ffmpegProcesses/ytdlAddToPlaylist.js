@@ -4,7 +4,6 @@ import { types as errorsTypes } from '../errors/errorsDuck';
 
 export default (action)=>{
     return new Promise((resolve, reject)=>{
-        console.log(path.resolve(__static, "youtube-dl.exe"));
         let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--dump-json", "--no-playlist"]);
         let videoObj = {
             title: "",
@@ -31,7 +30,6 @@ export default (action)=>{
         });
 
         video.stderr.on("data", (err)=>{
-            console.log("err", err);
             if(err.indexOf("URL")!==-1){
                 action.type = errorsTypes.ERROR_HANDLER;
                 action.payload = "Unsuported or unvalid URL";
@@ -42,12 +40,7 @@ export default (action)=>{
             resolve(action);
         });
 
-        video.on("close", ()=>{
-            console.log("close");
-        });
-        video.on("data", (data)=>{
-            console.log("data", data);
-        });
+
         video.on("error", (err)=>{
             console.log("some err", err);
         })

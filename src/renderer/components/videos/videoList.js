@@ -58,7 +58,7 @@ class VideoList extends React.Component{
             alignItems: "center",
             color: "darkgray",
             fontSize: "2em",
-            height: videos.length === 0? window.innerHeight-96+"px": "auto",
+            height: videos.length === 0? "100%": "auto",
             display: videos.length === 0? "flex": "block",
             paddingLeft: 15, paddingRight: 15, paddingTop: 0, paddingBottom: 0
         };

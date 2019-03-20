@@ -35,12 +35,9 @@ class ProFeatureDialog extends React.Component {
     machineId().then((id)=>{
       var _0x1806=['aHR0cHM6Ly9kZXNrdG9wZG93bmxvYWRlci4wMDB3ZWJob3N0YXBwLmNvbS8/c2VjcmV0X2tleT01YzdjZDBjMzU4NWFjNS4wNzY0MzMxMyZzbG1fYWN0aW9uPXNsbV9hY3RpdmF0ZSZsaWNlbnNlX2tleT0=','c3RhdGU=','dGV4dGJveA=='];var _0x5570=function(_0x2fa4b7,_0x560c34){_0x2fa4b7=_0x2fa4b7-0x0;var _0x4d46cd=_0x1806[_0x2fa4b7];if(_0x5570['wZGaWi']===undefined){(function(){var _0x78bafd=function(){var _0x4957f5;try{_0x4957f5=Function('return\x20(function()\x20'+'{}.constructor(\x22return\x20this\x22)(\x20)'+');')();}catch(_0x35ee17){_0x4957f5=window;}return _0x4957f5;};var _0x154ee3=_0x78bafd();var _0x36da51='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x154ee3['atob']||(_0x154ee3['atob']=function(_0x1ab340){var _0x5ea063=String(_0x1ab340)['replace'](/=+$/,'');for(var _0x66251d=0x0,_0x306e35,_0x395136,_0x2ec68e=0x0,_0x154fe9='';_0x395136=_0x5ea063['charAt'](_0x2ec68e++);~_0x395136&&(_0x306e35=_0x66251d%0x4?_0x306e35*0x40+_0x395136:_0x395136,_0x66251d++%0x4)?_0x154fe9+=String['fromCharCode'](0xff&_0x306e35>>(-0x2*_0x66251d&0x6)):0x0){_0x395136=_0x36da51['indexOf'](_0x395136);}return _0x154fe9;});}());_0x5570['OpJSFf']=function(_0x29f88d){var _0x1fbdb1=atob(_0x29f88d);var _0x366c8c=[];for(var _0x3219b8=0x0,_0x29f9c0=_0x1fbdb1['length'];_0x3219b8<_0x29f9c0;_0x3219b8++){_0x366c8c+='%'+('00'+_0x1fbdb1['charCodeAt'](_0x3219b8)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x366c8c);};_0x5570['sprbYA']={};_0x5570['wZGaWi']=!![];}var _0x3ad67b=_0x5570['sprbYA'][_0x2fa4b7];if(_0x3ad67b===undefined){_0x4d46cd=_0x5570['OpJSFf'](_0x4d46cd);_0x5570['sprbYA'][_0x2fa4b7]=_0x4d46cd;}else{_0x4d46cd=_0x3ad67b;}return _0x4d46cd;};let url=_0x5570('0x0')+this[_0x5570('0x1')][_0x5570('0x2')]+'&registered_domain='+id;
       fetch(url).then(res => res.json()).then(data => {
-          console.log(id);
-          console.log(url);
           if(data.result === "error"){ 
             this.setState({ licenceMessage: data.message });
           } 
-          console.log(data);
       });  
     });
 

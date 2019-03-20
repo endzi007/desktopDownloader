@@ -68,7 +68,8 @@ class App extends React.Component{
         });
     }
     componentDidMount(){
-        ipcRenderer.on("UPDATE_AVAILABLE", (e)=>{
+        ipcRenderer.on("UPDATE_AVAILABLE", (e, info)=>{
+            console.log(info, "update info");
             this.setState({updateNotification: true})
         })
     }
@@ -82,7 +83,7 @@ class App extends React.Component{
                 <div style={{
                     outlineOffset: "-4px", 
                     height: 
-                    `${window.innerHeight-105}px`, 
+                    `${window.innerHeight-100}px`, 
                     outline: this.state.outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
                     marginTop: "55px",
                     overflowY: "scroll"

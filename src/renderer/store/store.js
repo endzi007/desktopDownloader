@@ -6,16 +6,11 @@ import { types as optionsTypes } from '../../main/options/optionsDuck';
 import { ipcRenderer } from 'electron';
 const initialState = getInitialStateRenderer();
 
-const logger = createLogger({
-  collapsed: true
-});
-
 const store = createStore(
   reducers,
   initialState,
   applyMiddleware(
     forwardToMain, // IMPORTANT! This goes first,
-    logger
     )
 );
 

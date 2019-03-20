@@ -44,9 +44,7 @@ export default (store)=>(next)=>(action)=>{
             }
             break;
         case types.RESUME_VIDEO_DOWNLOAD: 
-            downloadAndConvert(store, action.payload, true).then(()=>{
-                console.log("downloading resumed");
-            });
+            downloadAndConvert(store, action.payload, true).then();
             break;
         case types.SAVE_PLAYLIST: 
             dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["enis"]}]}, (filename)=>{
@@ -61,7 +59,6 @@ export default (store)=>(next)=>(action)=>{
                     if(err){
                         console.log("error happened while saving file");
                     } 
-                    console.log("saved correctlly");
                 })
             });
             break;
@@ -69,7 +66,6 @@ export default (store)=>(next)=>(action)=>{
         case types.LOAD_PLAYLIST: 
             dialog.showOpenDialog(null, {filters:[{name: "JSON File", extensions: ["enis"]}]}, (fn)=>{
                 let data = fs.readFileSync(fn[0]);
-                console.log(JSON.parse(data));
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
             break;

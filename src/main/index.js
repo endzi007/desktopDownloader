@@ -45,16 +45,15 @@ app.on('ready', () => {
     }))
   }
 
- if (isDevelopment) {
+/*  if (isDevelopment) {
     window.webContents.openDevTools();
-  } 
-
+  }  */
+  window.webContents.openDevTools();
 
   let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})
 
   loading.once('show', () => {
     window.webContents.once('dom-ready', () => {
-      console.log('window loaded')
       window.show()
       loading.hide()
       loading.close()
@@ -148,11 +147,7 @@ ipcMain.on("QUIT_AND_INSTALL", (e)=>{
 
 
 autoUpdater.on("update-available", (info)=>{
-  window.webContents.send("UPDATE_AVAILABLE");
-})
-
-autoUpdater.on("update-not-available", (info)=>{
-  console.log("update not available")
+  window.webContents.send("UPDATE_AVAILABLE", info);
 })
 
 ipcMain.on("GO_TO_WEBSITE", (e, url)=>{

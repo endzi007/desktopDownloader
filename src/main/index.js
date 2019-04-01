@@ -3,14 +3,19 @@ import { app, BrowserWindow, Menu, ipcMain, shell } from 'electron';
 import * as path from 'path';
 import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
-
 import store from './store/store';
+import persistStore from '../main/helpers/persistStore';
 
+let key = persistStore.get("license");
+if(key === undefined){
+  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
+} else {
+  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true })
+}
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
 let window;
-
   
 // quit application when all windows are closed
 app.on('window-all-closed', () => {

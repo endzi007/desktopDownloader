@@ -13,6 +13,7 @@ import { machineId } from 'node-machine-id';
 import { creators as videoActions } from '../../main/videos/videoDuck';
 import { creators as appStateActions } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
+import persistStore from '../../main/helpers/persistStore';
 import fetch from 'node-fetch';
 
 class App extends React.Component{

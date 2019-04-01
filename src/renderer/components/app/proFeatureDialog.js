@@ -6,6 +6,7 @@ import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as appStateActions } from '../../../main/appState/appStateDuck';
 import fetch from 'node-fetch';
 import { machineId } from 'node-machine-id';
+import persistStore from '../../../main/helpers/persistStore';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -44,11 +45,10 @@ class ProFeatureDialog extends React.Component {
             fetch(checkUrl).then(response=> response.json()).then(licenseResponse =>{
               const { email, license_key, result } = licenseResponse;
               let cookie = { email, license_key, result};
-              try {
-                localStorage.setItem("license", JSON.stringify(cookie));
-              } catch (error) {
-                console.log("error", error)
-              }
+              persistStore.set("license", JSON.stringify(cookie));
+              this.props.changeLicense(true);
+              //localStorage.setItem("license", JSON.stringify(cookie));
+
             })
           }
       });  

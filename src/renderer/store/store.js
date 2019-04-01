@@ -6,11 +6,16 @@ import { types as optionsTypes } from '../../main/options/optionsDuck';
 import { ipcRenderer } from 'electron';
 const initialState = getInitialStateRenderer();
 
+const logger = createLogger({
+  collapsed: true
+});
+
 const store = createStore(
   reducers,
   initialState,
   applyMiddleware(
     forwardToMain, // IMPORTANT! This goes first,
+    logger
     )
 );
 
@@ -40,9 +45,11 @@ ipcRenderer.on('ui/SHOW_CONFIG_PANEL', (event)=>{
 ipcRenderer.on('videos/CLEAR_ALL', (event)=>{
   store.dispatch({type: 'videos/CLEAR_ALL', payload: true});
 })
-
 ipcRenderer.on('videos/ADD_VIDEO_TO_PLAYLIST', (event)=>{
   store.dispatch({type: 'videos/ADD_VIDEO_TO_PLAYLIST', payload: ""});
+})
+ipcRenderer.on("SHOW_ABOUT", (e, info)=>{
+  store.dispatch({type: "ui/SHOW_ABOUT", payload: true })
 })
 
 

@@ -28,7 +28,8 @@ let initialState = {
         showProFeatureDialog: {
           open: false,
           message: ""
-        }
+        },
+        showAbout: false
     },
     appState: {
       connection: null,
@@ -38,7 +39,10 @@ let initialState = {
         bool: null,
         count: 0
       },
-      licence: false,
+      license: {
+        status: false,
+        failureCount: 0
+      },
       proFeatures: {
           videosLength: 20, 
           quality: "1080"

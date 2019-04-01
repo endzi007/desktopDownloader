@@ -28,7 +28,7 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  console.log("error");
+  console.log("error", err);
 })
 
 // create main BrowserWindow when electron is ready
@@ -122,7 +122,11 @@ app.on('ready', () => {
       label: "Help",
       submenu:[
         {label: "Activate"},
-        {label: "About"}
+        {label: "About",
+        click(){
+          window.webContents.send("SHOW_ABOUT");
+        }
+        }
       ]
     }
   ];

@@ -21,7 +21,7 @@ export default (store, index, resume)=>{
                 "best": ["bestaudio/m4a/webm/mp4", "--audio-quality", "0"]
             }, 
             mp4: {
-                "360": ["134/18/135/mp4"],
+                "360": ["18/134/135/mp4"],
                 "720": ["22/397/mp4"],
                 "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format" , "mp4"]
             }

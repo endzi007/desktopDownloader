@@ -10,6 +10,7 @@ let key = persistStore.get("license");
 if(key === undefined){
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
 } else {
+  console.log(key);
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true })
 }
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -33,7 +34,7 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  console.log("error", err);
+  window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: err})
 })
 
 // create main BrowserWindow when electron is ready
@@ -50,7 +51,7 @@ app.on('ready', () => {
     }))
   }
 
-/*  if (isDevelopment) {
+  /*  if (isDevelopment) {
     window.webContents.openDevTools();
   }  */
   window.webContents.openDevTools();
@@ -75,14 +76,14 @@ app.on('ready', () => {
         {
           label: "Save project",
           click() {
-            window.webContents.send('videos/SAVE_PLAYLIST');
+            window.webContents.send("FORWARD_TO_REDUX", {type: 'videos/SAVE_PLAYLIST'})
           },
           accelerator: 'Ctrl+S'
         },
         {
           label: "Load project",
           click() {
-            window.webContents.send('videos/LOAD_PLAYLIST');
+            window.webContents.send("FORWARD_TO_REDUX", {type: 'videos/LOAD_PLAYLIST'})
           },
           accelerator: 'Ctrl+O'
         },
@@ -90,7 +91,7 @@ app.on('ready', () => {
         {
           label: "Preferences",
           click() {
-            window.webContents.send('ui/SHOW_CONFIG_PANEL');
+            window.webContents.send("FORWARD_TO_REDUX", {type: 'ui/SHOW_CONFIG_PANEL', payload: true})
           },
           accelerator: 'Ctrl+M'
         },
@@ -106,7 +107,7 @@ app.on('ready', () => {
         {
           label: "Paste", accelerator: "CmdOrCtrl+P", selector: "paste:",
           click(){
-            window.webContents.send("videos/ADD_VIDEO_TO_PLAYLIST")
+            window.webContents.send("FORWARD_TO_REDUX", {type: "videos/ADD_VIDEO_TO_PLAYLIST", payload: ""})
           }
         },
         {
@@ -118,7 +119,7 @@ app.on('ready', () => {
         {
           label: "Clear all",
           click(){
-            window.webContents.send("videos/CLEAR_ALL")
+            window.webContents.send("FORWARD_TO_REDUX", {type: "videos/CLEAR_ALL", payload: true})
           }
         }
       ]
@@ -126,10 +127,19 @@ app.on('ready', () => {
     {
       label: "Help",
       submenu:[
-        {label: "Activate"},
+        {
+          label: "Activate",
+          click(){
+            window.webContents.send("FORWARD_TO_REDUX", 
+            {
+              type: "ui/SHOW_PRO_FEATURE", 
+              payload: {open: true, message: ""} 
+            })
+          }
+        },
         {label: "About",
         click(){
-          window.webContents.send("SHOW_ABOUT");
+          window.webContents.send("FORWARD_TO_REDUX", {type: "ui/SHOW_ABOUT", payload: true})
         }
         }
       ]

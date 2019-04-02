@@ -32,27 +32,9 @@ try {
 } catch (error) {
   console.log("error loading local storage", error);
 }
-
-ipcRenderer.on('videos/SAVE_PLAYLIST', (event)=>{
-  store.dispatch({type: 'videos/SAVE_PLAYLIST'});
-})
-ipcRenderer.on('videos/LOAD_PLAYLIST', (event)=>{
-  store.dispatch({type: 'videos/LOAD_PLAYLIST'});
-})
-ipcRenderer.on('ui/SHOW_CONFIG_PANEL', (event)=>{
-  store.dispatch({type: 'ui/SHOW_CONFIG_PANEL', payload: true});
-})
-ipcRenderer.on('videos/CLEAR_ALL', (event)=>{
-  store.dispatch({type: 'videos/CLEAR_ALL', payload: true});
-})
-ipcRenderer.on('videos/ADD_VIDEO_TO_PLAYLIST', (event)=>{
-  store.dispatch({type: 'videos/ADD_VIDEO_TO_PLAYLIST', payload: ""});
-})
-ipcRenderer.on("SHOW_ABOUT", (e, info)=>{
-  store.dispatch({type: "ui/SHOW_ABOUT", payload: true })
-})
-
-
+ipcRenderer.on("FORWARD_TO_REDUX", (e, action)=>{
+  store.dispatch({type: action.type, payload: action.payload})
+});
 
 
 replayActionRenderer(store);

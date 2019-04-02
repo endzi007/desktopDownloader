@@ -15,7 +15,7 @@ import { creators as appStateActions } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
 import persistStore from '../../main/helpers/persistStore';
 import fetch from 'node-fetch';
-
+import ErrorNotification from './app/errorNotification';
 class App extends React.Component{
     constructor(){
         super();
@@ -72,13 +72,16 @@ class App extends React.Component{
         });
     }
     componentDidMount(){
+        console.log("app props", this.props);
         ipcRenderer.on("UPDATE_AVAILABLE", (e, info)=>{
             console.log(info, "update info");
             this.setState({updateNotification: true})
         })
-        let storageItem = JSON.parse(localStorage.getItem("license"));
-        if(storageItem !== null){
-            let key = storageItem.license_key;
+        let storageItem = persistStore.get("license");
+
+        if(storageItem !== undefined){
+            let parsedStorage = JSON.parse(storageItem);
+            let key = parsedStorage.license_key;
             let url = `https://desktopdownloader.000webhostapp.com/?secret_key=5c7cd0c3585ac5.07643313&slm_action=slm_check&license_key=${key}`
             fetch(url).then(response=> response.json()).then(licenseResponse =>{
                 if(licenseResponse.status === "error"){
@@ -131,6 +134,7 @@ class App extends React.Component{
                     <ProFeatureDialog />
                     <UpdateNotification open={this.state.updateNotification} handleClose={this.handleCloseUpdate}/>
                     <About />
+                    <ErrorNotification error={this.props.error}/>
                 </div>
             </MuiThemeProvider>
         );
@@ -138,7 +142,8 @@ class App extends React.Component{
 }
 function mapStateToProps(store){
     return{
-        ui: store.uiConfig 
+        ui: store.uiConfig,
+        error: store.appState.error
     }
 }
 

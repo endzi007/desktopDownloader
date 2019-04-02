@@ -39,8 +39,10 @@ class ProFeatureDialog extends React.Component {
             About DeDex Video downloader
           </DialogTitle>
           <DialogContent>
-                <Typography variant="h6">Dedex Video Downloader</Typography>
-                <Typography variant="body1">Current Version: {version}</Typography>
+                <Typography variant="h6">Dedex Video Downloader </Typography>
+                <Typography variant="body1">Current Version: {version}
+                <span style={{display: this.props.license.status === true? "block": "none" }}>licenced PRO version</span>
+                </Typography>
                 <Typography variant="subtitle2">Copyright {new Date().getFullYear()} DeCom doo Montenegro</Typography>
                 <Typography variant="subtitle2">All rights reserved</Typography>
           </DialogContent>
@@ -52,7 +54,8 @@ class ProFeatureDialog extends React.Component {
 
 function mapStateToProps(store){
     return {
-        showAbout: store.uiConfig.showAbout
+        showAbout: store.uiConfig.showAbout,
+        license: store.appState.license
     }
 }
 

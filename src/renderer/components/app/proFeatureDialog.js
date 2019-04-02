@@ -47,8 +47,6 @@ class ProFeatureDialog extends React.Component {
               let cookie = { email, license_key, result};
               persistStore.set("license", JSON.stringify(cookie));
               this.props.changeLicense(true);
-              //localStorage.setItem("license", JSON.stringify(cookie));
-
             })
           }
       });  
@@ -58,11 +56,7 @@ class ProFeatureDialog extends React.Component {
   handleChange(e){
     this.setState({textbox: e.target.value})
   }
-  componentDidMount(){
-    ipcRenderer.on("LICENCE_ACTIVATION_FAILED", (e, message)=>{
-      this.setState({licenceMessage: message})
-    })
-  }
+
   render() {
     return (
       <div>
@@ -112,7 +106,8 @@ class ProFeatureDialog extends React.Component {
 
 function mapStateToProps(store){
     return {
-        uiConfig: store.uiConfig
+        uiConfig: store.uiConfig,
+        license: store.appState.license
     }
 }
 

@@ -34,7 +34,10 @@ let initialState = {
     appState: {
       connection: null,
       downloading: null,
-      error: null,
+      error: {
+        status: null,
+        message: ""
+      },
       parsingData: {
         bool: null,
         count: 0

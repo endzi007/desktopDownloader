@@ -1,10 +1,7 @@
-import { types as appStateTypes } from './appStateDuck';
 import { types as videoTypes } from '../videos/videoDuck';
 import { types as optionsTypes } from "../options/optionsDuck";
 import { types as uiTypes } from '../ui/uiDuck';
-import { session } from 'electron'
-import fetch from 'node-fetch';
-import { ipcMain, webContents } from 'electron';
+
 
 export default (store)=>(next)=>(action)=>{
     const state = store.getState();

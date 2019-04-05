@@ -5,12 +5,13 @@ import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
 import store from './store/store';
 import persistStore from '../main/helpers/persistStore';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let key = persistStore.get("license");
 if(key === undefined){
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
 } else {
-  console.log(key);
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true })
 }
 const isDevelopment = process.env.NODE_ENV !== 'production';

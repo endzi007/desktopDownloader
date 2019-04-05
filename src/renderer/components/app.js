@@ -82,7 +82,7 @@ class App extends React.Component{
         if(storageItem !== undefined){
             let parsedStorage = JSON.parse(storageItem);
             let key = parsedStorage.license_key;
-            let url = `https://desktopdownloader.000webhostapp.com/?secret_key=5c7cd0c3585ac5.07643313&slm_action=slm_check&license_key=${key}`
+            let url = `${process.env.CHECK_LICENSE_ADDRESS}${key}`;
             fetch(url).then(response=> response.json()).then(licenseResponse =>{
                 if(licenseResponse.status === "error"){
                     //dispatch licence failed 

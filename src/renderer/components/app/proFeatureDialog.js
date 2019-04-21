@@ -7,7 +7,7 @@ import { creators as appStateActions } from '../../../main/appState/appStateDuck
 import fetch from 'node-fetch';
 import { machineId } from 'node-machine-id';
 import persistStore from '../../../main/helpers/persistStore';
-import { CHECK_LICENSE_ADDRESS, REGISTER_LICENSE_ADDRESS, DEACTIVATE_LICENSE_ADDRESS } from '../../../main/appState/appConfig';
+import { CHECK_LICENSE_ADDRESS, REGISTER_LICENSE_ADDRESS, DEACTIVATE_LICENSE_ADDRESS } from '../../../appConfig';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;

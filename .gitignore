@@ -6,4 +6,4 @@
 /static/ffprobe.exe
 /static/youtube-dl.exe
 electron-builder.yml
-/src/appState/appConfig.js
+/src/appConfig.js

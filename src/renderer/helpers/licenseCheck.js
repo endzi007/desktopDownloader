@@ -1,7 +1,7 @@
 import persistStore from '../../main/helpers/persistStore';
 import fetch from 'node-fetch';
 import { machineId } from 'node-machine-id';
-import { CHECK_LICENSE_ADDRESS } from '../../main/appState/appConfig';
+import { CHECK_LICENSE_ADDRESS } from '../../appConfig';
 
 export default () => {
     let storageItem = persistStore.get("license");

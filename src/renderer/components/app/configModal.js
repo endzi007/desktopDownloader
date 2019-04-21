@@ -6,6 +6,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as optionsActions } from '../../../main/options/optionsDuck';
+import persistStore from '../../../main/helpers/persistStore';
 
 
 
@@ -54,8 +55,9 @@ class ConfigModal extends React.Component {
     if(setStorage){
       this.props.showConfigPanel(false);
       try {
-        localStorage.setItem("options", JSON.stringify(this.props.options));
+        persistStore.set("options", JSON.stringify(this.props.options))
       } catch (error) {
+        
       }
     } else {
       this.props.showConfigPanel(false);

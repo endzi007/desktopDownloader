@@ -9,5 +9,5 @@ export default combineReducers({
     videos: videos,
     uiConfig: uiReducer,
     options: optionsReducer,
-    appState: appStateReducer
+    appState: appStateReducer,
 });

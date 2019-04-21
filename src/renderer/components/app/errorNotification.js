@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import { ipcRenderer } from 'electron';
-
 const styles = theme => ({
+  error: {
+    backgroundColor: theme.palette.error.dark
+  },
   close: {
     padding: theme.spacing.unit / 4,
   },
@@ -24,23 +24,30 @@ class SimpleSnackbar extends React.Component {
             horizontal: 'right',
           }}
           open={this.props.error.status}
-
-          
-          ContentProps={{
-            'aria-describedby': 'message-id',
-          }}
-          message={<span id="message-id">{this.props.error.message}</span>}
+          onClose={this.props.closeErrorNotification}
+        >
+        <SnackbarContent
+          className={classes.error}
+          aria-describedby="client-snackbar"
+          message={
+            <span id="client-snackbar" className={classes.message}>
+              
+              {this.props.error.message}
+            </span>
+          }
           action={[
             <IconButton
               key="close"
               aria-label="Close"
               color="inherit"
               className={classes.close}
+              onClick={this.props.closeErrorNotification}
             >
               <CloseIcon />
             </IconButton>,
           ]}
         />
+        </Snackbar>
       </div>
     );
   }
@@ -51,3 +58,5 @@ SimpleSnackbar.propTypes = {
 };
 
 export default withStyles(styles)(SimpleSnackbar);
+
+

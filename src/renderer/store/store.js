@@ -4,6 +4,7 @@ import reducers from '../../main/store/reducers';
 import { createLogger } from 'redux-logger';
 import { types as optionsTypes } from '../../main/options/optionsDuck';
 import { ipcRenderer } from 'electron';
+import persistStore from '../../main/helpers/persistStore';
 const initialState = getInitialStateRenderer();
 
 const logger = createLogger({
@@ -20,7 +21,7 @@ const store = createStore(
 );
 
 try {
-  let localStorageItems = JSON.parse(localStorage.getItem("options"));
+  let localStorageItems = JSON.parse(persistStore.get("options"));
   if(localStorageItems !== null){
     store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder});
     store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat.type});

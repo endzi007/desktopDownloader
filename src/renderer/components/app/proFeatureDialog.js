@@ -7,6 +7,7 @@ import { creators as appStateActions } from '../../../main/appState/appStateDuck
 import fetch from 'node-fetch';
 import { machineId } from 'node-machine-id';
 import persistStore from '../../../main/helpers/persistStore';
+import { CHECK_LICENSE_ADDRESS, REGISTER_LICENSE_ADDRESS, DEACTIVATE_LICENSE_ADDRESS } from '../../../main/appState/appConfig';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -34,14 +35,15 @@ class ProFeatureDialog extends React.Component {
   handleActivate(){
     this.setState({ licenceMessage: "" });
     //register license
-    let url = `${process.env.REGISTER_LICENSE_ADDRESS}${this.state.textbox}&registered_domain=${this.state.id}`
+    let url = `${REGISTER_LICENSE_ADDRESS}${this.state.textbox}&registered_domain=${this.state.id}`;
+    console.log(url);
     fetch(url).then(res => res.json()).then(data => {
       if(data.result === "error"){ 
         this.setState({ licenceMessage: data.message });
       } else if (data.result === "success"){
         //set cookie 
         this.setState({ licenceMessage: data.message });
-        fetch(`${process.env.CHECK_LICENSE_ADDRESS}${this.state.textbox}`).then(response=> response.json()).then(licenseResponse =>{
+        fetch(`${CHECK_LICENSE_ADDRESS}${this.state.textbox}`).then(response=> response.json()).then(licenseResponse =>{
           const { email, license_key, result } = licenseResponse;
           let cookie = { email, license_key, result};
           persistStore.set("license", JSON.stringify(cookie));
@@ -53,7 +55,7 @@ class ProFeatureDialog extends React.Component {
     });  
   };
   handleDeactivate(){
-    let url = `${process.env.DEACTIVATE_LICENSE_ADDRESS}${this.state.defaultValue}&registered_domain=${this.state.id}`;
+    let url = `${DEACTIVATE_LICENSE_ADDRESS}${this.state.defaultValue}&registered_domain=${this.state.id}`;
     fetch(url).then(res => res.json()).then((response)=>{
       if(response.result === "success"){
         persistStore.delete("license");

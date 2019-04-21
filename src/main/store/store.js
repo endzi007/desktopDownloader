@@ -35,7 +35,7 @@ let initialState = {
       connection: null,
       downloading: null,
       error: {
-        status: null,
+        status: false,
         message: ""
       },
       parsingData: {

@@ -1,6 +1,6 @@
 import { execFile } from 'child_process';
 import path from 'path';
-import { types as errorsTypes } from '../errors/errorsDuck';
+import { types as appStateTypes } from '../appState/appStateDuck';
 
 export default (action)=>{
     return new Promise((resolve, reject)=>{
@@ -30,13 +30,8 @@ export default (action)=>{
         });
 
         video.stderr.on("data", (err)=>{
-            if(err.indexOf("URL")!==-1){
-                action.type = errorsTypes.ERROR_HANDLER;
-                action.payload = "Unsuported or unvalid URL";
-            } else if(err.indexOf("Unable to download")!==-1){
-                action.type = errorsTypes.ERROR_HANDLER;
-                action.payload = "Unable to download. Check internet connection.";
-            }
+            action.type = appStateTypes.ERROR_HANDLER;
+            action.payload = {status: true, message: "Unable to parse. Check URL or internet connection"};
             resolve(action);
         });
 

@@ -9,13 +9,13 @@ import BottomAppBar from './app/bottomAppBar';
 import ProFeatureDialog from "./app/proFeatureDialog";
 import UpdateNotification from './app/updateNotification';
 import About from './app/about';
-import { machineId } from 'node-machine-id';
 import { creators as videoActions } from '../../main/videos/videoDuck';
 import { creators as appStateActions } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
-import persistStore from '../../main/helpers/persistStore';
-import fetch from 'node-fetch';
+import licenseCheck from '../helpers/licenseCheck';
+
 import ErrorNotification from './app/errorNotification';
+
 class App extends React.Component{
     constructor(){
         super();
@@ -72,43 +72,21 @@ class App extends React.Component{
         });
     }
     componentDidMount(){
-        console.log("app props", this.props);
         ipcRenderer.on("UPDATE_AVAILABLE", (e, info)=>{
             console.log(info, "update info");
             this.setState({updateNotification: true})
         })
-        let storageItem = persistStore.get("license");
-
-        if(storageItem !== undefined){
-            let parsedStorage = JSON.parse(storageItem);
-            let key = parsedStorage.license_key;
-            let url = `${process.env.CHECK_LICENSE_ADDRESS}${key}`;
-            fetch(url).then(response=> response.json()).then(licenseResponse =>{
-                if(licenseResponse.status === "error"){
-                    //dispatch licence failed 
-                    //increase licence failed by 1
-                    this.props.licenseFailureCounter("INC");
-                } else {
-                    machineId().then((id)=>{
-                        for(let domain of licenseResponse.registered_domains){
-                            if(domain.registered_domain === id){
-                                //dispatch licenced
-                                //reset failed counter to 0
-                                this.props.changeLicense(true);
-                                this.props.licenseFailureCounter("RESET");
-                                break;       
-                            } else {
-                                //dispatch licence failed
-                                //increase failed counter by 1
-                                this.props.licenseFailureCounter("INC");
-                            }
-                        }
-                    })
-                }
-            })
-        
-        }
-
+        licenseCheck().then((res)=>{
+            console.log(res);
+            if(res === "RESET"){
+                this.props.changeLicense(true);
+                this.props.licenseFailureCounter(res);
+            } else {
+                this.props.licenseFailureCounter("INC");
+            }
+        }).catch((e)=>{
+            this.props.errorHandler({status: true, message: e});
+        });
     }
     handleCloseUpdate(bool){
         this.setState({updateNotification: bool})
@@ -134,7 +112,7 @@ class App extends React.Component{
                     <ProFeatureDialog />
                     <UpdateNotification open={this.state.updateNotification} handleClose={this.handleCloseUpdate}/>
                     <About />
-                    <ErrorNotification error={this.props.error}/>
+                    <ErrorNotification error={this.props.error} closeErrorNotification={this.props.errorHandler}/>
                 </div>
             </MuiThemeProvider>
         );
@@ -150,6 +128,7 @@ function mapStateToProps(store){
 const mapDispatchToProps = {
     addVideoToPlaylist: videoActions.addVideoToPlaylist,
     changeLicense: appStateActions.changeLicense,
-    licenseFailureCounter: appStateActions.licenseFailureCounter
+    licenseFailureCounter: appStateActions.licenseFailureCounter,
+    errorHandler: appStateActions.errorHandler
 }
 export default  withStyles(null,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(App));

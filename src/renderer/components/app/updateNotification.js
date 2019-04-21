@@ -14,6 +14,12 @@ const styles = theme => ({
 });
 
 class SimpleSnackbar extends React.Component {
+  handleClose(e, reason){
+    if(reason==="clickaway"){
+      return;
+    }
+    this.props.handleClose.bind(null, false)
+  }
   render() {
     const { classes } = this.props;
     return (
@@ -23,15 +29,16 @@ class SimpleSnackbar extends React.Component {
             vertical: 'bottom',
             horizontal: 'right',
           }}
+          ClickAwayListenerProps={""}
           open={this.props.open}
-          onClose={this.props.handleClose.bind(null, false)}
+          onClose={this.handleClose.bind(this)}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
           message={<span id="message-id">Update available</span>}
           action={[
             <Button key="undo" color="secondary" size="small" onClick={()=>{ipcRenderer.send("QUIT_AND_INSTALL")}}>
-              Update
+              Update now
             </Button>,
             <IconButton
               key="close"

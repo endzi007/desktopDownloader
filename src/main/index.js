@@ -5,9 +5,8 @@ import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
 import store from './store/store';
 import persistStore from '../main/helpers/persistStore';
-import dotenv from 'dotenv';
-dotenv.config();
-
+autoUpdater.autoDownload = false;
+  
 let key = persistStore.get("license");
 if(key === undefined){
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
@@ -64,7 +63,7 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
-      autoUpdater.checkForUpdatesAndNotify()
+      autoUpdater.checkForUpdates();
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));
@@ -162,9 +161,12 @@ app.on('ready', () => {
 });
 
 ipcMain.on("QUIT_AND_INSTALL", (e)=>{
-  autoUpdater.quitAndInstall();
+  autoUpdater.downloadUpdate();
 })
 
+autoUpdater.on("update-downloaded", ()=>{
+  autoUpdater.quitAndInstall();
+})
 
 autoUpdater.on("update-available", (info)=>{
   window.webContents.send("UPDATE_AVAILABLE", info);

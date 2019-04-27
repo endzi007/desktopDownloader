@@ -1,6 +1,5 @@
 import { types as optionsTypes} from '../options/optionsDuck';
 import { types as videosTypes} from '../videos/videoDuck';
-import { types as appStateTypes } from '../appState/appStateDuck';
 import { ipcMain } from 'electron';
 import path from 'path';
 import { execFile } from 'child_process';

@@ -5,7 +5,6 @@ import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
 import store from './store/store';
 import persistStore from '../main/helpers/persistStore';
-autoUpdater.autoDownload = false;
   
 let key = persistStore.get("license");
 if(key === undefined){
@@ -63,7 +62,7 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
-      autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));
@@ -161,16 +160,9 @@ app.on('ready', () => {
 });
 
 ipcMain.on("QUIT_AND_INSTALL", (e)=>{
-  autoUpdater.downloadUpdate();
-})
-
-autoUpdater.on("update-downloaded", ()=>{
   autoUpdater.quitAndInstall();
 })
 
-autoUpdater.on("update-available", (info)=>{
-  window.webContents.send("UPDATE_AVAILABLE", info);
-})
 
 ipcMain.on("GO_TO_WEBSITE", (e, url)=>{
     shell.openExternal(url, {activate: true});

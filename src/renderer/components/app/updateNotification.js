@@ -29,17 +29,13 @@ class SimpleSnackbar extends React.Component {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          ClickAwayListenerProps={""}
           open={this.props.open}
           onClose={this.handleClose.bind(this)}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Update available</span>}
+          message={<span id="message-id">Update will be installed after program is terminated</span>}
           action={[
-            <Button key="undo" color="secondary" size="small" onClick={()=>{ipcRenderer.send("QUIT_AND_INSTALL")}}>
-              Update now
-            </Button>,
             <IconButton
               key="close"
               aria-label="Close"

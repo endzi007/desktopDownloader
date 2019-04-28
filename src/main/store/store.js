@@ -34,6 +34,7 @@ let initialState = {
     appState: {
       connection: null,
       downloading: null,
+      updates: true,
       error: {
         status: false,
         message: ""

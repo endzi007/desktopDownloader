@@ -6,7 +6,8 @@ export const types = {
     DOWNLOADING: "appState/DOWNLOADING",
     CHANGE_LICENSE: "appState/CHANGE_LICENSE",
     LICENSE_FAILURE_COUNTER: "appState/LICENSE_FAILURE_COUNTER",
-    ERROR_HANDLER: "appState/ERROR_HANDLER"
+    ERROR_HANDLER: "appState/ERROR_HANDLER",
+    ALLOW_UPDATES: "appState/ALLOW_UPDATES"
 }
 
 export const creators = {
@@ -17,12 +18,14 @@ export const creators = {
     errorHandler: obj=>({type: types.ERROR_HANDLER, payload: {
         status: obj.status,
         message: obj.message
-    }})
+    }}),
+    allowUpdates: bool => ({type: types.ALLOW_UPDATES, payload: bool})
 }
 
 let defaultState = {
     connection: null,
     downloading: null,
+    updates: true, 
     error: {
         status: null,
         message: ""
@@ -63,6 +66,9 @@ export default (state = defaultState, action)=>{
             return newState;
         case types.ERROR_HANDLER: 
             newState.error = action.payload;
+            return newState;
+        case types.ALLOW_UPDATES:
+            newState.updates = action.payload;
             return newState;
         default:
             return newState;

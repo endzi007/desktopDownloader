@@ -6,6 +6,7 @@ import FolderIcon from '@material-ui/icons/Folder';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as optionsActions } from '../../../main/options/optionsDuck';
+import { creators as appStateActions } from '../../../main/appState/appStateDuck';
 import persistStore from '../../../main/helpers/persistStore';
 
 
@@ -49,6 +50,7 @@ class ConfigModal extends React.Component {
         this.handleChangeQuality = this.handleChangeQuality.bind(this);
         this.handleAutoNumbering = this.handleAutoNumbering.bind(this);
         this.handleAutoNumberingBlur = this.handleAutoNumberingBlur.bind(this);
+        this.handleAutoUpdate = this.handleAutoUpdate.bind(this);
       }
 
   handleClose (setStorage) {
@@ -57,7 +59,7 @@ class ConfigModal extends React.Component {
       try {
         persistStore.set("options", JSON.stringify(this.props.options))
       } catch (error) {
-        
+        console.log("error");
       }
     } else {
       this.props.showConfigPanel(false);
@@ -89,6 +91,10 @@ class ConfigModal extends React.Component {
       if(e.target.value === ""){
         this.props.autoNumbering({numbering: this.props.options.autoNumbering.numbering, value: 0})
       }
+    }
+    handleAutoUpdate(e){
+      persistStore.set("allowUpdates", !this.props.appState.updates);
+      this.props.allowUpdates(!this.props.appState.updates);
     }
   render() {
     const { classes } = this.props;
@@ -171,6 +177,11 @@ class ConfigModal extends React.Component {
                   disabled={!this.props.options.autoNumbering.numbering}
                 />
             </ListItem>
+            <ListItem className={classes.listItem}>
+              <Typography variant="body1">Allow updates (recommended):</Typography>
+              <Switch id="autoUpdateSwitch" onChange={this.handleAutoUpdate} checked={this.props.appState.updates}/>
+               
+            </ListItem>
           </List>
         </Dialog>
       </div>
@@ -187,7 +198,8 @@ function mapStateToProps(state){
     return {
         uiConfig: state.uiConfig,
         options: state.options,
-        store: state
+        store: state,
+        appState: state.appState
     }
 }
 
@@ -197,7 +209,8 @@ const mapDispatchToProps = {
     changeDownloadFormat: optionsActions.changeDownloadFormat,
     saveToLocalStorage: optionsActions.saveToLocalStorage,
     changeDownloadQuality: optionsActions.changeDownloadQuality,
-    autoNumbering: optionsActions.autoNumbering
+    autoNumbering: optionsActions.autoNumbering,
+    allowUpdates: appStateActions.allowUpdates
 }
 
 

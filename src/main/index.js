@@ -50,10 +50,10 @@ app.on('ready', () => {
     }))
   }
 
-  /*  if (isDevelopment) {
+  if (isDevelopment) {
     window.webContents.openDevTools();
-  }  */
-  window.webContents.openDevTools();
+  } 
+
 
   let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})
 
@@ -62,7 +62,10 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
-      autoUpdater.checkForUpdatesAndNotify();
+      if(store.getState().appState.updates){
+        console.log("called update");
+        autoUpdater.checkForUpdatesAndNotify();
+      }
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));

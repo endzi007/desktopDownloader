@@ -3,6 +3,7 @@ import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'el
 import reducers from '../../main/store/reducers';
 import { createLogger } from 'redux-logger';
 import { types as optionsTypes } from '../../main/options/optionsDuck';
+import { creators as appStateCreators } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
 import persistStore from '../../main/helpers/persistStore';
 const initialState = getInitialStateRenderer();
@@ -30,6 +31,11 @@ try {
   } else {
     store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
   }
+  let allowUpdatesKey = JSON.parse(persistStore.get("allowUpdates"));
+  if(allowUpdatesKey !== null){
+    store.dispatch(appStateCreators.allowUpdates(allowUpdatesKey));
+  }
+
 } catch (error) {
   console.log("error loading local storage", error);
 }

@@ -3,7 +3,8 @@ export const types = {
     SHOW_CONFIG_PANEL : "ui/SHOW_CONFIG_PANEL",
     SHOW_VIDEO_LOADER : "ui/SHOW_VIDEO_LOADER",
     SHOW_PRO_FEATURE: "ui/SHOW_PRO_FEATURE",
-    SHOW_ABOUT: "ui/SHOW_ABOUT"
+    SHOW_ABOUT: "ui/SHOW_ABOUT",
+    SHOW_YT_PLAYLIST: "ui/SHOW_YT_PLAYLIST"
 }
 export const creators = {
     showOpenDialog: val =>({ type: types.SHOW_OPEN_DIALOG, payload: val }),
@@ -22,10 +23,11 @@ export const creators = {
                 message: open.message
             }
     }),
-    showAbout: open =>({type: types.SHOW_ABOUT, payload: open})
+    showAbout: open =>({type: types.SHOW_ABOUT, payload: open}),
+    showYtPlaylist: obj => ({ type: types.SHOW_YT_PLAYLIST, payload: {show: obj.show, videos: obj.videos}})
 }
 
-export default (state={showConfig: false, showProFeatureDialog: false, showAbout: false}, action)=>{
+export default (state={showConfig: false, showProFeatureDialog: false, showAbout: false, showYtPlaylist: {show: false, videos: []}}, action)=>{
     let newState = {...state};
     switch (action.type) {
         case types.SHOW_CONFIG_PANEL:
@@ -37,6 +39,9 @@ export default (state={showConfig: false, showProFeatureDialog: false, showAbout
             return newState; 
         case types.SHOW_ABOUT:
             newState.showAbout = action.payload;
+            return newState;
+        case types.SHOW_YT_PLAYLIST: 
+            newState.showYtPlaylist = action.payload; 
             return newState;
         default:
             return newState;

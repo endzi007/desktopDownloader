@@ -3,6 +3,8 @@ import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import { clipboard, ipcMain, dialog } from 'electron';
 import { types } from './videoDuck';
 import { creators as appStateActions } from '../appState/appStateDuck';
+import { creators as uiActions } from '../ui/uiDuck';
+import addYtPlaylist from '../ffmpegProcesses/addYtPlaylist';
 import fs from 'fs';
 export default (store)=>(next)=>(action)=>{
     let state = store.getState();
@@ -69,7 +71,13 @@ export default (store)=>(next)=>(action)=>{
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
             break;
-        
+        case types.ADD_YT_PLAYLIST:
+            let url = clipboard.readText();
+            addYtPlaylist(url).then((videos)=>{
+                store.dispatch(uiActions.showYtPlaylist({show: true, payload: videos}))
+            }).catch((err)=>{
+                console.log(err, "playlist");
+            });
         default: 
         break;
     }

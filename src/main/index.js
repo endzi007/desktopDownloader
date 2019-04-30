@@ -63,7 +63,6 @@ app.on('ready', () => {
       loading.hide()
       loading.close()
       if(store.getState().appState.updates){
-        console.log("called update");
         autoUpdater.checkForUpdatesAndNotify();
       }
     })
@@ -110,6 +109,12 @@ app.on('ready', () => {
           label: "Paste", accelerator: "CmdOrCtrl+P", selector: "paste:",
           click(){
             window.webContents.send("FORWARD_TO_REDUX", {type: "videos/ADD_VIDEO_TO_PLAYLIST", payload: ""})
+          }
+        },
+        {
+          label: "Paste YT Playlist link", accelerator: "CmdOrCtrl+P", selector: "paste:",
+          click(){
+            window.webContents.send("FORWARD_TO_REDUX", {type: "videos/ADD_YT_PLAYLIST", payload: ""})
           }
         },
         {

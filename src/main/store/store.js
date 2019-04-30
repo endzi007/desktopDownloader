@@ -29,7 +29,8 @@ let initialState = {
           open: false,
           message: ""
         },
-        showAbout: false
+        showAbout: false,
+        showYtPlaylist: {show: false, videos: []}
     },
     appState: {
       connection: null,

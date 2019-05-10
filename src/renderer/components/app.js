@@ -72,8 +72,7 @@ class App extends React.Component{
         });
     }
     componentDidMount(){
-        ipcRenderer.on("UPDATE_AVAILABLE", (e, info)=>{
-            console.log(info, "update info");
+        ipcRenderer.on("update-available", (e, info)=>{
             this.setState({updateNotification: true})
         })
         licenseCheck().then((res)=>{
@@ -89,6 +88,7 @@ class App extends React.Component{
         });
     }
     handleCloseUpdate(bool){
+        ipcRenderer.send("QUIT_AND_INSTALL");
         this.setState({updateNotification: bool})
     }
     render(){

@@ -50,7 +50,7 @@ app.on('ready', () => {
     }))
   }
 
-  if (isDevelopment) {
+  if (!isDevelopment) {
     window.webContents.openDevTools();
   } 
 
@@ -62,10 +62,7 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
-      if(store.getState().appState.updates){
-        console.log("called update");
-        autoUpdater.checkForUpdatesAndNotify();
-      }
+      autoUpdater.checkForUpdates();
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));
@@ -160,13 +157,25 @@ app.on('ready', () => {
       window.focus();
     })
   });
+  ipcMain.on("QUIT_AND_INSTALL", (e)=>{
+    autoUpdater.quitAndInstall(true, true);
+  })
+  autoUpdater.on("update-available", (info)=>{
+    window.webContents.send("update-available", info);
+  })
+
+  autoUpdater.on("update-not-available", ()=>{
+    window.webContents.send("update-not-available");
+  })
+
+  autoUpdater.on("checking-for-updates", ()=>{
+    window.webContents.send("checking-for-updates");
+  })
+
+  ipcMain.on("GO_TO_WEBSITE", (e, url)=>{
+      shell.openExternal(url, {activate: true});
+  });
+
 });
 
-ipcMain.on("QUIT_AND_INSTALL", (e)=>{
-  autoUpdater.quitAndInstall();
-})
 
-
-ipcMain.on("GO_TO_WEBSITE", (e, url)=>{
-    shell.openExternal(url, {activate: true});
-});

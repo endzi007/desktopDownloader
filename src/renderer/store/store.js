@@ -44,6 +44,18 @@ ipcRenderer.on("FORWARD_TO_REDUX", (e, action)=>{
 });
 
 
+ipcRenderer.on("update-available", (e, info)=>{
+  console.log("called update", info)
+})
+
+
+ipcRenderer.on("update-not-available", (e)=>{
+  console.log("called update")
+})
+
+ipcRenderer.on("checking-for-updates", (e)=>{
+  console.log("checking-for-updates")
+})
 replayActionRenderer(store);
 
 export default store;

@@ -30,9 +30,11 @@ export default (action)=>{
         });
 
         video.stderr.on("data", (err)=>{
-            action.type = appStateTypes.ERROR_HANDLER;
-            action.payload = {status: true, message: "Unable to parse. Check URL or internet connection"};
-            resolve(action);
+            if(err.indexOf("URL") !== -1){
+                action.type = appStateTypes.ERROR_HANDLER;
+                action.payload = {status: true, message: "Unable to parse. Check URL or internet connection"};
+                resolve(action);
+            }
         });
 
 

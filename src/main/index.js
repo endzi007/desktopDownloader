@@ -5,6 +5,7 @@ import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
 import store from './store/store';
 import persistStore from '../main/helpers/persistStore';
+
   
 let key = persistStore.get("license");
 if(key === undefined){
@@ -62,7 +63,7 @@ app.on('ready', () => {
       window.show()
       loading.hide()
       loading.close()
-      autoUpdater.checkForUpdates();
+      autoUpdater.checkForUpdatesAndNotify();
     })
   })
   loading.loadURL(path.resolve(__static, 'assets/loading.html'));

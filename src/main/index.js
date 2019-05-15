@@ -51,7 +51,7 @@ app.on('ready', () => {
     }))
   }
 
-  if (!isDevelopment) {
+  if (isDevelopment) {
     window.webContents.openDevTools();
   } 
 
@@ -108,6 +108,12 @@ app.on('ready', () => {
           label: "Paste", accelerator: "CmdOrCtrl+P", selector: "paste:",
           click(){
             window.webContents.send("FORWARD_TO_REDUX", {type: "videos/ADD_VIDEO_TO_PLAYLIST", payload: ""})
+          }
+        },
+        {
+          label: "Paste YT Playlist link", accelerator: "CmdOrCtrl+L", selector: "paste YT playlist:",
+          click(){
+            window.webContents.send("FORWARD_TO_REDUX", {type: "videos/YT_PLAYLIST_DOWNLOAD", payload: ""})
           }
         },
         {

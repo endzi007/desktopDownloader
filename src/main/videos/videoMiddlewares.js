@@ -1,5 +1,6 @@
 import downloadAndConvert from '../ffmpegProcesses';
 import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
+import ytdlPlaylist from '../ffmpegProcesses/ytdlPlaylist';
 import { clipboard, ipcMain, dialog } from 'electron';
 import { types } from './videoDuck';
 import { creators as appStateActions } from '../appState/appStateDuck';
@@ -69,7 +70,11 @@ export default (store)=>(next)=>(action)=>{
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
             break;
-        
+        case types.YT_PLAYLIST_DOWNLOAD:
+            action.payload = clipboard.readText();
+            ytdlPlaylist(action).then((newAction)=>{
+                console.log("finished...");
+            })
         default: 
         break;
     }

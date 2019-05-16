@@ -29,7 +29,8 @@ let initialState = {
           open: false,
           message: ""
         },
-        showAbout: false
+        showAbout: false,
+        showPlaylistDialog: {show: false, videos: []}
     },
     appState: {
       connection: null,

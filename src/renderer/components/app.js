@@ -8,6 +8,7 @@ import ConfigModal from './app/configModal';
 import BottomAppBar from './app/bottomAppBar';
 import ProFeatureDialog from "./app/proFeatureDialog";
 import UpdateNotification from './app/updateNotification';
+import PlaylistDialog from './videos/playlistDialog';
 import About from './app/about';
 import { creators as videoActions } from '../../main/videos/videoDuck';
 import { creators as appStateActions } from '../../main/appState/appStateDuck';
@@ -113,6 +114,7 @@ class App extends React.Component{
                     <UpdateNotification open={this.state.updateNotification} handleClose={this.handleCloseUpdate}/>
                     <About />
                     <ErrorNotification error={this.props.error} closeErrorNotification={this.props.errorHandler}/>
+                    <PlaylistDialog />
                 </div>
             </MuiThemeProvider>
         );

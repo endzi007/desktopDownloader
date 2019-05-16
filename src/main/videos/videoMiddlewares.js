@@ -4,6 +4,7 @@ import ytdlPlaylist from '../ffmpegProcesses/ytdlPlaylist';
 import { clipboard, ipcMain, dialog } from 'electron';
 import { types } from './videoDuck';
 import { creators as appStateActions } from '../appState/appStateDuck';
+import { creators as uiActions } from '../ui/uiDuck';
 import fs from 'fs';
 export default (store)=>(next)=>(action)=>{
     let state = store.getState();
@@ -72,8 +73,10 @@ export default (store)=>(next)=>(action)=>{
             break;
         case types.YT_PLAYLIST_DOWNLOAD:
             action.payload = clipboard.readText();
+            store.dispatch(appStateActions.parsingData(true));
             ytdlPlaylist(action).then((newAction)=>{
-                console.log("finished...");
+                store.dispatch(appStateActions.parsingData(false));
+                store.dispatch(uiActions.showPlaylistDialog({show: true, videos: newAction.payload}))
             })
         default: 
         break;

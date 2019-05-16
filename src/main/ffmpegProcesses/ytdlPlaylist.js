@@ -6,15 +6,22 @@ import fs from 'fs';
 export default (action)=>{
     return new Promise((resolve, reject)=>{
         let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--dump-single-json", "--ignore-errors"]);
-        let videos =[]
-        let file = fs.createWriteStream("allInfo.txt");
+        let videos =[];
 
         video.stdout.on("data", (info)=>{
-            file.write(info, ()=>{
-                console.log("writing to file");
-            }); 
+            try {
+                let data = JSON.parse(info);
+                data.entries.forEach(entry => {
+                    let date = new Date(null);
+                    date.setSeconds(entry.duration); // specify value for SECONDS here
+                    let duration = date.toISOString().substr(11, 8);
+                    videos.push({title: entry.title, thumbnail: entry.thumbnail, duration: duration, url: entry.webpage_url})
+                });
+            } catch (error) {
+                console.log(error);
+            }
             action.type = `${action.type}_PROCESSED`;
-            action.payload = videoObj;
+            action.payload = videos;
             resolve(action);
         });
 

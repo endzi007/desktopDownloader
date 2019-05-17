@@ -2,8 +2,8 @@ import React from 'react';
 import { Button, Dialog, TextField, Typography, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
-import SingleVideo from './singleVideo';
-
+import { execFile } from 'child_process';
+import path from 'path';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -12,7 +12,7 @@ function Transition(props) {
 class PlaylistDialog extends React.Component {
   constructor(props){
     super(props);
-
+    this.getAdditionalInfo = this.getAdditionalInfo.bind(this);
   }
   handleClose() {
     this.props.showPlaylistDialog({show: false, videos: []});
@@ -34,7 +34,7 @@ class PlaylistDialog extends React.Component {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            PRO Licence Notification
+            Select videos
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">

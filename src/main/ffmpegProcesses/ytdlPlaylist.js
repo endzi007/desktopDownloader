@@ -5,17 +5,14 @@ import fs from 'fs';
 
 export default (action)=>{
     return new Promise((resolve, reject)=>{
-        let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--dump-single-json", "--ignore-errors"]);
+        let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--dump-single-json", "--flat-playlist",  "--ignore-errors"]);
         let videos =[];
 
         video.stdout.on("data", (info)=>{
             try {
                 let data = JSON.parse(info);
                 data.entries.forEach(entry => {
-                    let date = new Date(null);
-                    date.setSeconds(entry.duration); // specify value for SECONDS here
-                    let duration = date.toISOString().substr(11, 8);
-                    videos.push({title: entry.title, thumbnail: entry.thumbnail, duration: duration, url: entry.webpage_url})
+                    videos.push({title: entry.title, url: entry.url})
                 });
             } catch (error) {
                 console.log(error);

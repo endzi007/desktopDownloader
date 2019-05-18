@@ -1,13 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton, CircularProgress } from '@material-ui/core';
+import { Card, Typography, CardContent, CardMedia, IconButton, Checkbox} from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DoneIcon from '@material-ui/icons/Done';
-import PauseIcon from '@material-ui/icons/Pause';
-import ReplayIcon from '@material-ui/icons/Replay';
-
-import { FadeLoader  } from 'react-spinners';
 
 const styles = (theme) => ({
     card: { 
@@ -56,19 +51,23 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, handleDelete, classes, iPosition})=>{
+const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, checked})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
-            <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
+            <CardMedia className={classes.cover} image={`file://${thumbnail}`} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>
                     <Typography variant="body1">{modifiedTitle}</Typography>
                 </div>
                 <div className={classes.divSt}>
-                    <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
+                    <Checkbox 
+                        checked={checked}
+                        onChange={handleChange.bind(null)}
+                        value={iPosition}
+                     />
                 </div>
             </CardContent>
         </Card>

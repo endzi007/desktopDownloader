@@ -4,24 +4,64 @@ import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { execFile } from 'child_process';
 import path from 'path';
+import PlaylistSingleVideo from './playlistSingleVideo';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
+function getInfo (video, getWhat){
+  return new Promise ((res, rej)=>{
+    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [video.url, "--get-thumbnail", "--get-duration"]);
+    let dataToReturn = [];
+    info.stdout.on("data", (data)=>{
+      if(dataToReturn.length === 1){
+        dataToReturn.push (data);
+        res(dataToReturn);
+      } else {
+        dataToReturn.push(data);
+      }
+    })
+
+    info.stderr.on("data", (err)=>{
+      rej(err);
+    })
+
+  });
+}
 class PlaylistDialog extends React.Component {
   constructor(props){
     super(props);
     this.getAdditionalInfo = this.getAdditionalInfo.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
   handleClose() {
     this.props.showPlaylistDialog({show: false, videos: []});
   };
+  handleChange(e){
+    console.log(e.target.checked);
+  }
+  async getAdditionalInfo(){
+    const { videos } = this.props.uiConfig.showPlaylistDialog;
+    for (let video of videos ){
+      let thumb = await getInfo(video, "thumb");
+      console.log(thumb);
 
+    }
+  }
+
+  componentDidMount(){
+    if(this.props.uiConfig.showPlaylistDialog.videos.length > 0){
+      this.getAdditionalInfo();
+    }
+  }
   render() {
       let videosToDisplay = [];
-      for (let video of this.props.uiConfig.showPlaylistDialog.videos){
-        videosToDisplay.push(<div>{video.title}</div>)
+      const { videos } = this.props.uiConfig.showPlaylistDialog;
+      const thumbPlaceholder = path.resolve(__static, "assets", "noThumbnail.jpg");
+      for (let i in videos){
+        let video = videos[i];
+        videosToDisplay.push(<PlaylistSingleVideo title={video.title} url={video.url} thumbnail={thumbPlaceholder} iPosition = {i} duration="" handleChange={this.handleChange} />)
       }
     return (
       <div>

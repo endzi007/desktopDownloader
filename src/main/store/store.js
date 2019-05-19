@@ -30,7 +30,7 @@ let initialState = {
           message: ""
         },
         showAbout: false,
-        showPlaylistDialog: {show: false, videos: []}
+        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""}
     },
     appState: {
       connection: null,

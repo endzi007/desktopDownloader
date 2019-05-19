@@ -12,14 +12,23 @@ export default (action)=>{
             try {
                 let data = JSON.parse(info);
                 data.entries.forEach(entry => {
-                    videos.push({title: entry.title, url: entry.url})
+                    videos.push({
+                        title: entry.title,
+                        thumbnail: "noThumbnail",
+                        downloaded: 0,
+                        url: entry.url,
+                        duration: "",
+                        downloadLinks: [],
+                        status: "NOT_STARTED"
+                    })
                 });
+                action.type = `${action.type}_PROCESSED`;
+                action.payload = {show: true, videos: videos, playlistUrl: data.webpage_url};
+                resolve(action);
             } catch (error) {
                 console.log(error);
             }
-            action.type = `${action.type}_PROCESSED`;
-            action.payload = videos;
-            resolve(action);
+            
         });
 
         video.stderr.on("data", (err)=>{

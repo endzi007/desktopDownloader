@@ -10,30 +10,15 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-function getInfo (video, getWhat){
-  return new Promise ((res, rej)=>{
-    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [video.url, "--get-thumbnail", "--get-duration"]);
-    let dataToReturn = [];
-    info.stdout.on("data", (data)=>{
-      if(dataToReturn.length === 1){
-        dataToReturn.push (data);
-        res(dataToReturn);
-      } else {
-        dataToReturn.push(data);
-      }
-    })
-
-    info.stderr.on("data", (err)=>{
-      rej(err);
-    })
-
-  });
-}
 class PlaylistDialog extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      videos: []
+    }
     this.getAdditionalInfo = this.getAdditionalInfo.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.updateStateVideo = this.updateStateVideo.bind(this);
   }
   handleClose() {
     this.props.showPlaylistDialog({show: false, videos: []});
@@ -41,27 +26,52 @@ class PlaylistDialog extends React.Component {
   handleChange(e){
     console.log(e.target.checked);
   }
-  async getAdditionalInfo(){
-    const { videos } = this.props.uiConfig.showPlaylistDialog;
-    for (let video of videos ){
-      let thumb = await getInfo(video, "thumb");
-      console.log(thumb);
-
-    }
+  getAdditionalInfo(){
+    const { videos, playlistUrl } = this.props.uiConfig.showPlaylistDialog;
+    let index = 0;
+    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration"]);
+    info.stdout.on("data", (data)=>{
+      if(index===10){
+        info.kill();
+      }
+      this.updateStateVideo(index, data.split("\n"));
+      index++;
+    })
+    info.stderr.on("data", (err)=>{
+      console.log(err);
+      index++;
+      info.kill();
+    })
+    info.on("close", ()=>{
+      console.log("closed");
+    });
+  }
+  updateStateVideo(i, data){
+    let vid = this.state.videos[i]
+    vid.thumbnail = data[0];
+    vid.duration = data[1];
+    this.setState({
+      videos: this.state.videos.splice(i, 1, vid)
+    })
+    
   }
 
-  componentDidMount(){
-    if(this.props.uiConfig.showPlaylistDialog.videos.length > 0){
-      this.getAdditionalInfo();
+  componentWillUpdate(nextProps){
+    if(nextProps.uiConfig.showPlaylistDialog.videos !== this.state.videos){
+      this.setState({
+        videos: nextProps.uiConfig.showPlaylistDialog.videos
+      })
+      setTimeout(()=>{
+        this.getAdditionalInfo();
+      }, 0)
     }
   }
   render() {
       let videosToDisplay = [];
-      const { videos } = this.props.uiConfig.showPlaylistDialog;
-      const thumbPlaceholder = path.resolve(__static, "assets", "noThumbnail.jpg");
+      const { videos } = this.state;
       for (let i in videos){
         let video = videos[i];
-        videosToDisplay.push(<PlaylistSingleVideo title={video.title} url={video.url} thumbnail={thumbPlaceholder} iPosition = {i} duration="" handleChange={this.handleChange} />)
+        videosToDisplay.push(<PlaylistSingleVideo iPosition ={i} {...video} handleChange={this.handleChange} />)
       }
     return (
       <div>
@@ -77,9 +87,7 @@ class PlaylistDialog extends React.Component {
             Select videos
           </DialogTitle>
           <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
               {videosToDisplay}
-            </DialogContentText>
               <Typography variant="body1">Modal</Typography>
           </DialogContent>
           <DialogActions>

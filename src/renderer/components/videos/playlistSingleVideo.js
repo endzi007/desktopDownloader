@@ -53,11 +53,12 @@ const styles = (theme) => ({
 
 const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, checked})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
+    let displayMessage = thumbnail === "noThumbnail"? <Typography variant="body1">Getting image..</Typography>: <CardMedia image={thumbnail} className={classes.cover}  title={title} />; 
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${iPosition+1}.`}</Typography>
         <Card className={classes.card}>
-            <CardMedia className={classes.cover} image={`file://${thumbnail}`} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
+            {displayMessage}
             <CardContent className={classes.content}>
                 <div>
                     <Typography variant="body1">{modifiedTitle}</Typography>

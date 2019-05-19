@@ -76,7 +76,7 @@ export default (store)=>(next)=>(action)=>{
             store.dispatch(appStateActions.parsingData(true));
             ytdlPlaylist(action).then((newAction)=>{
                 store.dispatch(appStateActions.parsingData(false));
-                store.dispatch(uiActions.showPlaylistDialog({show: true, videos: newAction.payload}))
+                store.dispatch(uiActions.showPlaylistDialog(newAction.payload));
             })
         default: 
         break;

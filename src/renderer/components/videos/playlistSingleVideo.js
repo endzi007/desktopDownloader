@@ -66,7 +66,7 @@ const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, 
                 <div className={classes.divSt}>
                     <Checkbox 
                         checked={checked}
-                        onChange={handleChange.bind(null)}
+                        onChange={handleChange.bind(null, iPosition)}
                         value={iPosition}
                      />
                 </div>

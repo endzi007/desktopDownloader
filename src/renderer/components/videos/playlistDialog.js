@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Button, Dialog, TextField, Typography, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@material-ui/core';
+import { Button, Dialog, LinearProgress, Typography, DialogActions, DialogContent, DialogTitle, Slide, Checkbox, FormControlLabel } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { execFile } from 'child_process';
@@ -11,30 +11,57 @@ function Transition(props) {
 }
 
 const  PlaylistDialog = (props)=> {
-  const [ videos, setVideos ] = useState([])
+  const [ videos, setVideos ] = useState([]);
+  const [ fetching, setFetching ] = useState(false);
+  const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
+
   useEffect(()=>{
-    if(props.uiConfig.showPlaylistDialog.videos !== videos){
-      setVideos(props.uiConfig.showPlaylistDialog.videos);
+    if(props.showPlaylistDialog.videos !== videos){
+      setVideos(props.showPlaylistDialog.videos);
+      setTimeout(()=>{
+        console.log(props.showPlaylistDialog.videos);
+      }, 100)
+      setFetching(true);
       getAdditionalInfo();
     }
-  }, []);
-
+  }, [props.showPlaylistDialog.videos]);
   const handleClose = ()=> {
-    props.showPlaylistDialog({show: false, videos: []});
+    props.showPlaylistDialogFn({show: false, videos: []});
   };
 
-  const handleChange = (e)=>{
-    console.log(e.target.checked);
+  const handleChange = (index, e)=>{
+    let value = e.target.value;
+    let newVideos = [...videos];
+    if(value === "Select all"){
+        setSelectAll({text: "Deselect all", checked: true})
+        newVideos.map((video)=>{
+          video.status = "CHECKED"
+        })
+        setVideos([...newVideos]);
+    } else if(value === "Select all"){
+        setSelectAll({text: "Select all", checked: false})
+        newVideos.map((video)=>{
+          video.status = "NOT_STARTED"
+        })
+        setVideos([...newVideos]);
+    } else {
+      newVideos[index].status="CHECKED"
+      setVideos([...newVideos]);
+    }
   }
   const getAdditionalInfo = ()=>{
-    const { videos, playlistUrl } = props.uiConfig.showPlaylistDialog;
+    const { videos, playlistUrl } = props.showPlaylistDialog;
     let index = 0;
-    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration"]);
+    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
     info.stdout.on("data", (data)=>{
       let infos = data.split("\n");
       let newVideos = videos;
-      newVideos[index].thumbnail=infos[0];
-      newVideos[index].duration=infos[1];
+      if(infos.length === 3){
+        newVideos[index].thumbnail=infos[0];
+        newVideos[index].duration=infos[1];
+      } else {
+        newVideos[index].duration=infos[0];
+      }
       setVideos([...newVideos]);
       index++;
     })
@@ -42,6 +69,7 @@ const  PlaylistDialog = (props)=> {
       console.log(err);
     })
     info.on("close", ()=>{
+      setFetching(false);
       console.log("closed");
     });
   }
@@ -53,23 +81,34 @@ const  PlaylistDialog = (props)=> {
         videosToDisplay.push(<PlaylistSingleVideo iPosition ={i} {...video} handleChange={handleChange} />)
       }
     }
+    let progress = fetching === true ? <LinearProgress /> : "";
     return (
       <div>
         <Dialog
-          open={props.uiConfig.showPlaylistDialog.show}
+          open={props.showPlaylistDialog.show}
           TransitionComponent={Transition}
           keepMounted
           onClose={handleClose.bind(this)}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
+          disableBackdropClick = {true}
         >
           <DialogTitle id="alert-dialog-slide-title">
             Select videos
           </DialogTitle>
+
+          <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"flex-end"}}>
+            <Typography variant="body1">Select all: </Typography>
+            <Checkbox
+                checked={selectAll.checked}
+                value={selectAll.text}
+                onChange={handleChange.bind(null, !selectAll.checked)}
+              />
+          </DialogContent>
           <DialogContent>
               {videosToDisplay}
-              <Typography variant="body1">Modal</Typography>
           </DialogContent>
+            {progress}
           <DialogActions>
             <Button onClick={handleClose.bind(this)} color="primary">
               Close
@@ -82,12 +121,12 @@ const  PlaylistDialog = (props)=> {
 
 function mapStateToProps(store){
     return {
-        uiConfig: store.uiConfig    
+      showPlaylistDialog: store.uiConfig.showPlaylistDialog    
     }
 }
 
 const mapDispatchToProps = {
-    showPlaylistDialog: uiActions.showPlaylistDialog
+    showPlaylistDialogFn: uiActions.showPlaylistDialog
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDialog);

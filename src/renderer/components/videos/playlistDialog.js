@@ -14,6 +14,7 @@ const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
+  const [ queque, setQueque ] = useState({inProgress: 0, quequeVideos: []});
 
   useEffect(()=>{
     if(props.showPlaylistDialog.videos !== videos){
@@ -25,6 +26,10 @@ const  PlaylistDialog = (props)=> {
       getAdditionalInfo();
     }
   }, [props.showPlaylistDialog.videos]);
+  useEffect(()=>{
+    //console.log(queque, "queque");
+  },[queque]);
+
   const handleClose = ()=> {
     props.showPlaylistDialogFn({show: false, videos: []});
   };
@@ -49,9 +54,38 @@ const  PlaylistDialog = (props)=> {
       setVideos([...newVideos]);
     }
   }
+
+  const getSingleVideoInfo = (url, index, retries)=>{
+    return new Promise((resolve, reject)=>{
+      let info = execFile(path.resolve(__static, "youtube-dl.exe"), [`https://www.youtube.com/watch?v=${url}`, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
+      info.stdout.on("data", (data)=>{
+        let infos = data.split("\n");
+        if(infos.length===3){
+          let newVideos = videos;
+          newVideos[index].thumbnail=infos[0];
+          newVideos[index].duration=infos[1];
+          setVideos([...newVideos]);
+          resolve("OK",{});
+        } else {
+          if(retries >= 2){
+            resolve("PARSING_FAILED")
+          } else{
+            getSingleVideoInfo(url, index, retries+1);
+          }
+        }
+      });
+
+      info.stderr.on("data", (err)=>{
+
+      })
+      
+    });
+
+  }
   const getAdditionalInfo = ()=>{
     const { videos, playlistUrl } = props.showPlaylistDialog;
     let index = 0;
+    let counter = 0;
     let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
     info.stdout.on("data", (data)=>{
       let infos = data.split("\n");
@@ -59,14 +93,22 @@ const  PlaylistDialog = (props)=> {
       if(infos.length === 3){
         newVideos[index].thumbnail=infos[0];
         newVideos[index].duration=infos[1];
+        setVideos([...newVideos]);
+        index++;
       } else {
-        newVideos[index].duration=infos[0];
+        if(counter===0){
+          newVideos[index].thumbnail=infos[0];
+          counter++;
+        } else {
+          newVideos[index].duration=infos[0];
+          counter = 0;
+          index++;
+        }
       }
-      setVideos([...newVideos]);
-      index++;
+
     })
     info.stderr.on("data", (err)=>{
-      console.log(err);
+      index++;
     })
     info.on("close", ()=>{
       setFetching(false);

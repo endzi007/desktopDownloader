@@ -10,7 +10,8 @@ export const types = {
     RESUME_VIDEO_DOWNLOAD: "videos/RESUME_VIDEO_DOWNLOAD",
     PAUSE_VIDEO_DOWNLOAD: "",
     CHANGE_VIDEO_STATUS: "videos/CHANGE_VIDEO_STATUS",
-    YT_PLAYLIST_DOWNLOAD: "videos/YT_PLAYLIST_DOWNLOAD"
+    YT_PLAYLIST_DOWNLOAD: "videos/YT_PLAYLIST_DOWNLOAD",
+    ADD_PARSED_PLAYLIST: "videos/ADD_PARSED_PLAYLIST"
 }
 
 export const creators = {
@@ -23,7 +24,8 @@ export const creators = {
     savePlaylist: ()=> ({ type: types.SAVE_PLAYLIST }),
     loadPlaylist: ()=> ({ type: types.LOAD_PLAYLIST, payload: []}),
     changeVideoStatus: (obj)=>({ type: types.CHANGE_VIDEO_STATUS, payload: { index: obj.index, status: obj.status}}),
-    ytPlaylistDownload: url=>({type: types.YT_PLAYLIST_DOWNLOAD, payload: url})
+    ytPlaylistDownload: url=>({type: types.YT_PLAYLIST_DOWNLOAD, payload: url}),
+    addParsedPlaylist: videos=>({type: types.ADD_PARSED_PLAYLIST, payload: videos})
 }
 
 export default (state=[], action)=>{
@@ -50,9 +52,8 @@ export default (state=[], action)=>{
         case types.CHANGE_VIDEO_STATUS: 
             newState[action.payload.index].status = action.payload.status;
             return newState; 
-        case `${types.YT_PLAYLIST_DOWNLOAD}_PROCESSED`:
-            newState.concat(...action.payload);
-            return newState;
+        case types.ADD_PARSED_PLAYLIST:
+            return [...newState, ...action.payload];
         default:
             return newState;
     }

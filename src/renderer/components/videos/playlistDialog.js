@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Button, Dialog, LinearProgress, Typography, DialogActions, DialogContent, DialogTitle, Slide, Checkbox, FormControlLabel } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
+import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { execFile } from 'child_process';
 import path from 'path';
 import PlaylistSingleVideo from './playlistSingleVideo';
@@ -14,7 +15,6 @@ const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
-  const [ queque, setQueque ] = useState({inProgress: 0, quequeVideos: []});
 
   useEffect(()=>{
     if(props.showPlaylistDialog.videos !== videos){
@@ -27,9 +27,8 @@ const  PlaylistDialog = (props)=> {
     }
   }, [props.showPlaylistDialog.videos]);
   useEffect(()=>{
-    //console.log(queque, "queque");
-  },[queque]);
-
+    console.log(videos);
+  }, [videos]);
   const handleClose = ()=> {
     props.showPlaylistDialogFn({show: false, videos: []});
   };
@@ -40,17 +39,21 @@ const  PlaylistDialog = (props)=> {
     if(value === "Select all"){
         setSelectAll({text: "Deselect all", checked: true})
         newVideos.map((video)=>{
-          video.status = "CHECKED"
-        })
-        setVideos([...newVideos]);
-    } else if(value === "Select all"){
-        setSelectAll({text: "Select all", checked: false})
-        newVideos.map((video)=>{
           video.status = "NOT_STARTED"
         })
         setVideos([...newVideos]);
+    } else if(value === "Deselect all"){
+        setSelectAll({text: "Select all", checked: false})
+        newVideos.map((video)=>{
+          video.status = "NOT_CHECKED"
+        })
+        setVideos([...newVideos]);
     } else {
-      newVideos[index].status="CHECKED"
+      if(newVideos[index].status === "NOT_CHECKED"){
+        newVideos[index].status="NOT_STARTED"
+      } else {
+        newVideos[index].status="NOT_CHECKED"
+      }
       setVideos([...newVideos]);
     }
   }
@@ -88,6 +91,7 @@ const  PlaylistDialog = (props)=> {
     let counter = 0;
     let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
     info.stdout.on("data", (data)=>{
+      console.log(data);
       let infos = data.split("\n");
       let newVideos = videos;
       if(infos.length === 3){
@@ -152,6 +156,18 @@ const  PlaylistDialog = (props)=> {
           </DialogContent>
             {progress}
           <DialogActions>
+          <Button disabled={fetching} onClick={()=>{
+            let videosToAdd = [];
+            for(let vid of videos){
+              if(vid.status === "NOT_STARTED"){
+                videosToAdd.push(vid);
+              }
+            }
+            props.addParsedPlaylist(videosToAdd);
+            props.showPlaylistDialogFn({show: false, videos: []})
+          }} color="primary">
+              Add to playlist 
+            </Button>
             <Button onClick={handleClose.bind(this)} color="primary">
               Close
             </Button>
@@ -168,7 +184,8 @@ function mapStateToProps(store){
 }
 
 const mapDispatchToProps = {
-    showPlaylistDialogFn: uiActions.showPlaylistDialog
+    showPlaylistDialogFn: uiActions.showPlaylistDialog,
+    addParsedPlaylist: videoActions.addParsedPlaylist
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlaylistDialog);

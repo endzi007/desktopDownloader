@@ -17,7 +17,7 @@ const store = createStore(
   initialState,
   applyMiddleware(
     forwardToMain, // IMPORTANT! This goes first,
-    //logger
+    logger
     )
 );
 

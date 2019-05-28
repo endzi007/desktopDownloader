@@ -16,6 +16,7 @@ export default (action)=>{
         }
 
         video.stdout.on("data", (info)=>{
+            console.log("info", info);
             let infoData = JSON.parse(info);
             videoObj.title = infoData.title;
             videoObj.thumbnail = infoData.thumbnail;
@@ -32,7 +33,15 @@ export default (action)=>{
         video.stderr.on("data", (err)=>{
             if(err.indexOf("URL") !== -1){
                 action.type = appStateTypes.ERROR_HANDLER;
-                action.payload = {status: true, message: "Unable to parse. Check URL or internet connection"};
+                action.payload = {status: true, message: `Unable to parse. URL:${action.payload} seems to be invalid...`};
+                resolve(action);
+            } else if(err.indexOf("blocked") !== -1){
+                action.type = appStateTypes.ERROR_HANDLER;
+                action.payload = {status: true, message: "This video is blocked"};
+                resolve(action);
+            } else if(err.indexOf("copyright") !== -1){
+                action.type = appStateTypes.ERROR_HANDLER;
+                action.payload = {status: true, message: "This video is no longer available due to a copyright claim"};
                 resolve(action);
             }
         });

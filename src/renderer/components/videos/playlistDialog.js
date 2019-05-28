@@ -26,9 +26,7 @@ const  PlaylistDialog = (props)=> {
       getAdditionalInfo();
     }
   }, [props.showPlaylistDialog.videos]);
-  useEffect(()=>{
-    console.log(videos);
-  }, [videos]);
+
   const handleClose = ()=> {
     props.showPlaylistDialogFn({show: false, videos: []});
   };
@@ -112,6 +110,7 @@ const  PlaylistDialog = (props)=> {
 
     })
     info.stderr.on("data", (err)=>{
+      console.log("err", err);
       index++;
     })
     info.on("close", ()=>{
@@ -144,7 +143,7 @@ const  PlaylistDialog = (props)=> {
           </DialogTitle>
 
           <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"flex-end"}}>
-            <Typography variant="body1">Select all: </Typography>
+            <Typography variant="body1">{selectAll.text}</Typography>
             <Checkbox
                 checked={selectAll.checked}
                 value={selectAll.text}

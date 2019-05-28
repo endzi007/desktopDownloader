@@ -51,7 +51,7 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, checked})=>{
+const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let displayMessage = thumbnail === "noThumbnail"? <Typography variant="body1">Getting image..</Typography>: <CardMedia image={thumbnail} className={classes.cover}  title={title} />; 
     return (
@@ -65,7 +65,7 @@ const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, 
                 </div>
                 <div className={classes.divSt}>
                     <Checkbox 
-                        checked={checked}
+                        checked={status==="NOT_STARTED"? true: false}
                         onChange={handleChange.bind(null, iPosition)}
                         value={iPosition}
                      />

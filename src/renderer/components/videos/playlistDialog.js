@@ -56,42 +56,14 @@ const  PlaylistDialog = (props)=> {
     }
   }
 
-  const getSingleVideoInfo = (url, index, retries)=>{
-    return new Promise((resolve, reject)=>{
-      let info = execFile(path.resolve(__static, "youtube-dl.exe"), [`https://www.youtube.com/watch?v=${url}`, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
-      info.stdout.on("data", (data)=>{
-        let infos = data.split("\n");
-        if(infos.length===3){
-          let newVideos = videos;
-          newVideos[index].thumbnail=infos[0];
-          newVideos[index].duration=infos[1];
-          setVideos([...newVideos]);
-          resolve("OK",{});
-        } else {
-          if(retries >= 2){
-            resolve("PARSING_FAILED")
-          } else{
-            getSingleVideoInfo(url, index, retries+1);
-          }
-        }
-      });
-
-      info.stderr.on("data", (err)=>{
-
-      })
-      
-    });
-
-  }
   const getAdditionalInfo = ()=>{
     const { videos, playlistUrl } = props.showPlaylistDialog;
     let index = 0;
     let counter = 0;
-    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors"]);
+    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors", "--no-warnings"]);
+    let newVideos = videos;
     info.stdout.on("data", (data)=>{
-      console.log(data);
       let infos = data.split("\n");
-      let newVideos = videos;
       if(infos.length === 3){
         newVideos[index].thumbnail=infos[0];
         newVideos[index].duration=infos[1];
@@ -110,12 +82,25 @@ const  PlaylistDialog = (props)=> {
 
     })
     info.stderr.on("data", (err)=>{
-      console.log("err", err);
-      index++;
+      if(err.indexOf("Unable") !==-1){
+        newVideos[index].status = "ERROR";
+        index++;
+      } else if(err.indexOf("country")){
+        newVideos[index].status = "ERROR";
+        index++;
+      }
     })
     info.on("close", ()=>{
       setFetching(false);
-      console.log("closed");
+      setVideos((prevVideos)=>{
+        let filteredVideos =[];
+        for(let vid of prevVideos){
+          	if(vid.status !== "ERROR"){
+              filteredVideos.push(vid);
+            }
+        }
+        return filteredVideos;
+      });
     });
   }
 

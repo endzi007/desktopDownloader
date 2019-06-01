@@ -82,10 +82,11 @@ const  PlaylistDialog = (props)=> {
 
     })
     info.stderr.on("data", (err)=>{
-      if(err.indexOf("Unable") !==-1){
+      if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
         newVideos[index].status = "ERROR";
         index++;
       } else if(err.indexOf("country")){
+        console.log(err, "rr");
         newVideos[index].status = "ERROR";
         index++;
       }

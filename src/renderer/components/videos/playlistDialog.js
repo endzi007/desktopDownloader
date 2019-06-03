@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { execFile } from 'child_process';
+import events from 'events';
 import path from 'path';
 import PlaylistSingleVideo from './playlistSingleVideo';
 
@@ -15,15 +16,62 @@ const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
-
+  let infoObj = {
+    info: execFile(path.resolve(__static, "youtube-dl.exe"), [props.showPlaylistDialog.playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]),
+    getAdditionalInfo: function(){
+        const { videos } = props.showPlaylistDialog;
+        let index = 0;
+        let newVideos = videos;
+        let dataArr = [];
+        this.info.stdout.on("data", (data)=>{
+          let infos = data.split("\n");
+          infos.pop();
+          dataArr = dataArr.concat(infos);
+          if(dataArr.length === 3){
+            console.log(dataArr);
+            newVideos[index].title = dataArr[0];
+            newVideos[index].thumbnail=dataArr[1];
+            newVideos[index].duration=dataArr[2];
+            setVideos([...newVideos]);
+            dataArr = [];
+            index++;
+          }
+        })
+    
+        this.info.stderr.on("data", (err)=>{
+          if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
+            newVideos[index].status = "ERROR";
+            index++;
+          } else if(err.indexOf("country")){
+            console.log(err, "rr");
+            newVideos[index].status = "ERROR";
+            index++;
+          }
+        })
+        this.info.on("close", ()=>{
+          setFetching(false);
+          setVideos((prevVideos)=>{
+            let filteredVideos =[];
+            for(let vid of prevVideos){
+                if(vid.status !== "ERROR"){
+                  filteredVideos.push(vid);
+                }
+            }
+            return filteredVideos;
+          });
+        });
+    },
+    killFn: function(){
+      this.info.kill();
+    }
+  }
+  
   useEffect(()=>{
     if(props.showPlaylistDialog.videos !== videos){
       setVideos(props.showPlaylistDialog.videos);
-      setTimeout(()=>{
-        console.log(props.showPlaylistDialog.videos);
-      }, 100)
       setFetching(true);
-      getAdditionalInfo();
+      infoObj.getAdditionalInfo();
+      console.log(infoObj, "infoObj");
     }
   }, [props.showPlaylistDialog.videos]);
 
@@ -56,60 +104,13 @@ const  PlaylistDialog = (props)=> {
     }
   }
 
-  const getAdditionalInfo = ()=>{
-    const { videos, playlistUrl } = props.showPlaylistDialog;
-    let index = 0;
-    let counter = 0;
-    let info = execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl, "--get-thumbnail", "--get-duration", "--ignore-errors", "--no-warnings"]);
-    let newVideos = videos;
-    info.stdout.on("data", (data)=>{
-      let infos = data.split("\n");
-      if(infos.length === 3){
-        newVideos[index].thumbnail=infos[0];
-        newVideos[index].duration=infos[1];
-        setVideos([...newVideos]);
-        index++;
-      } else {
-        if(counter===0){
-          newVideos[index].thumbnail=infos[0];
-          counter++;
-        } else {
-          newVideos[index].duration=infos[0];
-          counter = 0;
-          index++;
-        }
-      }
-
-    })
-    info.stderr.on("data", (err)=>{
-      if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
-        newVideos[index].status = "ERROR";
-        index++;
-      } else if(err.indexOf("country")){
-        console.log(err, "rr");
-        newVideos[index].status = "ERROR";
-        index++;
-      }
-    })
-    info.on("close", ()=>{
-      setFetching(false);
-      setVideos((prevVideos)=>{
-        let filteredVideos =[];
-        for(let vid of prevVideos){
-          	if(vid.status !== "ERROR"){
-              filteredVideos.push(vid);
-            }
-        }
-        return filteredVideos;
-      });
-    });
-  }
+  
 
     let videosToDisplay = [];
     if(videos.length > 0){
       for (let i in videos){
         let video = videos[i];
-        videosToDisplay.push(<PlaylistSingleVideo iPosition ={i} {...video} handleChange={handleChange} />)
+        videosToDisplay.push(<PlaylistSingleVideo key={videos[i].url} iPosition ={i} {...video} handleChange={handleChange} />)
       }
     }
     let progress = fetching === true ? <LinearProgress /> : "";
@@ -153,7 +154,10 @@ const  PlaylistDialog = (props)=> {
           }} color="primary">
               Add to playlist 
             </Button>
-            <Button onClick={handleClose.bind(this)} color="primary">
+            <Button onClick={()=>{
+              handleClose();
+              infoObj.killFn();
+            }} color="primary">
               Close
             </Button>
           </DialogActions>

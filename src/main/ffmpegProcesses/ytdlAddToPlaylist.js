@@ -1,6 +1,7 @@
 import { execFile } from 'child_process';
 import path from 'path';
 import { types as appStateTypes } from '../appState/appStateDuck';
+import { types as uiTypes } from '../ui/uiDuck';
 import store from "../store/store";
 
 export default (action)=>{
@@ -35,15 +36,19 @@ export default (action)=>{
                         durationInSec += Number.parseInt(durationArr[x])* Math.pow(60, x);
                     }
                     if(durationInSec > 1200){
-                        console.log("larger than");
+                        action.type = uiTypes.SHOW_PRO_FEATURE;
+                        action.payload = {open: true, message: "To download videos longer than 20 minutes please consider donating to get PRO License"};
+                    } else {
+                        action.type = `${action.type}_PROCESSED`;
+                        action.payload = videoObj;
                     }
+                } else {
+                    action.type = `${action.type}_PROCESSED`;
+                    action.payload = videoObj;
                 }
                 console.log(durationInSec);
-                action.type = `${action.type}_PROCESSED`;
-                action.payload = videoObj;
                 resolve(action);
             }
-            console.log(dataArr);
         });
 
         video.stderr.on("data", (err)=>{

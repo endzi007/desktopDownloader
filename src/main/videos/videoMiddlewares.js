@@ -77,6 +77,10 @@ export default (store)=>(next)=>(action)=>{
             ytdlPlaylist(action).then((newAction)=>{
                 store.dispatch(appStateActions.parsingData(false));
                 store.dispatch(uiActions.showPlaylistDialog(newAction.payload));
+            }).catch((errAction)=>{
+                console.log("catch");
+                store.dispatch(appStateActions.parsingData(false));
+                next(errAction);
             })
         default: 
         break;

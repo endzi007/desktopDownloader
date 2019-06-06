@@ -12,23 +12,41 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
+const killEvent = new events.EventEmitter();
+
+
+
 const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
-  let infoObj = {
-    info: execFile(path.resolve(__static, "youtube-dl.exe"), [props.showPlaylistDialog.playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]),
-    getAdditionalInfo: function(){
-        const { videos } = props.showPlaylistDialog;
+  useEffect(()=>{
+    setVideos([...props.showPlaylistDialog.videos]);
+    setFetching(true);
+    if(props.showPlaylistDialog.videos.length > 0){
+      getAdditionalInfo();
+    }
+    return ()=>{
+      console.log("called unmount");
+      setVideos([]);
+    }
+  }, [props.showPlaylistDialog.videos]);
+
+
+    useEffect(()=>{
+      console.log("updated videos", videos)
+    }, [videos]);
+  const getAdditionalInfo = ()=> {
+        const { videos, playlistUrl } = props.showPlaylistDialog;
+        const info =  execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]);
         let index = 0;
         let newVideos = videos;
         let dataArr = [];
-        this.info.stdout.on("data", (data)=>{
+        info.stdout.on("data", (data)=>{
           let infos = data.split("\n");
           infos.pop();
           dataArr = dataArr.concat(infos);
           if(dataArr.length === 3){
-            console.log(dataArr);
             newVideos[index].title = dataArr[0];
             newVideos[index].thumbnail=dataArr[1];
             newVideos[index].duration=dataArr[2];
@@ -37,43 +55,35 @@ const  PlaylistDialog = (props)=> {
             index++;
           }
         })
-    
-        this.info.stderr.on("data", (err)=>{
+        killEvent.on("KILL", ()=>{
+          info.kill();
+        });
+        info.stderr.on("data", (err)=>{
+          console.log("err", err);
           if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
             newVideos[index].status = "ERROR";
             index++;
           } else if(err.indexOf("country")){
-            console.log(err, "rr");
             newVideos[index].status = "ERROR";
             index++;
           }
         })
-        this.info.on("close", ()=>{
+        info.on("close", ()=>{
           setFetching(false);
           setVideos((prevVideos)=>{
             let filteredVideos =[];
-            for(let vid of prevVideos){
-                if(vid.status !== "ERROR"){
-                  filteredVideos.push(vid);
-                }
+            if(prevVideos.length > 0){
+              for(let vid of prevVideos){
+                  if(vid.status !== "ERROR"){
+                    filteredVideos.push(vid);
+                  }
+              }
             }
             return filteredVideos;
           });
         });
-    },
-    killFn: function(){
-      this.info.kill();
-    }
   }
   
-  useEffect(()=>{
-    if(props.showPlaylistDialog.videos !== videos){
-      setVideos(props.showPlaylistDialog.videos);
-      setFetching(true);
-      infoObj.getAdditionalInfo();
-      console.log(infoObj, "infoObj");
-    }
-  }, [props.showPlaylistDialog.videos]);
 
   const handleClose = ()=> {
     props.showPlaylistDialogFn({show: false, videos: []});
@@ -156,7 +166,7 @@ const  PlaylistDialog = (props)=> {
             </Button>
             <Button onClick={()=>{
               handleClose();
-              infoObj.killFn();
+              killEvent.emit("KILL");
             }} color="primary">
               Close
             </Button>

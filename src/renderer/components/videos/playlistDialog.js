@@ -32,10 +32,6 @@ const  PlaylistDialog = (props)=> {
     }
   }, [props.showPlaylistDialog.videos]);
 
-
-    useEffect(()=>{
-      console.log("updated videos", videos)
-    }, [videos]);
   const getAdditionalInfo = ()=> {
         const { videos, playlistUrl } = props.showPlaylistDialog;
         const info =  execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]);
@@ -59,7 +55,6 @@ const  PlaylistDialog = (props)=> {
           info.kill();
         });
         info.stderr.on("data", (err)=>{
-          console.log("err", err);
           if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
             newVideos[index].status = "ERROR";
             index++;

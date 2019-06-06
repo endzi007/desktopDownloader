@@ -80,7 +80,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
 
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
-        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${iPosition+1}.`}</Typography>
+        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>

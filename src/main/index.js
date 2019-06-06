@@ -5,8 +5,11 @@ import { format as formatUrl } from 'url';
 import { autoUpdater } from 'electron-updater';
 import store from './store/store';
 import persistStore from '../main/helpers/persistStore';
+import { execFile } from 'child_process';
 
-  
+//update youtube-dl if there is an update or fix available
+execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"]);
+
 let key = persistStore.get("license");
 if(key === undefined){
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
@@ -39,7 +42,7 @@ process.on('uncaughtException', function (err) {
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader"});
+  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader", resizable: false});
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   }

@@ -59,7 +59,7 @@ const SingleVideo = ({ thumbnail, title, url, handleChange, classes, iPosition, 
     let displayMessage = thumbnail === "noThumbnail"? <Typography variant="body1">Getting image..</Typography>: <CardMedia image={thumbnail} className={classes.cover}  title={title} />; 
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
-        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${iPosition+1}.`}</Typography>
+        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
             {displayMessage}
             <CardContent className={classes.content}>

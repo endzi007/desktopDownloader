@@ -4,7 +4,6 @@ import { types as uiTypes } from '../ui/uiDuck';
 
 
 export default (store)=>(next)=>(action)=>{
-    console.log("middleware called");
     const state = store.getState();
     if(!state.appState.license.status){
         switch (action.type) {

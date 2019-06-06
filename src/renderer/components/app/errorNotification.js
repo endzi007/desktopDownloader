@@ -23,7 +23,6 @@ class SimpleSnackbar extends React.Component {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          autoHideDuration={3000}
           open={this.props.error.status}
           onClose={this.props.closeErrorNotification}
         >

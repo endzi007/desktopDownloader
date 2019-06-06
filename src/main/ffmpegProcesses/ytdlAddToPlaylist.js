@@ -6,7 +6,7 @@ import store from "../store/store";
 
 export default (action)=>{
     return new Promise((resolve, reject)=>{
-        let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--get-title", "--get-thumbnail", "--get-duration", "--no-playlist"]);
+        let video = execFile(path.resolve(__static, "youtube-dl.exe"), [action.payload, "--get-title", "--get-thumbnail", "--get-duration", "--no-playlist", "--no-warnings"]);
         let videoObj = {
             title: "",
             thumbnail: "",
@@ -52,19 +52,9 @@ export default (action)=>{
         });
 
         video.stderr.on("data", (err)=>{
-            if(err.indexOf("URL") !== -1){
-                action.type = appStateTypes.ERROR_HANDLER;
-                action.payload = {status: true, message: `Unable to parse. URL:${action.payload} seems to be invalid...`};
-                resolve(action);
-            } else if(err.indexOf("blocked") !== -1){
-                action.type = appStateTypes.ERROR_HANDLER;
-                action.payload = {status: true, message: "This video is blocked"};
-                resolve(action);
-            } else if(err.indexOf("copyright") !== -1){
-                action.type = appStateTypes.ERROR_HANDLER;
-                action.payload = {status: true, message: "This video is no longer available due to a copyright claim"};
-                resolve(action);
-            }
+            action.type = appStateTypes.ERROR_HANDLER;
+            action.payload = {status: true, message: err};
+            resolve(action);
         });
 
         video.on("error", (err)=>{

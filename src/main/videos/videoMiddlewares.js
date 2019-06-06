@@ -24,6 +24,9 @@ export default (store)=>(next)=>(action)=>{
                 ytdlAddToPlaylist(action).then((newAction)=>{
                     store.dispatch(appStateActions.parsingData(false));
                     next(newAction);
+                }).catch((newAction)=>{
+                    store.dispatch(appStateActions.parsingData(false));
+                    next(newAction);
                 });
             } else {
                 action.type = "CANCELED_ACTION";
@@ -49,7 +52,7 @@ export default (store)=>(next)=>(action)=>{
             downloadAndConvert(store, action.payload, true).then();
             break;
         case types.SAVE_PLAYLIST: 
-            dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["enis"]}]}, (filename)=>{
+            dialog.showSaveDialog({filters:[{ name: "JSON file", extensions: ["ddx"]}]}, (filename)=>{
                 let modifiedVideos = [];
                 state.videos.forEach(video => {
                     video.status = "NOT_STARTED";
@@ -59,14 +62,14 @@ export default (store)=>(next)=>(action)=>{
 
                 fs.writeFile(filename, JSON.stringify(modifiedVideos), (err)=>{
                     if(err){
-                        console.log("error happened while saving file");
+                        store.dispatch(appStateActions.errorHandler({status: true, message: "Could't save file" + err}))
                     } 
                 })
             });
             break;
 
         case types.LOAD_PLAYLIST: 
-            dialog.showOpenDialog(null, {filters:[{name: "JSON File", extensions: ["enis"]}]}, (fn)=>{
+            dialog.showOpenDialog(null, {filters:[{name: "JSON File", extensions: ["ddx"]}]}, (fn)=>{
                 let data = fs.readFileSync(fn[0]);
                 store.dispatch({type: `${types.LOAD_PLAYLIST}_PROCESSED`, payload: JSON.parse(data)})
             });
@@ -78,7 +81,6 @@ export default (store)=>(next)=>(action)=>{
                 store.dispatch(appStateActions.parsingData(false));
                 store.dispatch(uiActions.showPlaylistDialog(newAction.payload));
             }).catch((errAction)=>{
-                console.log("catch");
                 store.dispatch(appStateActions.parsingData(false));
                 next(errAction);
             })

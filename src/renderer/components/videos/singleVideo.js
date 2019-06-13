@@ -6,6 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import PauseIcon from '@material-ui/icons/Pause';
 import ReplayIcon from '@material-ui/icons/Replay';
+import CustomRange from './customRange';
 
 import { FadeLoader  } from 'react-spinners';
 
@@ -15,7 +16,8 @@ const styles = (theme) => ({
         marginBottom: "5px",
         flexGrow: "1",
         maxHeight: "60px",
-        position: "relative"
+        position: "relative",
+        borderRadius: "0px"
     },
     cover: {
         minWidth: "120px" 
@@ -90,12 +92,13 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
                     <Typography variant="body1">{duration}</Typography>
                 </div>
                 <div className={classes.divSt}>
-
                     {stateToDisplay}
                     {buttonToDisplay} 
                 </div>
             </CardContent>
         </Card>
+        <div></div>
+        <CustomRange duration={duration}/>
     </div>
      
     );

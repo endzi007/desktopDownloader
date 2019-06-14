@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
 import { types as videoTypes } from '../../../main/videos/videoDuck';
+import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { Card, Typography } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 function mapStateToProps (state){
@@ -18,7 +19,7 @@ class VideoList extends React.Component{
         this.handlePauseResume = this.handlePauseResume.bind(this);
     }
     handleDelete(url){
-        this.props.dispatch({type: videoTypes.REMOVE, payload: url})
+        this.props.removeVideoFromPlaylist(url);
     }
     handlePauseResume(pause, i){
         if(pause){
@@ -28,13 +29,17 @@ class VideoList extends React.Component{
         }
     }
 
+    handleCustomRange(range, index){
+        //dispatch custom range for selected video
+    }
+
     render(){
         let noVideos = "Drag and Drop YouTube video";
         let arrOfVideos = [];
         const { videos } = this.props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete} handlePauseResume={this.handlePauseResume}/>);
+                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={this.handleDelete} handlePauseResume={this.handlePauseResume} customRange={this.props.handleCustomRange}/>);
             });
         }
         if(this.props.appState.parsingData.bool){
@@ -70,4 +75,8 @@ class VideoList extends React.Component{
     }
 };
 
-export default connect(mapStateToProps)(VideoList);
+const mapDispatchToProps = {
+    removeVideoFromPlaylist: videoActions.removeVideoFromPlaylist,
+    handleCustomRange: videoActions.handleCustomRange
+}
+export default connect(mapStateToProps, mapDispatchToProps)(VideoList);

@@ -18,8 +18,9 @@ export default (action)=>{
                             url: entry.url,
                             duration: "",
                             downloadLinks: [],
-                            status: "NOT_CHECKED" //this value is used in playlistDialog, in which by clicking checkbox
+                            status: "NOT_CHECKED", //this value is used in playlistDialog, in which by clicking checkbox
                             //this value becomes NOT_STARTED and stored in redux store
+                            range: {status: false, range: []}
                         })
                     });
                     action.type = `${action.type}_PROCESSED`;

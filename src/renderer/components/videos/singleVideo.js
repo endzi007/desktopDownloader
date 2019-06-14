@@ -98,7 +98,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             </CardContent>
         </Card>
         <div></div>
-        <CustomRange duration={duration}/>
+        <CustomRange duration={duration} index={iPosition} />
     </div>
      
     );

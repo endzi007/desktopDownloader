@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Slider, Rail, Handles, Tracks } from 'react-compound-slider'
 import { SliderRail, Handle, Track } from './sliderComponents' // example render components - source below
+import { connect } from 'react-redux';
+import { creators as videoActions } from '../../../main/videos/videoDuck';
 
 const sliderStyle = {
   position: 'relative',
@@ -28,13 +30,23 @@ class Example extends Component {
     }
 
     onChange (values) {
+      let durationArr = this.props.duration.split(":").reverse();
+      let valInSec = 1; 
+      for(let x in durationArr){
+        valInSec += Number.parseInt(durationArr[x])* Math.pow(60, x);
+      }
         this.setState({ values })
-    }
+        let obj = { status: true, range: values, index: this.props.index}
+        if(values[0] === 0 && values[1] === valInSec){
+          obj.status = false; 
+        }
+        this.props.handleCustomRange(obj);
 
+    }
+    componentDidMount(){
+      console.log(this.props, "props");
+    }
   render() {
-    const {
-      state: { values, update },
-    } = this
     let durationArr = this.props.duration.split(":").reverse();
     let newValue = 1; 
     for(let x in durationArr){
@@ -88,4 +100,7 @@ class Example extends Component {
   }
 }
 
-export default Example
+const mapDispatchToProps = {
+  handleCustomRange: videoActions.customRangeDownload
+}
+export default connect(null, mapDispatchToProps)(Example);

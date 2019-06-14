@@ -14,7 +14,8 @@ export default (action)=>{
             url: "",
             duration: "",
             downloadLinks: [],
-            status: "NOT_STARTED"
+            status: "NOT_STARTED",
+            range: {status: false, range: []}
         }
         let dataArr = [];
         let newAction = {};

@@ -17,8 +17,10 @@ export default (action)=>{
             status: "NOT_STARTED"
         }
         let dataArr = [];
+        let newAction = {};
 
         video.stdout.on("data", (info)=>{
+
             let infoArr = info.split("\n");
             infoArr.pop();
             dataArr = dataArr.concat(infoArr);
@@ -36,29 +38,30 @@ export default (action)=>{
                         durationInSec += Number.parseInt(durationArr[x])* Math.pow(60, x);
                     }
                     if(durationInSec > 1200){
-                        action.type = uiTypes.SHOW_PRO_FEATURE;
-                        action.payload = {open: true, message: "To download videos longer than 20 minutes please consider donating to get PRO License"};
+                        newAction.type = uiTypes.SHOW_PRO_FEATURE;
+                        newAction.payload = {open: true, message: "To download videos longer than 20 minutes please consider donating to get PRO License"};
                     } else {
-                        action.type = `${action.type}_PROCESSED`;
-                        action.payload = videoObj;
+                        newAction.type = `${action.type}_PROCESSED`;
+                        newAction.payload = videoObj;
                     }
                 } else {
-                    action.type = `${action.type}_PROCESSED`;
-                    action.payload = videoObj;
+                    newAction.type = `${action.type}_PROCESSED`;
+                    newAction.payload = videoObj;
                 }
-                console.log(durationInSec);
-                resolve(action);
+                
             }
         });
 
         video.stderr.on("data", (err)=>{
-            action.type = appStateTypes.ERROR_HANDLER;
-            action.payload = {status: true, message: err};
-            resolve(action);
+            newAction.type = appStateTypes.ERROR_HANDLER;
+            newAction.payload = {status: true, message: err};
         });
 
         video.on("error", (err)=>{
             console.log("some err", err);
+        })
+        video.on("close", ()=>{
+            resolve(newAction);
         })
     });
 }

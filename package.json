@@ -1,6 +1,6 @@
 {
   "name": "dedex-video-downloader",
-  "version": "0.0.1",
+  "version": "1.0.4",
   "description": "Audio and video downloader, YouTube, 100+ sites",
   "main": "src/main/index.js",
   "repository": "https://github.com/endzi007/desktopDownloader",

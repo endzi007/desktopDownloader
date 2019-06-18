@@ -2,7 +2,9 @@ import { types as optionsTypes} from '../options/optionsDuck';
 import { types as videosTypes} from '../videos/videoDuck';
 import { ipcMain } from 'electron';
 import path from 'path';
+import getDownloadUrl from './getDownloadUrl';
 import { execFile } from 'child_process';
+import customRangeDownload from './customRangeDownload';
 
 export default (store, index, resume)=>{
     return new Promise((resolve, reject)=>{
@@ -13,19 +15,34 @@ export default (store, index, resume)=>{
 
         let state = store.getState();
         let storeVideo = state.videos[index];
+
+        console.log("function execution still going");
+        const { downloadFormat } = state.options;
+
+        if(storeVideo.range.status === true){
+            return getDownloadUrl(store, index).then((url)=>{
+                customRangeDownload(url, storeVideo, downloadFormat.type, state.options.downloadFolder).then(()=>{
+                    
+                }).catch((err)=>{
+                    console.log(err);
+                });
+            })
+        }
+
+
         let qualitySelect = {
             mp3:{
                 "low": ["worstaudio/m4a/mp4"],
                 "medium": ["m4a/webm/18/mp4"],
-                "best": ["bestaudio/m4a/webm/mp4", "--audio-quality", "0"]
+                "best": ["bestaudio/m4a/webm/mp4"]
             }, 
             mp4: {
                 "360": ["18/134/135/mp4"],
                 "720": ["22/397/mp4"],
-                "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio", "--merge-output-format" , "mp4"]
+                "1080": ["bestvideo[ext=mp4]+bestaudio[ext=m4a]"]
             }
         }
-        const { downloadFormat } = state.options;
+
 
         let args;
         if(downloadFormat.type === "mp3"){

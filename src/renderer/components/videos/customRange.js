@@ -36,7 +36,7 @@ class Example extends Component {
         valInSec += Number.parseInt(durationArr[x])* Math.pow(60, x);
       }
         this.setState({ values })
-        let obj = { status: true, range: values, index: this.props.index}
+        let obj = { status: true, range: [values[0], values[1]-values[0]], index: this.props.index}
         if(values[0] === 0 && values[1] === valInSec){
           obj.status = false; 
         }

@@ -30,14 +30,10 @@ class Example extends Component {
     }
 
     onChange (values) {
-      let durationArr = this.props.duration.split(":").reverse();
-      let valInSec = 1; 
-      for(let x in durationArr){
-        valInSec += Number.parseInt(durationArr[x])* Math.pow(60, x);
-      }
+
         this.setState({ values })
         let obj = { status: true, range: [values[0], values[1]-values[0]], index: this.props.index}
-        if(values[0] === 0 && values[1] === valInSec){
+        if(values[0] === 0 && values[1] === this.props.duration){
           obj.status = false; 
         }
         this.props.handleCustomRange(obj);
@@ -47,11 +43,8 @@ class Example extends Component {
       console.log(this.props, "props");
     }
   render() {
-    let durationArr = this.props.duration.split(":").reverse();
-    let newValue = 1; 
-    for(let x in durationArr){
-      newValue += Number.parseInt(durationArr[x])* Math.pow(60, x);
-    }
+    let newValue = this.props.duration; 
+
     return (
       <div style={{height: 10, width: '100%', marginTop: "-8px"}}>
         <Slider

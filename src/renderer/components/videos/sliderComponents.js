@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import PropTypes from 'prop-types'
 // *******************************************************
 // RAIL
@@ -45,7 +45,7 @@ export function Handle({
   disabled,
   getHandleProps,
 }) {
-
+    const [ showHandle, setShowHandle ] = useState(false);
     let h= Math.floor(value / 3600);
     let m =  Math.floor(value % 3600 / 60);
     let s=  Math.floor(value % 3600 % 60);
@@ -53,6 +53,12 @@ export function Handle({
   return (
     <Fragment>
       <div
+        onMouseOver={()=>{
+          setShowHandle(true);
+        }}
+        onMouseLeave={()=>{
+          setShowHandle(false);
+        }}
         style={{
           left: `${percent}%`,
           position: 'absolute',
@@ -84,7 +90,7 @@ export function Handle({
           backgroundColor: disabled ? '#666' : '#ffc400',
         }}
       >
-        <div style={{ fontFamily: 'Roboto', fontSize: 11, marginTop: -15, backgroundColor:"black", minWidth: "25px", padding: "2px" }}>
+        <div style={{ display: showHandle===true? "block": "none", fontFamily: 'Roboto', fontSize: 11, marginTop: -15, marginLeft: -10, backgroundColor:"black", minWidth: "25px", padding: "2px" }}>
           {`${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}
          </div>
       </div>

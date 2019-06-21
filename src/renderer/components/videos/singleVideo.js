@@ -61,7 +61,10 @@ const styles = (theme) => ({
 const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
-    let stateToDisplay = ""; 
+    let stateToDisplay = "";
+    let h= Math.floor(duration / 3600);
+    let m =  Math.floor(duration % 3600 / 60);
+    let s=  Math.floor(duration % 3600 % 60);
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -89,7 +92,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             <CardContent className={classes.content}>
                 <div>
                     <Typography variant="body1">{modifiedTitle}</Typography>
-                    <Typography variant="body1">{duration}</Typography>
+                    <Typography variant="body1">{`${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
                 </div>
                 <div className={classes.divSt}>
                     {stateToDisplay}

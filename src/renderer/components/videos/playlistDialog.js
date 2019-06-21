@@ -3,7 +3,7 @@ import { Button, Dialog, LinearProgress, Typography, DialogActions, DialogConten
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
-import { execFile } from 'child_process';
+import { spawn } from 'child_process';
 import events from 'events';
 import path from 'path';
 import PlaylistSingleVideo from './playlistSingleVideo';
@@ -34,36 +34,35 @@ const  PlaylistDialog = (props)=> {
 
   const getAdditionalInfo = ()=> {
         const { videos, playlistUrl } = props.showPlaylistDialog;
-        const info =  execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]);
+        const info =  spawn(path.resolve(__static, "youtube-dl.exe"), ["--ignore-errors", "--dump-json", "--no-warnings",  playlistUrl ]);
         let index = 0;
         let newVideos = videos;
         let dataArr = [];
         info.stdout.on("data", (data)=>{
-          let infos = data.split("\n");
-          infos.pop();
-          dataArr = dataArr.concat(infos);
-          if(dataArr.length === 3){
-            newVideos[index].title = dataArr[0];
-            newVideos[index].thumbnail=dataArr[1];
-            newVideos[index].duration=dataArr[2];
-            setVideos([...newVideos]);
-            dataArr = [];
-            index++;
-          }
+          console.log(data.toString(), "DATA");
+            let infoData = JSON.parse(data);
+          newVideos[index].title = infoData.title;
+          newVideos[index].thumbnail = infoData.thumbnail;
+          newVideos[index].url = `https://www.youtube.com/watch?v=${infoData.id}`;
+          newVideos[index].duration = Number.parseInt(infoData.duration);
+          newVideos[index].range.range = [0, Number.parseInt(infoData.duration)]
+          newVideos[index].downloadLinks = infoData.formats;
+          setVideos([...newVideos]);
+          index++;
+
         })
         killEvent.on("KILL", ()=>{
           info.kill();
         });
         info.stderr.on("data", (err)=>{
-          if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
-            newVideos[index].status = "ERROR";
-            index++;
-          } else if(err.indexOf("country")){
-            newVideos[index].status = "ERROR";
-            index++;
-          }
+          newVideos[index].status = "ERROR";
+          setVideos([...newVideos]);
+          index++; 
         })
         info.on("close", ()=>{
+          
+        });
+        info.on("exit", ()=>{
           setFetching(false);
           setVideos((prevVideos)=>{
             let filteredVideos =[];
@@ -76,7 +75,7 @@ const  PlaylistDialog = (props)=> {
             }
             return filteredVideos;
           });
-        });
+        })
   }
   
 

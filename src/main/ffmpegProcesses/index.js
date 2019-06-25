@@ -15,7 +15,7 @@ export default (store, index, resume)=>{
         let state = store.getState();
         let storeVideo = state.videos[index];
         const { downloadFormat } = state.options;
-
+//1:08 should be 382kB
         if(storeVideo.range.status === true){
             customRangeDownload(store, index).then(()=>{
                 

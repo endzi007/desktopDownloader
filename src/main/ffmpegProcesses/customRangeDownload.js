@@ -7,12 +7,12 @@ export default (store, index)=>{
         let stateVideo = state.videos[index];
         let formatsToDownload = getFormatsToDownload(state.options.downloadFormat, stateVideo.downloadLinks);
         let modifiedTitle = stateVideo.title.replace(/[|*:/"<>,]/g, "-");
-        let getPercent = ((stateVideo.range.range[1]-stateVideo.range.range[0])/stateVideo.duration)*100;
-        console.log("percent", getPercent);
+        let getPercent = (stateVideo.range.range[1]/stateVideo.duration)*100;
+        console.log("percent", stateVideo.range.range[1], stateVideo.range.range[0]);
         let sizeToDownload = ((formatsToDownload.filesize / 100) * getPercent)/1024;
         let baseValue = 0;
         let video = execFile(path.resolve(__static, "ffmpeg"), 
-        ['-ss', stateVideo.range.range[0], '-i', formatsToDownload.url, "-y", "-loglevel", "quiet", "-stats", '-to', stateVideo.range.range[1], '-c:a', "copy",  modifiedTitle+"."+formatsToDownload.ext]);
+        ['-ss', stateVideo.range.range[0], '-i', formatsToDownload.url, "-y", "-loglevel", "quiet", "-stats", '-t', stateVideo.range.range[1], '-c:a', "copy",  modifiedTitle+"."+formatsToDownload.ext]);
         video.stdout.on("data", (data)=>{
             console.log("DATA", data);
         })

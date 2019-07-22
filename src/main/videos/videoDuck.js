@@ -27,7 +27,8 @@ export const creators = {
     changeVideoStatus: (obj)=>({ type: types.CHANGE_VIDEO_STATUS, payload: { index: obj.index, status: obj.status}}),
     ytPlaylistDownload: url=>({type: types.YT_PLAYLIST_DOWNLOAD, payload: url}),
     addParsedPlaylist: videos=>({type: types.ADD_PARSED_PLAYLIST, payload: videos}),
-    customRangeDownload: obj =>({type: types.CUSTOM_RANGE_DOWNLOAD, payload: obj})
+    customRangeDownload: obj =>({type: types.CUSTOM_RANGE_DOWNLOAD, payload: obj}),
+    resumeVideoDownload: index =>({ type: types.RESUME_VIDEO_DOWNLOAD, payload: index })
 }
 
 export default (state=[], action)=>{

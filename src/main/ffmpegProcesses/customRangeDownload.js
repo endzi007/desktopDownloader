@@ -1,18 +1,18 @@
 import path from 'path';
 import { execFile } from 'child_process';
-import { unwatchFile } from 'fs';
-import { reduce } from 'bluebird-lst';
+import { unlink } from 'fs';
+import { types as videosTypes } from '../videos/videoDuck';
+import { ipcMain } from 'electron';
 
 export default (store, index)=>{
     return new Promise((resolve, reject)=>{
         let state = store.getState();
-        const { downloadFormat } = state.options;
+        const { downloadFormat, downloadFolder } = state.options;
         let stateVideo = state.videos[index];
         let formatsToDownload = getFormatsToDownload(downloadFormat, stateVideo.downloadLinks);
-        let modifiedTitle = stateVideo.title.replace(/[|*:/"<>,]/g, "-");
+        let modifiedTitle = stateVideo.title.replace(/[|*://"<>\\,]/g, "-");
         let getPercent = (stateVideo.range.range[1]/stateVideo.duration)*100;
-        let sizeToDownload = ((formatsToDownload.filesize / 100) * getPercent)/1024;
-        let args;
+        let sizeToDownload = Number.parseInt(((formatsToDownload.filesize / 100) * getPercent)/1024);
         let qa;
         if(downloadFormat.type === "mp3"){
             if(downloadFormat.quality === "low"){
@@ -23,49 +23,82 @@ export default (store, index)=>{
                 qa = 0;
             }
         }
-        if(downloadFormat.type === "mp3"){
-            args = ['-ss', stateVideo.range.range[0], 
-            '-i', formatsToDownload.url, 
-            "-y","-stats", 
-            '-t', stateVideo.range.range[1], 
-            '-c:a', "libmp3lame", 
-            "-q:a", qa,  
-            modifiedTitle+"."+downloadFormat.type]
-        } else {
-            args = ['-ss', stateVideo.range.range[0], 
-            '-i', formatsToDownload.url, 
-            "-y", "-stats", 
-            '-t', stateVideo.range.range[1], 
-            "-c:v", "copy",
-            '-c:a', "copy",
-            modifiedTitle+"."+downloadFormat.type]
-
-        }
-        console.log(args);
-
-        let video = execFile(path.resolve(__static, "ffmpeg"), [...args]);
+        let video = execFile(path.resolve(__static, "ffmpeg"), ['-ss', stateVideo.range.range[0], '-i', formatsToDownload.url, "-n", "-stats", '-t', stateVideo.range.range[1], "-c:v", "copy", '-c:a', "copy", downloadFolder+"\\"+modifiedTitle+".mp4"]);
         video.stdout.on("data", (data)=>{
             console.log("DATA", data);
         })
         video.stderr.on("data", (err)=>{
             let msg = err.replace(/\s/g, "");
-            let downloadedVal = msg.split("=");
-            let indexOfValue = null;
-            downloadedVal.forEach((piece, i)=>{
-                if(piece === "size"){
-                    indexOfValue = i;
-                }
-            });
-            let currentDownloadValue = Number.parseInt(downloadedVal[indexOfValue+1].replace(/[a-zA-Z]/g, ""));
-                console.log("currend download value", currentDownloadValue);
-                console.log("sizeToDownload", sizeToDownload);
-                console.log("whole file", formatsToDownload.filesize);
+            let startIndex = msg.indexOf("size=");
+            let endIndex = msg.indexOf("kBtime");
+            let downloadedVal = Number.parseInt(msg.substr(startIndex+5, endIndex-startIndex-5));
+            let downloadedPercent = (downloadedVal/sizeToDownload)*100;
+            console.log(downloadedPercent);
+            if(downloadedPercent < 100){
+                store.dispatch({ 
+                    type: videosTypes.COUNTER,
+                    payload: {
+                        value: downloadedPercent,
+                        index: index
+                    }
+                }) 
+            }
         })
 
         video.on("close", ()=>{
-            //download finished -- start converting 
-            resolve();
+            store.dispatch({ 
+                type: videosTypes.COUNTER,
+                payload: {
+                    value: 100,
+                    index: index
+                }
+            })
+            if(downloadFormat.type === "mp3" && stateVideo.status !== "PAUSED"){
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "CONVERTING" }})
+                let convertToMp3 = execFile(path.resolve(__static, "ffmpeg"), ['-i', downloadFolder+"\\"+modifiedTitle+".mp4", '-c', "libmp3lame", "-n", "-q:a", qa, downloadFolder+"\\"+modifiedTitle+".mp3"]);
+                convertToMp3.stderr.on("data", (err)=>{
+                    console.log(err, "ffmpeg conversion");
+                })  
+                convertToMp3.on("close", ()=>{
+                    unlink(downloadFolder+"\\"+modifiedTitle+".mp4", ()=>{
+                        
+                    });
+                    resolve();
+                })
+
+                convertToMp3.on("exit", ()=>{
+                    store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DONE" }})
+                })
+            } else {
+                resolve();
+            }
         })
+
+        video.on("exit", ()=>{
+            if(stateVideo.status !== "PAUSED"){
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DONE" }})
+            }
+        })
+
+        ipcMain.on("PAUSE_VIDEO", (event, i)=>{
+            if(i === index){
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "PAUSED" }})
+                video.kill();
+            }
+        })
+        ipcMain.on("STOP_VIDEO", (event, i)=>{
+            if(i === index){
+                resolve();
+                video.kill();
+            }
+        })
+
+        ipcMain.on("STOP_ALL", (event)=>{
+            video.kill();
+            reject();
+        })
+
+
     });
     
 }

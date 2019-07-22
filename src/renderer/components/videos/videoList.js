@@ -25,12 +25,9 @@ class VideoList extends React.Component{
         if(pause){
             ipcRenderer.send("PAUSE_VIDEO", i);
         } else {
-            this.props.dispatch({type: videoTypes.RESUME_VIDEO_DOWNLOAD, payload: i})
+            this.props.resumeVideoDownload(i)
+            //this.props.dispatch({type: videoTypes.RESUME_VIDEO_DOWNLOAD, payload: })
         }
-    }
-
-    handleCustomRange(range, index){
-        //dispatch custom range for selected video
     }
 
     render(){
@@ -77,6 +74,7 @@ class VideoList extends React.Component{
 
 const mapDispatchToProps = {
     removeVideoFromPlaylist: videoActions.removeVideoFromPlaylist,
-    handleCustomRange: videoActions.handleCustomRange
+    handleCustomRange: videoActions.handleCustomRange,
+    resumeVideoDownload: videoActions.resumeVideoDownload
 }
 export default connect(mapStateToProps, mapDispatchToProps)(VideoList);

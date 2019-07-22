@@ -4,6 +4,7 @@ import { ipcMain } from 'electron';
 import path from 'path';
 import { execFile } from 'child_process';
 import customRangeDownload from './customRangeDownload';
+import { types as appStateTypes} from '../appState/appStateDuck';
 
 export default (store, index, resume)=>{
     return new Promise((resolve, reject)=>{
@@ -11,14 +12,15 @@ export default (store, index, resume)=>{
             store.dispatch({ type: optionsTypes.INCREASE_LIMIT});
         } 
         store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "DOWNLOADING" }})
-
+        store.dispatch({ type: appStateTypes.DOWNLOADING, payload: "INC"});
         let state = store.getState();
         let storeVideo = state.videos[index];
         const { downloadFormat } = state.options;
-//1:08 should be 382kB
+
         if(storeVideo.range.status === true){
             customRangeDownload(store, index).then(()=>{
-                
+                store.dispatch({ type: appStateTypes.DOWNLOADING, payload: "DEC"});
+                resolve();
             }).catch((err)=>{
                 console.log(err);
             });
@@ -95,6 +97,7 @@ export default (store, index, resume)=>{
             })
     
             video.on("close", ()=>{
+                store.dispatch({ type: appStateTypes.DOWNLOADING, payload: "DEC"});
                 resolve()
             })
     

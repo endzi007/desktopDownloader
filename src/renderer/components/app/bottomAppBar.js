@@ -32,10 +32,10 @@ const styles = theme => ({
 function BottomAppBar(props) {
   const { classes } = props;
   let buttonToDisplay;
-  if(props.downloading){
+  if(props.downloading !== 0){
     buttonToDisplay = <Fab onClick={()=>{
                             props.resetLimit();
-                            props.downloadingStarted(false);
+                            //props.downloadingStarted(0);
                             ipcRenderer.send("STOP_ALL");
                       }} color="secondary" className={classes.fabButton}>
                         <StopIcon />
@@ -43,7 +43,7 @@ function BottomAppBar(props) {
   } else {
     buttonToDisplay = <Fab onClick={()=>{
                             props.resetLimit();
-                            props.downloadingStarted(true);
+                            //props.downloadingStarted(1);
                             props.startVideoDownload(props.videos[0].url);
                       }} color="secondary" className={classes.fabButton}>
                         <SaveAltIcon />

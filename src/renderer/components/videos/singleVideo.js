@@ -4,7 +4,7 @@ import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } 
 import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
-import PauseIcon from '@material-ui/icons/Pause';
+import StopIcon from '@material-ui/icons/Stop';
 import ReplayIcon from '@material-ui/icons/Replay';
 import CustomRange from './customRange';
 
@@ -62,7 +62,7 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status })=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
@@ -78,7 +78,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             stateToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
             break; 
         case "DOWNLOADING":
-            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><PauseIcon fontSize="small" /></IconButton>
+            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><StopIcon    fontSize="small" /></IconButton>
             break; 
         case "PAUSED":
             buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, false, iPosition)} aria-label="Delete"><ReplayIcon fontSize="small" /></IconButton>

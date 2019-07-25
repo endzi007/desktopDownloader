@@ -7,7 +7,8 @@ export const types = {
     RESET_LIMIT: "options/RESET_LIMIT",
     GET_SAVE_FOLDER: "options/GET_SAVE_FOLDER",
     CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
-    AUTO_NUMBERING: "options/AUTO_NUMBERING"
+    AUTO_NUMBERING: "options/AUTO_NUMBERING",
+    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE"
 }
 
 export const creators = {
@@ -20,6 +21,7 @@ export const creators = {
     resetLimit: ()=>({ type: types.RESET_LIMIT, payload: "" }),
     getSaveFolder: ()=>({type: types.GET_SAVE_FOLDER,  payload: null }),
     changeDownloadQuality: quality=>({ type: types.CHANGE_DOWNLOAD_QUALITY, payload: quality }),
+    enableCustomRange: bool =>({type: types.ENABLE_CUSTOM_RANGE, payload: bool}),
     autoNumbering: (val)=>({
             type: types.AUTO_NUMBERING,
             payload: {
@@ -45,7 +47,8 @@ let defaultState = {
     autoNumbering: {
         numbering: false,
         value: 0
-    }
+    },
+    customRange: false
   };
 export default (state = defaultState, action)=>{
     let newState = {...state};
@@ -68,6 +71,9 @@ export default (state = defaultState, action)=>{
             return newState;
         case types.AUTO_NUMBERING: 
             newState.autoNumbering = action.payload;
+            return newState;
+        case types.ENABLE_CUSTOM_RANGE:
+            newState.customRange = action.payload;
             return newState;
         default:
             return newState;

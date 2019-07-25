@@ -108,6 +108,7 @@ export default (store, index, resume)=>{
             })
     
             ipcMain.on("PAUSE_VIDEO", (event, i)=>{
+                console.log("pause video indexc");
                 if(i === index){
                     store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "PAUSED" }})
                     video.kill();

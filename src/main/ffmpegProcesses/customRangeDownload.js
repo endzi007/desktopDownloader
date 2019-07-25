@@ -23,7 +23,7 @@ export default (store, index)=>{
                 qa = 0;
             }
         }
-        let video = execFile(path.resolve(__static, "ffmpeg"), ['-ss', stateVideo.range.range[0], '-i', formatsToDownload.url, "-n", "-stats", '-t', stateVideo.range.range[1], "-c:v", "copy", '-c:a', "copy", downloadFolder+"\\"+modifiedTitle+".mp4"]);
+        let video = execFile(path.resolve(__static, "ffmpeg"), ['-ss', stateVideo.range.range[0], '-i', formatsToDownload.url, "-y", "-stats", '-t', stateVideo.range.range[1], "-c:v", "copy", '-c:a', "copy", downloadFolder+"\\"+modifiedTitle+".mp4"]);
         video.stdout.on("data", (data)=>{
             console.log("DATA", data);
         })
@@ -55,7 +55,7 @@ export default (store, index)=>{
             })
             if(downloadFormat.type === "mp3" && stateVideo.status !== "PAUSED"){
                 store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "CONVERTING" }})
-                let convertToMp3 = execFile(path.resolve(__static, "ffmpeg"), ['-i', downloadFolder+"\\"+modifiedTitle+".mp4", '-c', "libmp3lame", "-n", "-q:a", qa, downloadFolder+"\\"+modifiedTitle+".mp3"]);
+                let convertToMp3 = execFile(path.resolve(__static, "ffmpeg"), ['-i', downloadFolder+"\\"+modifiedTitle+".mp4", '-c', "libmp3lame", "-y", "-q:a", qa, downloadFolder+"\\"+modifiedTitle+".mp3"]);
                 convertToMp3.stderr.on("data", (err)=>{
                     console.log(err, "ffmpeg conversion");
                 })  
@@ -82,7 +82,7 @@ export default (store, index)=>{
 
         ipcMain.on("PAUSE_VIDEO", (event, i)=>{
             if(i === index){
-                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "PAUSED" }})
+                store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "NOT_STARTED" }})
                 video.kill();
             }
         })

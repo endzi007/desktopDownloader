@@ -46,7 +46,7 @@ class Example extends Component {
     let newValue = this.props.duration; 
 
     return (
-      <div style={{height: 10, width: '100%', marginTop: "-8px"}}>
+      <div style={{height: 10, width: '100%', marginTop: "-8px", display: this.props.customRange === true? "block": "none" }}>
         <Slider
           mode={2}
           step={1}
@@ -92,8 +92,13 @@ class Example extends Component {
     )
   }
 }
+function mapStateToProps(state){
+  return {
+    customRange: state.options.customRange
+  }
+}
 
 const mapDispatchToProps = {
   handleCustomRange: videoActions.customRangeDownload
 }
-export default connect(null, mapDispatchToProps)(Example);
+export default connect(mapStateToProps, mapDispatchToProps)(Example);

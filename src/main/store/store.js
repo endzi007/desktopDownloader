@@ -20,7 +20,8 @@ let initialState = {
       autoNumbering: {
         numbering: false,
         value: 0
-      }
+      },
+      customRange: false
     },
     videos: [],
     uiConfig: {

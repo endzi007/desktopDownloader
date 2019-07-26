@@ -24,7 +24,7 @@ class ProFeatureDialog extends React.Component {
     }
   }
   handleClose() {
-    this.props.showProFeature({open: false, message: ""});
+    this.props.showProFeature({open: false, message: "", type: "INFO"});
   };
 
   handlePurchase(){
@@ -80,6 +80,8 @@ class ProFeatureDialog extends React.Component {
   }
 
   render() {
+    const { showProFeatureDialog } = this.props.uiConfig;
+    let style = {display: showProFeatureDialog.type === "PRO"? "block": "none"}
     let buttonToDisplay;
     if(this.props.license.status){
       buttonToDisplay = <Button onClick={this.handleDeactivate.bind(this)} color="primary"> Deactivate </Button>
@@ -89,7 +91,7 @@ class ProFeatureDialog extends React.Component {
     return (
       <div>
         <Dialog
-          open={this.props.uiConfig.showProFeatureDialog.open}
+          open={showProFeatureDialog.open}
           TransitionComponent={Transition}
           keepMounted
           onClose={this.handleClose.bind(this)}
@@ -97,16 +99,17 @@ class ProFeatureDialog extends React.Component {
           aria-describedby="alert-dialog-slide-description"
         >
           <DialogTitle id="alert-dialog-slide-title">
-            PRO Licence Notification
+           Notification {`${showProFeatureDialog.type === "PRO"? "PRO Feature": ""}`}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
               {this.props.uiConfig.showProFeatureDialog.message}
             </DialogContentText>
-              <Typography variant = "body1">
+              <Typography style={style}variant = "body1">
                 Alredy have a key?
               </Typography>
               <TextField
+                style={style}
                 id="licence-key"
                 label="Licence key"
                 margin="normal"
@@ -118,7 +121,7 @@ class ProFeatureDialog extends React.Component {
           </DialogContent>
           <DialogActions>
             {buttonToDisplay}
-            <Button onClick={this.handlePurchase.bind(this)} color="primary">
+            <Button style={style} onClick={this.handlePurchase.bind(this)} color="primary">
               Purchase
             </Button>
             <Button onClick={this.handleClose.bind(this)} color="primary">
@@ -134,7 +137,8 @@ class ProFeatureDialog extends React.Component {
 function mapStateToProps(store){
     return {
         uiConfig: store.uiConfig,
-        license: store.appState.license
+        license: store.appState.license,
+        options:store.options
     }
 }
 

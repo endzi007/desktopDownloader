@@ -28,7 +28,8 @@ let initialState = {
         showConfig: false, 
         showProFeatureDialog: {
           open: false,
-          message: ""
+          message: "",
+          type: "INFO" //PRO, ALERT, INFO
         },
         showAbout: false,
         showPlaylistDialog: {show: false, videos: [], playlistUrl: ""}

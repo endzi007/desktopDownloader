@@ -2,6 +2,7 @@ import path from 'path';
 import { execFile } from 'child_process';
 import { unlink } from 'fs';
 import { types as videosTypes } from '../videos/videoDuck';
+import { types as appStateTypes } from '../appState/appStateDuck';
 import { ipcMain } from 'electron';
 
 export default (store, index)=>{
@@ -53,7 +54,9 @@ export default (store, index)=>{
                     index: index
                 }
             })
+            
             if(downloadFormat.type === "mp3" && stateVideo.status !== "PAUSED"){
+                
                 store.dispatch({ type: videosTypes.CHANGE_VIDEO_STATUS, payload: { index: index, status: "CONVERTING" }})
                 let convertToMp3 = execFile(path.resolve(__static, "ffmpeg"), ['-i', downloadFolder+"\\"+modifiedTitle+".mp4", '-c', "libmp3lame", "-y", "-q:a", qa, downloadFolder+"\\"+modifiedTitle+".mp3"]);
                 convertToMp3.stderr.on("data", (err)=>{
@@ -88,7 +91,7 @@ export default (store, index)=>{
         })
         ipcMain.on("STOP_VIDEO", (event, i)=>{
             if(i === index){
-                resolve();
+                reject();
                 video.kill();
             }
         })

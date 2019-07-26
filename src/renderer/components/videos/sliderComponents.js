@@ -70,6 +70,7 @@ export function Handle({
           cursor: 'pointer',
           // border: '1px solid white',
           backgroundColor: 'none',
+          color: "#66bb6a"
         }}
         {...getHandleProps(id)}
       />
@@ -83,11 +84,11 @@ export function Handle({
           position: 'absolute',
           transform: 'translate(-50%, -50%)',
           zIndex: 2,
-          width: 15,
-          height: 15,
+          width: 12,
+          height: 12,
           borderRadius: "50%",
           boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
-          backgroundColor: disabled ? '#666' : '#ffc400',
+          backgroundColor: disabled ? '#666' : '#66bb6a',
         }}
       >
         <div style={{ display: showHandle===true? "block": "none", fontFamily: 'Roboto', fontSize: 11, marginTop: -15, marginLeft: -10, backgroundColor:"black", minWidth: "25px", padding: "2px" }}>
@@ -123,25 +124,39 @@ export function KeyboardHandle({
   disabled,
   getHandleProps,
 }) {
+  const [ showHandle, setShowHandle ] = useState(false);
+  let h= Math.floor(value / 3600);
+  let m =  Math.floor(value % 3600 / 60);
+  let s=  Math.floor(value % 3600 % 60);
   return (
-    <button
-      role="slider"
-      aria-valuemin={min}
-      aria-valuemax={max}
-      aria-valuenow={value}
-      style={{
-        left: `${percent}%`,
-        position: 'absolute',
-        transform: 'translate(-50%, -50%)',
-        zIndex: 2,
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-        boxShadow: '1px 1px 1px 1px rgba(0, 0, 0, 0.3)',
-        backgroundColor: disabled ? '#666' : '#ffc400',
-      }}
-      {...getHandleProps(id)}
-    />
+      <button
+        onMouseOver={()=>{
+          setShowHandle(true);
+        }}
+        onMouseLeave={()=>{
+          setShowHandle(false);
+        }}
+        role="slider"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        style={{
+          left: `${percent}%`,
+          position: 'absolute',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 2,
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          backgroundColor: disabled ? '#666' : '#66bb6a',
+        }}
+        {...getHandleProps(id)}
+      >
+        <div style={{ position: "absolute", display: showHandle===true? "block": "none", fontFamily: 'Roboto', fontSize: 11, backgroundColor: "white", marginTop: -25, marginLeft: -10, padding: "2px" }}>
+          {`${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}
+        </div>
+      </button>
+
   )
 }
 
@@ -169,9 +184,9 @@ export function Track({ source, target, getTrackProps, disabled }) {
       style={{
         position: 'absolute',
         transform: 'translate(0%, -50%)',
-        height: 7,
+        height: 4,
         zIndex: 1,
-        backgroundColor: disabled ? '#999' : '#b28900',
+        backgroundColor: disabled ? '#999' : '#66bb6a',
         borderRadius: 7,
         cursor: 'pointer',
         left: `${source.percent}%`,

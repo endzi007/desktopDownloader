@@ -91,7 +91,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
-            <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.5}} color="secondary" variant="determinate" value={downloaded} />
+            <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>

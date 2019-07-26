@@ -21,8 +21,9 @@ export default (store, index, resume)=>{
             customRangeDownload(store, index).then(()=>{
                 store.dispatch({ type: appStateTypes.DOWNLOADING, payload: "DEC"});
                 resolve();
-            }).catch((err)=>{
-                console.log(err);
+            }).catch(()=>{
+                store.dispatch({ type: appStateTypes.DOWNLOADING, payload: "DEC"});
+                reject();
             });
         } else {
             let qualitySelect = {

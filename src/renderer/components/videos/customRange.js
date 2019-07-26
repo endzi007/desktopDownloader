@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Slider, Rail, Handles, Tracks } from 'react-compound-slider'
-import { SliderRail, Handle, Track } from './sliderComponents' // example render components - source below
+import { SliderRail, Handle, Track, KeyboardHandle } from './sliderComponents' // example render components - source below
 import { connect } from 'react-redux';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
 
@@ -46,9 +46,9 @@ class Example extends Component {
     let newValue = this.props.duration; 
 
     return (
-      <div style={{height: 10, width: '100%', marginTop: "-8px", display: this.props.customRange === true? "block": "none" }}>
+      <div style={{height: 5, width: '100%', marginTop: "-8px", display: this.props.customRange === true? "block": "none" }}>
         <Slider
-          mode={2}
+          mode={1}
           step={1}
           domain={[0, newValue]}
           rootStyle={sliderStyle}
@@ -63,7 +63,7 @@ class Example extends Component {
             {({ handles, getHandleProps }) => (
               <div className="slider-handles">
                 {handles.map(handle => (
-                  <Handle
+                  <KeyboardHandle
                     key={handle.id}
                     handle={handle}
                     domain={domain}

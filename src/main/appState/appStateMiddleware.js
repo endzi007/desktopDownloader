@@ -14,7 +14,6 @@ export default (store)=>(next)=>(action)=>{
                 }
             break; 
             case optionsTypes.CHANGE_DOWNLOAD_QUALITY: 
-            console.log(action.payload);
                 if(action.payload === "1080"){
                     store.dispatch({type: uiTypes.SHOW_CONFIG_PANEL, payload: false});
                     action.type = uiTypes.SHOW_PRO_FEATURE;

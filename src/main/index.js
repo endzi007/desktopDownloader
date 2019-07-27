@@ -142,7 +142,7 @@ app.on('ready', () => {
             window.webContents.send("FORWARD_TO_REDUX", 
             {
               type: "ui/SHOW_PRO_FEATURE", 
-              payload: {open: true, message: ""} 
+              payload: {open: true, message: "", type: "PRO"} 
             })
           }
         },

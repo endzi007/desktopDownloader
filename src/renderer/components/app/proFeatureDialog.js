@@ -84,9 +84,9 @@ class ProFeatureDialog extends React.Component {
     let style = {display: showProFeatureDialog.type === "PRO"? "block": "none"}
     let buttonToDisplay;
     if(this.props.license.status){
-      buttonToDisplay = <Button onClick={this.handleDeactivate.bind(this)} color="primary"> Deactivate </Button>
+      buttonToDisplay = <Button style={style} onClick={this.handleDeactivate.bind(this)} color="primary"> Deactivate </Button>
     } else {
-      buttonToDisplay = <Button onClick={this.handleActivate.bind(this)} color="primary"> Activate </Button>
+      buttonToDisplay = <Button style={style} onClick={this.handleActivate.bind(this)} color="primary"> Activate </Button>
     }
     return (
       <div>

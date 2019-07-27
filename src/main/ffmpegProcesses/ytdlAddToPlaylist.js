@@ -32,7 +32,7 @@ export default (action)=>{
             videoObj.downloadLinks = infoData.formats;
 
             if(isPro === false){
-                if(Number.parseInt(infoData.duration) > 12000000){
+                if(Number.parseInt(infoData.duration) > 1200){
                     newAction.type = uiTypes.SHOW_PRO_FEATURE;
                     newAction.payload = {open: true, message: "To download videos longer than 20 minutes please consider donating to get PRO License"};
                 } else {

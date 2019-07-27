@@ -20,6 +20,7 @@ const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
+  const [ selectedVideosCount, setSelectedVideosCount ] = useState(0);
   useEffect(()=>{
     setVideos([...props.showPlaylistDialog.videos]);
     setFetching(true);
@@ -27,8 +28,9 @@ const  PlaylistDialog = (props)=> {
       getAdditionalInfo();
     }
     return ()=>{
-      console.log("called unmount");
       setVideos([]);
+      setSelectAll({text: "Select All", checked: false});
+      setSelectedVideosCount(0);
     }
   }, [props.showPlaylistDialog.videos]);
 
@@ -39,16 +41,15 @@ const  PlaylistDialog = (props)=> {
         let newVideos = videos;
         let dataArr = [];
         info.stdout.on("data", (data)=>{
-          console.log(data.toString(), "DATA");
-            let infoData = JSON.parse(data);
-          newVideos[index].title = infoData.title;
-          newVideos[index].thumbnail = infoData.thumbnail;
-          newVideos[index].url = `https://www.youtube.com/watch?v=${infoData.id}`;
-          newVideos[index].duration = Number.parseInt(infoData.duration);
-          newVideos[index].range.range = [0, Number.parseInt(infoData.duration)]
-          newVideos[index].downloadLinks = infoData.formats;
-          setVideos([...newVideos]);
-          index++;
+        let infoData = JSON.parse(data);
+        newVideos[index].title = infoData.title;
+        newVideos[index].thumbnail = infoData.thumbnail;
+        newVideos[index].url = `https://www.youtube.com/watch?v=${infoData.id}`;
+        newVideos[index].duration = Number.parseInt(infoData.duration);
+        newVideos[index].range.range = [0, Number.parseInt(infoData.duration)]
+        newVideos[index].downloadLinks = infoData.formats;
+        setVideos([...newVideos]);
+        index++;
 
         })
         killEvent.on("KILL", ()=>{
@@ -106,6 +107,10 @@ const  PlaylistDialog = (props)=> {
       }
       setVideos([...newVideos]);
     }
+    setSelectedVideosCount(()=>{
+      return newVideos.reduce((x, current)=> (current.status === "NOT_STARTED"? x+1: x), 0);
+      
+    });
   }
 
   
@@ -133,8 +138,8 @@ const  PlaylistDialog = (props)=> {
             Select videos
           </DialogTitle>
 
-          <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"flex-end"}}>
-            <Typography variant="body1">{selectAll.text}</Typography>
+          <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+          <Typography variant="body1">{`Selected: ${selectedVideosCount}`}</Typography>
             <Checkbox
                 checked={selectAll.checked}
                 value={selectAll.text}

@@ -63,8 +63,7 @@ export default (state = defaultState, action)=>{
             newState.parallel.index = 0;
             return newState;
         case types.CHANGE_DOWNLOAD_FORMAT: 
-            let payloadValue = typeof action.payload === "string"? action.payload: "mp3";
-            newState.downloadFormat.type = payloadValue;
+            newState.downloadFormat.type = action.payload;
             return newState;
         case  types.CHANGE_DOWNLOAD_QUALITY: 
             newState.downloadFormat.quality = action.payload;

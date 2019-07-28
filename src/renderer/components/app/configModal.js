@@ -51,6 +51,7 @@ class ConfigModal extends React.Component {
         this.handleAutoNumbering = this.handleAutoNumbering.bind(this);
         this.handleAutoNumberingBlur = this.handleAutoNumberingBlur.bind(this);
         this.handleAutoUpdate = this.handleAutoUpdate.bind(this);
+        this.handleCustomRange = this.handleCustomRange.bind(this);
       }
 
   handleClose (setStorage) {
@@ -95,6 +96,9 @@ class ConfigModal extends React.Component {
     handleAutoUpdate(e){
       persistStore.set("allowUpdates", !this.props.appState.updates);
       this.props.allowUpdates(!this.props.appState.updates);
+    }
+    handleCustomRange(e){
+      this.props.enableCustomRange(!this.props.options.customRange);
     }
   render() {
     const { classes } = this.props;
@@ -177,10 +181,14 @@ class ConfigModal extends React.Component {
                   disabled={!this.props.options.autoNumbering.numbering}
                 />
             </ListItem>
+            <Divider />
+            <ListItem className={classes.listItem}>
+              <Typography variant="body1">Enable custom range download</Typography>
+              <Switch id="customRangeSwitch" onChange={this.handleCustomRange} checked={this.props.options.customRange}/>
+            </ListItem>
             <ListItem className={classes.listItem}>
               <Typography variant="body1">Allow updates (recommended):</Typography>
               <Switch id="autoUpdateSwitch" onChange={this.handleAutoUpdate} checked={this.props.appState.updates}/>
-               
             </ListItem>
           </List>
         </Dialog>
@@ -210,7 +218,8 @@ const mapDispatchToProps = {
     saveToLocalStorage: optionsActions.saveToLocalStorage,
     changeDownloadQuality: optionsActions.changeDownloadQuality,
     autoNumbering: optionsActions.autoNumbering,
-    allowUpdates: appStateActions.allowUpdates
+    allowUpdates: appStateActions.allowUpdates,
+    enableCustomRange: optionsActions.enableCustomRange
 }
 
 

@@ -42,7 +42,7 @@ process.on('uncaughtException', function (err) {
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader", resizable: false});
+  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader", resizable: false, height: 750});
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   }
@@ -142,7 +142,7 @@ app.on('ready', () => {
             window.webContents.send("FORWARD_TO_REDUX", 
             {
               type: "ui/SHOW_PRO_FEATURE", 
-              payload: {open: true, message: ""} 
+              payload: {open: true, message: "", type: "PRO"} 
             })
           }
         },

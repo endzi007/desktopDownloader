@@ -1,11 +1,12 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton, CircularProgress } from '@material-ui/core';
+import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
-import PauseIcon from '@material-ui/icons/Pause';
+import StopIcon from '@material-ui/icons/Stop';
 import ReplayIcon from '@material-ui/icons/Replay';
+import CustomRange from './customRange';
 
 import { FadeLoader  } from 'react-spinners';
 
@@ -15,7 +16,7 @@ const styles = (theme) => ({
         marginBottom: "5px",
         flexGrow: "1",
         maxHeight: "60px",
-        position: "relative"
+        position: "relative",
     },
     cover: {
         minWidth: "120px" 
@@ -29,8 +30,9 @@ const styles = (theme) => ({
     },
     progress:{
         position: "absolute",
-        bottom: 0,
-        width: "100%"
+        top: 0,
+        width: "100%",
+        height: "100%",
     },
     margin: {
         padding: 0,
@@ -38,6 +40,9 @@ const styles = (theme) => ({
     },
     FadeLoader:{
         borderColor: theme.palette.primary.dark
+    },
+    colorSecondary: {
+        background: "none"
     },
     divSt: {
         width: "20px",
@@ -56,10 +61,13 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status})=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status })=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
-    let stateToDisplay = ""; 
+    let stateToDisplay = "";
+    let h= Math.floor(duration / 3600);
+    let m =  Math.floor(duration % 3600 / 60);
+    let s=  Math.floor(duration % 3600 % 60);
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -69,7 +77,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             stateToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
             break; 
         case "DOWNLOADING":
-            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><PauseIcon fontSize="small" /></IconButton>
+            buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><StopIcon    fontSize="small" /></IconButton>
             break; 
         case "PAUSED":
             buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, false, iPosition)} aria-label="Delete"><ReplayIcon fontSize="small" /></IconButton>
@@ -82,20 +90,21 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
         <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
-            <LinearProgress className={classes.progress} color="secondary" variant="determinate" value={downloaded} />
+            <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>
                     <Typography variant="body1">{modifiedTitle}</Typography>
-                    <Typography variant="body1">{duration}</Typography>
+                    <Typography variant="body1">{`${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
                 </div>
                 <div className={classes.divSt}>
-
                     {stateToDisplay}
                     {buttonToDisplay} 
                 </div>
             </CardContent>
         </Card>
+        <div></div>
+        <CustomRange duration={duration} index={iPosition} />
     </div>
      
     );

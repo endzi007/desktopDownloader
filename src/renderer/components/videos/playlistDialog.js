@@ -3,7 +3,7 @@ import { Button, Dialog, LinearProgress, Typography, DialogActions, DialogConten
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
-import { execFile } from 'child_process';
+import { spawn } from 'child_process';
 import events from 'events';
 import path from 'path';
 import PlaylistSingleVideo from './playlistSingleVideo';
@@ -20,6 +20,7 @@ const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
   const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
+  const [ selectedVideosCount, setSelectedVideosCount ] = useState(0);
   useEffect(()=>{
     setVideos([...props.showPlaylistDialog.videos]);
     setFetching(true);
@@ -27,43 +28,42 @@ const  PlaylistDialog = (props)=> {
       getAdditionalInfo();
     }
     return ()=>{
-      console.log("called unmount");
       setVideos([]);
+      setSelectAll({text: "Select All", checked: false});
+      setSelectedVideosCount(0);
     }
   }, [props.showPlaylistDialog.videos]);
 
   const getAdditionalInfo = ()=> {
         const { videos, playlistUrl } = props.showPlaylistDialog;
-        const info =  execFile(path.resolve(__static, "youtube-dl.exe"), [playlistUrl,  "--get-title", "--get-thumbnail",  "--get-duration", "--ignore-errors", "--no-warnings"]);
+        const info =  spawn(path.resolve(__static, "youtube-dl.exe"), ["--ignore-errors", "--dump-json", "--no-warnings",  playlistUrl ]);
         let index = 0;
         let newVideos = videos;
         let dataArr = [];
         info.stdout.on("data", (data)=>{
-          let infos = data.split("\n");
-          infos.pop();
-          dataArr = dataArr.concat(infos);
-          if(dataArr.length === 3){
-            newVideos[index].title = dataArr[0];
-            newVideos[index].thumbnail=dataArr[1];
-            newVideos[index].duration=dataArr[2];
-            setVideos([...newVideos]);
-            dataArr = [];
-            index++;
-          }
+        let infoData = JSON.parse(data);
+        newVideos[index].title = infoData.title;
+        newVideos[index].thumbnail = infoData.thumbnail;
+        newVideos[index].url = `https://www.youtube.com/watch?v=${infoData.id}`;
+        newVideos[index].duration = Number.parseInt(infoData.duration);
+        newVideos[index].range.range = [0, Number.parseInt(infoData.duration)]
+        newVideos[index].downloadLinks = infoData.formats;
+        setVideos([...newVideos]);
+        index++;
+
         })
         killEvent.on("KILL", ()=>{
           info.kill();
         });
         info.stderr.on("data", (err)=>{
-          if(err.indexOf("available") !==-1 || err.indexOf("unavailable")){
-            newVideos[index].status = "ERROR";
-            index++;
-          } else if(err.indexOf("country")){
-            newVideos[index].status = "ERROR";
-            index++;
-          }
+          newVideos[index].status = "ERROR";
+          setVideos([...newVideos]);
+          index++; 
         })
         info.on("close", ()=>{
+          
+        });
+        info.on("exit", ()=>{
           setFetching(false);
           setVideos((prevVideos)=>{
             let filteredVideos =[];
@@ -76,7 +76,7 @@ const  PlaylistDialog = (props)=> {
             }
             return filteredVideos;
           });
-        });
+        })
   }
   
 
@@ -107,6 +107,10 @@ const  PlaylistDialog = (props)=> {
       }
       setVideos([...newVideos]);
     }
+    setSelectedVideosCount(()=>{
+      return newVideos.reduce((x, current)=> (current.status === "NOT_STARTED"? x+1: x), 0);
+      
+    });
   }
 
   
@@ -134,8 +138,8 @@ const  PlaylistDialog = (props)=> {
             Select videos
           </DialogTitle>
 
-          <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"flex-end"}}>
-            <Typography variant="body1">{selectAll.text}</Typography>
+          <DialogContent style={{display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+          <Typography variant="body1">{`Selected: ${selectedVideosCount}`}</Typography>
             <Checkbox
                 checked={selectAll.checked}
                 value={selectAll.text}

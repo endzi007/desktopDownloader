@@ -12,7 +12,7 @@ export const types = {
 
 export const creators = {
     parsingData: bool =>({ type: types.PARSING_DATA, payload: bool }),
-    downloading: bool =>({ type: types.DOWNLOADING, payload: bool}),
+    downloading: val =>({ type: types.DOWNLOADING, payload: val}),
     changeLicense: bool =>({type: types.CHANGE_LICENSE, payload: bool}),
     licenseFailureCounter: val=>({type: types.LICENSE_FAILURE_COUNTER, payload: val}),
     errorHandler: obj=>({type: types.ERROR_HANDLER, payload: {
@@ -24,7 +24,7 @@ export const creators = {
 
 let defaultState = {
     connection: null,
-    downloading: null,
+    downloading: 0,
     updates: true, 
     error: {
         status: null,
@@ -52,7 +52,13 @@ export default (state = defaultState, action)=>{
             newState.parsingData.count = action.payload? newState.parsingData.count+1: newState.parsingData.count-1;
             return newState;
         case types.DOWNLOADING:
-            newState.downloading = action.payload;
+            if(action.payload === "INC"){
+                newState.downloading = newState.downloading+1;
+            } else if(action.payload === "DEC"){
+                newState.downloading = newState.downloading-1;
+            } else {
+                newState.downloading = 0;
+            }
             return newState;
         case types.CHANGE_LICENSE: 
             newState.license.status = action.payload;

@@ -11,7 +11,8 @@ export const types = {
     PAUSE_VIDEO_DOWNLOAD: "",
     CHANGE_VIDEO_STATUS: "videos/CHANGE_VIDEO_STATUS",
     YT_PLAYLIST_DOWNLOAD: "videos/YT_PLAYLIST_DOWNLOAD",
-    ADD_PARSED_PLAYLIST: "videos/ADD_PARSED_PLAYLIST"
+    ADD_PARSED_PLAYLIST: "videos/ADD_PARSED_PLAYLIST",
+    CUSTOM_RANGE_DOWNLOAD: "videos/CUSTOM_RANGE_DOWNLOAD"
 }
 
 export const creators = {
@@ -25,7 +26,9 @@ export const creators = {
     loadPlaylist: ()=> ({ type: types.LOAD_PLAYLIST, payload: []}),
     changeVideoStatus: (obj)=>({ type: types.CHANGE_VIDEO_STATUS, payload: { index: obj.index, status: obj.status}}),
     ytPlaylistDownload: url=>({type: types.YT_PLAYLIST_DOWNLOAD, payload: url}),
-    addParsedPlaylist: videos=>({type: types.ADD_PARSED_PLAYLIST, payload: videos})
+    addParsedPlaylist: videos=>({type: types.ADD_PARSED_PLAYLIST, payload: videos}),
+    customRangeDownload: obj =>({type: types.CUSTOM_RANGE_DOWNLOAD, payload: obj}),
+    resumeVideoDownload: index =>({ type: types.RESUME_VIDEO_DOWNLOAD, payload: index })
 }
 
 export default (state=[], action)=>{
@@ -54,6 +57,10 @@ export default (state=[], action)=>{
             return newState; 
         case types.ADD_PARSED_PLAYLIST:
             return [...newState, ...action.payload];
+        case types.CUSTOM_RANGE_DOWNLOAD: 
+            newState[action.payload.index].range.range = action.payload.range;
+            newState[action.payload.index].range.status = action.payload.status;
+            return newState;
         default:
             return newState;
     }

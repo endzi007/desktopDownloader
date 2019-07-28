@@ -20,21 +20,24 @@ let initialState = {
       autoNumbering: {
         numbering: false,
         value: 0
-      }
+      },
+      customRange: false
     },
     videos: [],
     uiConfig: {
         showConfig: false, 
         showProFeatureDialog: {
           open: false,
-          message: ""
+          message: "",
+          type: "INFO" //PRO, ALERT, INFO
         },
         showAbout: false,
-        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""}
+        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""},
+        scrollTopPosition: 0
     },
     appState: {
       connection: null,
-      downloading: null,
+      downloading: 0,
       updates: true,
       error: {
         status: false,

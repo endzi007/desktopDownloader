@@ -32,7 +32,8 @@ let initialState = {
           type: "INFO" //PRO, ALERT, INFO
         },
         showAbout: false,
-        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""}
+        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""},
+        scrollTopPosition: 0
     },
     appState: {
       connection: null,

@@ -8,10 +8,10 @@ import { ipcMain } from 'electron';
 export default (store, index)=>{
     return new Promise((resolve, reject)=>{
         let state = store.getState();
-        const { downloadFormat, downloadFolder } = state.options;
+        const { downloadFormat, downloadFolder, autoNumbering } = state.options;
         let stateVideo = state.videos[index];
         let formatsToDownload = getFormatsToDownload(downloadFormat, stateVideo.downloadLinks);
-        let modifiedTitle = stateVideo.title.replace(/[|*://"<>\\,]/g, "-");
+        let modifiedTitle = autoNumbering.numbering? `${autoNumbering.value}.${stateVideo.title.replace(/[?|*://"<>\\,]/g, " ")}`: stateVideo.title.replace(/[?|*://"<>\\,]/g, " ");
         let getPercent = (stateVideo.range.range[1]/stateVideo.duration)*100;
         let sizeToDownload = Number.parseInt(((formatsToDownload.filesize / 100) * getPercent)/1024);
         let qa;

@@ -17,7 +17,6 @@ const styles = (theme) => ({
         flexGrow: "1",
         maxHeight: "60px",
         position: "relative",
-        borderRadius: "0px"
     },
     cover: {
         minWidth: "120px" 

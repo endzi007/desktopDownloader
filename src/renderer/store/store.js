@@ -28,6 +28,7 @@ try {
     store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat.type});
     store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_QUALITY, payload:localStorageItems.downloadFormat.quality});
     store.dispatch({ type: optionsTypes.AUTO_NUMBERING, payload:localStorageItems.autoNumbering || {numbering: false, value: 0}});
+    store.dispatch({ type: optionsTypes.ENABLE_CUSTOM_RANGE, payload: localStorageItems.customRange || false })
   } else {
     store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
   }

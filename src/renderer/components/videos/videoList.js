@@ -33,7 +33,7 @@ const VideoList = (props) => {
             props.resumeVideoDownload(i)
         }
     }
-        let noVideos = "Drag and Drop online video/url, or paste using + sign above";
+        let noVideos = <Typography variant="title2" align="center" color="inherit">Drag and Drop online video/url or paste using + sign above</Typography>
         let arrOfVideos = [];
         const { videos } = props;
         if(videos.length !== 0 ){
@@ -52,7 +52,7 @@ const VideoList = (props) => {
                     maxHeight: "60px",
                     position: "relative"
                 }}>
-                    <Typography variant="body1"> Getting info...</Typography>
+                    <Typography variant="body1" align="right" noWrap> Getting info...</Typography>
                 </Card>
             )
         }
@@ -62,7 +62,7 @@ const VideoList = (props) => {
         return <div style={{...styles,
             height: videos.length === 0? "100%": "auto",
             display: videos.length === 0? "flex": "block"
-        }}><Typography style={{textAlign: "center"}}variant="title" color="inherit">{renderDiv}</Typography></div>;
+        }}><Typography variant="title" color="inherit">{renderDiv}</Typography></div>;
     }
 
 const mapDispatchToProps = {

@@ -7,7 +7,6 @@ export default () => {
     let storageItem = persistStore.get("license");
     return new Promise(async (resolve, reject)=>{
         if(storageItem !== undefined){
-            console.log("called");
             let parsedStorage = JSON.parse(storageItem);
             let key = parsedStorage.license_key;
             let url = `${CHECK_LICENSE_ADDRESS}${key}`;

@@ -19,7 +19,7 @@ const killEvent = new events.EventEmitter();
 const  PlaylistDialog = (props)=> {
   const [ videos, setVideos ] = useState([]);
   const [ fetching, setFetching ] = useState(false);
-  const [ selectAll, setSelectAll ] = useState({ text: "Select all", checked: false});
+  const [ selectAll, setSelectAll ] = useState({ text: "Select All", checked: false});
   const [ selectedVideosCount, setSelectedVideosCount ] = useState(0);
   useEffect(()=>{
     setVideos([...props.showPlaylistDialog.videos]);
@@ -86,15 +86,16 @@ const  PlaylistDialog = (props)=> {
 
   const handleChange = (index, e)=>{
     let value = e.target.value;
+    console.log("value", value);
     let newVideos = [...videos];
-    if(value === "Select all"){
-        setSelectAll({text: "Deselect all", checked: true})
+    if(value === "Select All"){
+        setSelectAll({text: "Deselect All", checked: true})
         newVideos.map((video)=>{
           video.status = "NOT_STARTED"
         })
         setVideos([...newVideos]);
-    } else if(value === "Deselect all"){
-        setSelectAll({text: "Select all", checked: false})
+    } else if(value === "Deselect All"){
+        setSelectAll({text: "Select All", checked: false})
         newVideos.map((video)=>{
           video.status = "NOT_CHECKED"
         })
@@ -112,8 +113,6 @@ const  PlaylistDialog = (props)=> {
       
     });
   }
-
-  
 
     let videosToDisplay = [];
     if(videos.length > 0){

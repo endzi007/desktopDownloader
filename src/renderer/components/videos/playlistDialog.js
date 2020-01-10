@@ -61,9 +61,11 @@ const  PlaylistDialog = (props)=> {
           index++; 
         })
         info.on("close", ()=>{
+            console.log("close called")
           
         });
         info.on("exit", ()=>{
+            console.log("exit called");
           setFetching(false);
           setVideos((prevVideos)=>{
             let filteredVideos =[];
@@ -86,7 +88,6 @@ const  PlaylistDialog = (props)=> {
 
   const handleChange = (index, e)=>{
     let value = e.target.value;
-    console.log("value", value);
     let newVideos = [...videos];
     if(value === "Select All"){
         setSelectAll({text: "Deselect All", checked: true})
@@ -163,10 +164,15 @@ const  PlaylistDialog = (props)=> {
               Add to playlist 
             </Button>
             <Button onClick={()=>{
-              handleClose();
-              killEvent.emit("KILL");
+              //handleClose();
+              if(fetching){
+                killEvent.emit("KILL");
+              } else {
+                handleClose();
+              }
+              
             }} color="primary">
-              Close
+              {fetching === true? "Stop Fetching" : "Close"}
             </Button>
           </DialogActions>
         </Dialog>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withStyles, MuiThemeProvider } from '@material-ui/core';
 import ButtonAppBar from './app/appBar';
@@ -17,23 +17,14 @@ import licenseCheck from '../helpers/licenseCheck';
 
 import ErrorNotification from './app/errorNotification';
 
-class App extends React.Component{
-    constructor(){
-        super();
-        this.state = {
-            mode: "off",
-            outline: "hide",
-            updateNotification: false
-        }
-        this.onDrop = this.onDrop.bind(this);
-        this.onDragOver = this.onDragOver.bind(this);
-        this.onDragEnter = this.onDragEnter.bind(this);
-        this.onDragStart = this.onDragStart.bind(this);
-        this.onDragLeave = this.onDragLeave.bind(this);
-        this.handleCloseUpdate = this.handleCloseUpdate.bind(this);
-    }
-    onDrop(e){
+const  App  = (props) => {
+    const [ mode, setMode ] = useState();
+    const [ outline, setOutline ] = useState();
+    const [ updateNotification, setUpdateNotification ] = useState();
+
+    const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
+        //setOutline
         this.setState((state, props)=>{
             return {
                 outline: "hide"
@@ -73,6 +64,7 @@ class App extends React.Component{
         });
     }
     componentDidMount(){
+
         ipcRenderer.on("update-available", (e, info)=>{
             this.setState({updateNotification: true})
         })
@@ -94,9 +86,12 @@ class App extends React.Component{
     }
     render(){
         const { classes } = this.props;
+        let reference = useRef();
         return (
             <MuiThemeProvider theme={theme}>
-                <div style={{
+                <div 
+                    ref={reference}
+                    style={{
                     outlineOffset: "-4px", 
                     height: 
                     `${window.innerHeight-100}px`, 
@@ -107,7 +102,7 @@ class App extends React.Component{
                 }}
                 onDrop={this.onDrop} onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDragLeave = {this.onDragLeave}>
                     <ButtonAppBar />
-                    <VideoList />
+                    <VideoList reference={reference} />
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />

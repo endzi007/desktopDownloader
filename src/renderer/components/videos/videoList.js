@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
 import { types as videoTypes } from '../../../main/videos/videoDuck';
@@ -22,6 +22,9 @@ let styles = {
 };
 
 const VideoList = (props) => {
+    const getInfoRef = useRef("#app");
+    let scrollDiv = document.getElementById("app");
+    let reference = props.reference;
 
     const handleDelete = (url)=>{
         props.removeVideoFromPlaylist(url);
@@ -52,9 +55,11 @@ const VideoList = (props) => {
                     maxHeight: "60px",
                     position: "relative"
                 }}>
-                    <Typography variant="body1" align="right" noWrap> Getting info...</Typography>
+                    <Typography variant="body1" align="right" noWrap>Getting info...</Typography>
+                    <div ref={getInfoRef}></div>
                 </Card>
             )
+            reference.current.scrollTop = 5000;
         }
 
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;

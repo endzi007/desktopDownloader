@@ -23,7 +23,6 @@ let styles = {
 
 const VideoList = (props) => {
     const getInfoRef = useRef("#app");
-    let scrollDiv = document.getElementById("app");
     let reference = props.reference;
 
     const handleDelete = (url)=>{
@@ -36,7 +35,7 @@ const VideoList = (props) => {
             props.resumeVideoDownload(i)
         }
     }
-        let noVideos = <Typography variant="title2" align="center" color="inherit">Drag and Drop online video/url or paste using + sign above</Typography>
+        let noVideos = <Typography variant="title" align="center" color="inherit">Drag and Drop online video/url or paste using + sign above</Typography>
         let arrOfVideos = [];
         const { videos } = props;
         if(videos.length !== 0 ){
@@ -67,7 +66,7 @@ const VideoList = (props) => {
         return <div style={{...styles,
             height: videos.length === 0? "100%": "auto",
             display: videos.length === 0? "flex": "block"
-        }}><Typography variant="title" color="inherit">{renderDiv}</Typography></div>;
+        }}><div>{renderDiv}</div></div>;
     }
 
 const mapDispatchToProps = {

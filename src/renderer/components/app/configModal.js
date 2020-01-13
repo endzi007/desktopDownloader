@@ -60,7 +60,7 @@ class ConfigModal extends React.Component {
       try {
         persistStore.set("options", JSON.stringify(this.props.options))
       } catch (error) {
-        console.log("error");
+        console.log("error in saving to local storage");
       }
     } else {
       this.props.showConfigPanel(false);

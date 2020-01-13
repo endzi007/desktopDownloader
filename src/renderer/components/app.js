@@ -19,73 +19,58 @@ import ErrorNotification from './app/errorNotification';
 
 const  App  = (props) => {
     const [ mode, setMode ] = useState();
-    const [ outline, setOutline ] = useState();
-    const [ updateNotification, setUpdateNotification ] = useState();
+    const [ outline, setOutline ] = useState("hide");
+    const [ updateNotification, setUpdateNotification ] = useState(false);
 
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         //setOutline
-        this.setState((state, props)=>{
-            return {
-                outline: "hide"
-            }
-        });
+        setOutline("hide");
         if(droppedItems){
             for(let x of droppedItems){
                 if(x.type==="text/plain"){
                     x.getAsString((s)=>{
-                        this.props.addVideoToPlaylist(s)
+                        props.addVideoToPlaylist(s);
                     });
                 }
             }
         }
     
     }
-    onDragStart(e){
+    const onDragStart = (e)=> {
 
     }
-    onDragOver(e){
+    const onDragOver = (e)=>{
         e.preventDefault();
     }
-    onDragEnter(e){ 
+    const onDragEnter = (e)=>{ 
         e.stopPropagation();
-        this.setState((old, newState)=>{
-            return {
-                outline: "show"
-            }
-        });
+        setOutline("show");
     }
-    onDragLeave(e){
+    const onDragLeave =(e)=>{
         e.preventDefault();
-        this.setState((old, newState)=>{
-            return {
-                outline: "hide"
-            }
-        });
+        setOutline("hide");
     }
-    componentDidMount(){
-
+    useEffect(()=>{
         ipcRenderer.on("update-available", (e, info)=>{
-            this.setState({updateNotification: true})
+            setUpdateNotification(true)
         })
         licenseCheck().then((res)=>{
-            console.log(res);
             if(res === "RESET"){
-                this.props.changeLicense(true);
-                this.props.licenseFailureCounter(res);
+                props.changeLicense(true);
+                props.licenseFailureCounter(res);
             } else {
-                this.props.licenseFailureCounter("INC");
+                props.licenseFailureCounter("INC");
             }
         }).catch((e)=>{
-            this.props.errorHandler({status: true, message: e});
+            props.errorHandler({status: true, message: e});
         });
-    }
-    handleCloseUpdate(bool){
+    })
+    const handleCloseUpdate = (bool)=>{
         ipcRenderer.send("QUIT_AND_INSTALL");
-        this.setState({updateNotification: bool})
+        setUpdateNotification(bool);
     }
-    render(){
-        const { classes } = this.props;
+        const { classes } = props;
         let reference = useRef();
         return (
             <MuiThemeProvider theme={theme}>
@@ -95,26 +80,25 @@ const  App  = (props) => {
                     outlineOffset: "-4px", 
                     height: 
                     `${window.innerHeight-100}px`, 
-                    outline: this.state.outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
+                    outline: outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
                     marginTop: "55px",
                     overflowY: "scroll"
 
                 }}
-                onDrop={this.onDrop} onDragEnter={this.onDragEnter} onDragOver={this.onDragOver} onDragLeave = {this.onDragLeave}>
+                onDrop={onDrop} onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave = {onDragLeave}>
                     <ButtonAppBar />
                     <VideoList reference={reference} />
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />
-                    <UpdateNotification open={this.state.updateNotification} handleClose={this.handleCloseUpdate}/>
+                    <UpdateNotification open={updateNotification} handleClose={handleCloseUpdate}/>
                     <About />
-                    <ErrorNotification error={this.props.error} closeErrorNotification={this.props.errorHandler}/>
+                    <ErrorNotification error={props.error} closeErrorNotification={props.errorHandler}/>
                     <PlaylistDialog />
                 </div>
             </MuiThemeProvider>
         );
     }
-}
 function mapStateToProps(store){
     return{
         ui: store.uiConfig,

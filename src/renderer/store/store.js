@@ -23,6 +23,7 @@ const store = createStore(
 
 try {
   let localStorageItems = JSON.parse(persistStore.get("options"));
+
   if(localStorageItems !== null){
     store.dispatch({ type: optionsTypes.CHANGE_SAVE_FOLDER, payload:localStorageItems.downloadFolder});
     store.dispatch({ type: optionsTypes.CHANGE_DOWNLOAD_FORMAT, payload:localStorageItems.downloadFormat.type});
@@ -32,10 +33,11 @@ try {
   } else {
     store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
   }
-  let allowUpdatesKey = JSON.parse(persistStore.get("allowUpdates"));
+  /*let allowUpdatesKey = JSON.parse(persistStore.get("allowUpdates"));
+  console.log("localStorage", allowUpdatesKey);
   if(allowUpdatesKey !== null){
     store.dispatch(appStateCreators.allowUpdates(allowUpdatesKey));
-  }
+  }*/
 
 } catch (error) {
   console.log("error loading local storage", error);

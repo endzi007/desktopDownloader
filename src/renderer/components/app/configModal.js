@@ -94,6 +94,7 @@ class ConfigModal extends React.Component {
       }
     }
     handleAutoUpdate(e){
+      console.log("allowUpdates", !this.props.appState.updates);
       persistStore.set("allowUpdates", !this.props.appState.updates);
       this.props.allowUpdates(!this.props.appState.updates);
     }

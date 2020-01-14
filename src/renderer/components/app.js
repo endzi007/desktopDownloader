@@ -21,10 +21,14 @@ const  App  = (props) => {
     const [ mode, setMode ] = useState();
     const [ outline, setOutline ] = useState("hide");
     const [ updateNotification, setUpdateNotification ] = useState(false);
-
+    const [ hoverCounter, setHoverCounter ] = useState(false);
+    const { classes } = props;
+    let reference = useRef();
+    
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         //setOutline
+        console.log("called on drop");
         setOutline("hide");
         if(droppedItems){
             for(let x of droppedItems){
@@ -37,19 +41,20 @@ const  App  = (props) => {
         }
     
     }
+
     const onDragStart = (e)=> {
 
     }
     const onDragOver = (e)=>{
         e.preventDefault();
     }
-    const onDragEnter = (e)=>{ 
-        e.stopPropagation();
-        setOutline("show");
+    const onDragEnterHandle = (e)=>{ 
+        console.log("onDragEnter");
+        setHoverCounter(true);
     }
-    const onDragLeave =(e)=>{
-        e.preventDefault();
-        setOutline("hide");
+    const onDragLeaveHandle =(e)=>{
+        console.log("onDragLeave");
+        setHoverCounter(false);
     }
     useEffect(()=>{
         ipcRenderer.on("update-available", (e, info)=>{
@@ -65,13 +70,28 @@ const  App  = (props) => {
         }).catch((e)=>{
             props.errorHandler({status: true, message: e});
         });
-    })
+    },[]);
+
+/*     useEffect(()=>{
+        reference.current.addEventListener("dragenter", (e)=>{
+            setHoverCounter(true);
+        })
+        reference.current.addEventListener("dragleave", (e)=>{
+            setHoverCounter(false);
+        })
+    },[]); */
+    useEffect(()=>{
+        if(hoverCounter){
+            setOutline("show");
+        } else {
+            setOutline("hide");
+        }
+    },[hoverCounter]);
     const handleCloseUpdate = (bool)=>{
         ipcRenderer.send("QUIT_AND_INSTALL");
         setUpdateNotification(bool);
     }
-        const { classes } = props;
-        let reference = useRef();
+
         return (
             <MuiThemeProvider theme={theme}>
                 <div 
@@ -83,9 +103,11 @@ const  App  = (props) => {
                     outline: outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
                     marginTop: "55px",
                     overflowY: "scroll"
-
                 }}
-                onDrop={onDrop} onDragEnter={onDragEnter} onDragOver={onDragOver} onDragLeave = {onDragLeave}>
+                onDragEnter={onDragEnterHandle}
+                onDragLeave={onDragLeaveHandle}
+                onDrop={onDrop} 
+               >
                     <ButtonAppBar />
                     <VideoList reference={reference} />
                     <ConfigModal />

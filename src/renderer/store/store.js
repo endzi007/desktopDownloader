@@ -33,11 +33,11 @@ try {
   } else {
     store.dispatch({ type: optionsTypes.GET_SAVE_FOLDER});
   }
-  /*let allowUpdatesKey = JSON.parse(persistStore.get("allowUpdates"));
+  let allowUpdatesKey = JSON.parse(persistStore.get("allowUpdates"));
   console.log("localStorage", allowUpdatesKey);
   if(allowUpdatesKey !== null){
     store.dispatch(appStateCreators.allowUpdates(allowUpdatesKey));
-  }*/
+  }
 
 } catch (error) {
   console.log("error loading local storage", error);

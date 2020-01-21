@@ -23,8 +23,28 @@ const  App  = (props) => {
     const [ updateNotification, setUpdateNotification ] = useState(false);
     const [ hoverCounter, setHoverCounter ] = useState(false);
     const { classes } = props;
-    let reference = useRef();
-    
+    useEffect(()=>{
+        ipcRenderer.on("update-available", (e, info)=>{
+            setUpdateNotification(true)
+        })
+        licenseCheck().then((res)=>{
+            if(res === "RESET"){
+                props.changeLicense(true);
+                props.licenseFailureCounter(res);
+            } else {
+                props.licenseFailureCounter("INC");
+            }
+        }).catch((e)=>{
+            props.errorHandler({status: true, message: e});
+        });
+    },[]);
+    useEffect(()=>{
+        if(hoverCounter){
+            setOutline("show");
+        } else {
+            setOutline("hide");
+        }
+    },[hoverCounter]);
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         //setOutline
@@ -41,10 +61,6 @@ const  App  = (props) => {
         }
     
     }
-
-    const onDragStart = (e)=> {
-
-    }
     const onDragOver = (e)=>{
         e.preventDefault();
     }
@@ -56,37 +72,7 @@ const  App  = (props) => {
         console.log("onDragLeave");
         setHoverCounter(false);
     }
-    useEffect(()=>{
-        ipcRenderer.on("update-available", (e, info)=>{
-            setUpdateNotification(true)
-        })
-        licenseCheck().then((res)=>{
-            if(res === "RESET"){
-                props.changeLicense(true);
-                props.licenseFailureCounter(res);
-            } else {
-                props.licenseFailureCounter("INC");
-            }
-        }).catch((e)=>{
-            props.errorHandler({status: true, message: e});
-        });
-    },[]);
 
-/*     useEffect(()=>{
-        reference.current.addEventListener("dragenter", (e)=>{
-            setHoverCounter(true);
-        })
-        reference.current.addEventListener("dragleave", (e)=>{
-            setHoverCounter(false);
-        })
-    },[]); */
-    useEffect(()=>{
-        if(hoverCounter){
-            setOutline("show");
-        } else {
-            setOutline("hide");
-        }
-    },[hoverCounter]);
     const handleCloseUpdate = (bool)=>{
         ipcRenderer.send("QUIT_AND_INSTALL");
         setUpdateNotification(bool);
@@ -95,7 +81,6 @@ const  App  = (props) => {
         return (
             <MuiThemeProvider theme={theme}>
                 <div 
-                    ref={reference}
                     style={{
                     outlineOffset: "-4px", 
                     height: 
@@ -134,4 +119,4 @@ const mapDispatchToProps = {
     licenseFailureCounter: appStateActions.licenseFailureCounter,
     errorHandler: appStateActions.errorHandler
 }
-export default  withStyles(null,{withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(App));
+export default  connect(mapStateToProps, mapDispatchToProps)(withStyles(null,{withTheme: true})(App));

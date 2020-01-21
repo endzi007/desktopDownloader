@@ -9,19 +9,18 @@ import { ipcRenderer } from 'electron';
 
 const styles = theme => ({
   close: {
-    padding: theme.spacing.unit / 4,
+    padding: theme.spacing(0.25),
   },
 });
 
-class SimpleSnackbar extends React.Component {
-  handleClose(e, reason){
+const SimpleSnackbar = (props)=> {
+  const handleClose = (e, reason)=>{
     if(reason==="clickaway"){
       return;
     }
-    this.props.handleClose.bind(null, false)
+    props.handleClose.bind(null, false)
   }
-  render() {
-    const { classes } = this.props;
+    const { classes } = props;
     return (
       <div>
         <Snackbar
@@ -29,8 +28,8 @@ class SimpleSnackbar extends React.Component {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          open={this.props.open}
-          onClose={this.handleClose.bind(this)}
+          open={props.open}
+          onClose={handleClose.bind(this)}
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
@@ -41,7 +40,7 @@ class SimpleSnackbar extends React.Component {
               aria-label="Close"
               color="inherit"
               className={classes.close}
-              onClick={this.props.handleClose.bind(null, false)}
+              onClick={props.handleClose.bind(null, false)}
             >
               <CloseIcon />
             </IconButton>,
@@ -49,7 +48,6 @@ class SimpleSnackbar extends React.Component {
         />
       </div>
     );
-  }
 }
 
 SimpleSnackbar.propTypes = {

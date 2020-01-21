@@ -31,7 +31,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   buttonIcon: {
-    margin: theme.spacing.unit/4
+    margin: theme.spacing(0.25)
   },
   button: {
     boxShadow: "none",

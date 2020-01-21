@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect} from 'react';
 import { Slider, Rail, Handles, Tracks } from 'react-compound-slider'
 import { SliderRail, Handle, Track, KeyboardHandle } from './sliderComponents' // example render components - source below
 import { connect } from 'react-redux';
@@ -13,47 +13,39 @@ const sliderStyle = {
 const domain = [0, 300]
 const defaultValues = [0, 50, 300]
 
-class Example extends Component {
-    constructor (props){
-        super(props);
-        this.state = {
-          values: defaultValues.slice(),
-          update: defaultValues.slice(),
-        }
-        this.onChange = this.onChange.bind(this);
-        this.onUpdate = this.onUpdate.bind(this);
+const Example = (props)=> {
+
+    const [values, setValues] = useState(defaultValues.slice());
+    const [update, setUpdate ] = useState(defaultValues.slice());
+
+    const onUpdate = (update)=>{
+        setUpdate(update);
     }
 
-    onUpdate(update){
-        this.setState({ update })
-        
-    }
+    const onChange = (values)=> {
 
-    onChange (values) {
-
-        this.setState({ values })
-        let obj = { status: true, range: [values[0], values[1]-values[0]], index: this.props.index}
-        if(values[0] === 0 && values[1] === this.props.duration){
+        setValues(values)
+        let obj = { status: true, range: [values[0], values[1]-values[0]], index: props.index}
+        if(values[0] === 0 && values[1] === props.duration){
           obj.status = false; 
         }
-        this.props.handleCustomRange(obj);
+        props.handleCustomRange(obj);
 
     }
-    componentDidMount(){
-      console.log(this.props, "props");
-    }
-  render() {
-    let newValue = this.props.duration; 
+    useEffect(()=>{
+      console.log(props, "props");
+    },[]);
+    let newValue = props.duration; 
 
     return (
-      <div style={{height: 5, width: '100%', marginTop: "-8px", display: this.props.customRange === true? "block": "none" }}>
+      <div style={{height: 5, width: '100%', marginTop: "-8px", display: props.customRange === true? "block": "none" }}>
         <Slider
           mode={1}
           step={1}
           domain={[0, newValue]}
           rootStyle={sliderStyle}
-          onUpdate={this.onUpdate}
-          onChange={this.onChange}
+          onUpdate={onUpdate}
+          onChange={onChange}
           values={[0, newValue]}
         >
           <Rail>
@@ -90,7 +82,6 @@ class Example extends Component {
         </Slider>
       </div>
     )
-  }
 }
 function mapStateToProps(state){
   return {

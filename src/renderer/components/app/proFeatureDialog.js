@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Dialog, TextField, Typography, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import { connect } from 'react-redux';
@@ -13,80 +13,70 @@ function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class ProFeatureDialog extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      textbox: "",
-      licenceMessage: "",
-      defaultValue: "",
-      id: ""
-    }
-  }
-  handleClose() {
-    this.props.showProFeature({open: false, message: "", type: "INFO"});
+const ProFeatureDialog = (props)=> {
+  const [ state, setState ] = useState({textbox: "", licenceMessage: "", defaultValue: "", id: ""});
+  const handleClose= ()=>{
+    props.showProFeature({open: false, message: "", type: "INFO"});
   };
 
-  handlePurchase(){
-    this.props.showProFeature({open: false, message: ""});
+  const handlePurchase =()=>{
+    props.showProFeature({open: false, message: ""});
     ipcRenderer.send("GO_TO_WEBSITE", "https://desktopdownloader.000webhostapp.com/");
   };
 
-  handleActivate(){
-    this.setState({ licenceMessage: "" });
+  const handleActivate =()=>{
+    setState({ ...state, licenceMessage: "" });
     //register license
-    let url = `${REGISTER_LICENSE_ADDRESS}${this.state.textbox}&registered_domain=${this.state.id}`;
+    let url = `${REGISTER_LICENSE_ADDRESS}${state.textbox}&registered_domain=${state.id}`;
     console.log(url);
     fetch(url).then(res => res.json()).then(data => {
       if(data.result === "error"){ 
-        this.setState({ licenceMessage: data.message });
+        setState({ ...state, licenceMessage: data.message });
       } else if (data.result === "success"){
         //set cookie 
-        this.setState({ licenceMessage: data.message });
-        fetch(`${CHECK_LICENSE_ADDRESS}${this.state.textbox}`).then(response=> response.json()).then(licenseResponse =>{
+        setState({ ...state, licenceMessage: data.message });
+        fetch(`${CHECK_LICENSE_ADDRESS}${state.textbox}`).then(response=> response.json()).then(licenseResponse =>{
           const { email, license_key, result } = licenseResponse;
           let cookie = { email, license_key, result};
           persistStore.set("license", JSON.stringify(cookie));
-          this.props.changeLicense(true);
+          props.changeLicense(true);
         }).catch((err)=>{
             console.log("error", err);
         })
       }
     });  
   };
-  handleDeactivate(){
-    let url = `${DEACTIVATE_LICENSE_ADDRESS}${this.state.defaultValue}&registered_domain=${this.state.id}`;
+  const handleDeactivate =()=>{
+    let url = `${DEACTIVATE_LICENSE_ADDRESS}${state.defaultValue}&registered_domain=${state.id}`;
     fetch(url).then(res => res.json()).then((response)=>{
       if(response.result === "success"){
         persistStore.delete("license");
-        this.setState({ defaultValue: "", textbox: ""});
-        this.props.changeLicense(false);
+        setState({ ...state, defaultValue: "", textbox: ""});
+        props.changeLicense(false);
       }
     }).catch((err)=>{
         console.log(err);
     })
   }
-  handleChange(e){
-    this.setState({textbox: e.target.value})
+  const handleChange = (e)=>{
+    setState({...state, textbox: e.target.value})
   }
-  componentDidMount(){
+  useEffect(()=>{
     machineId().then((id)=>{
-      this.setState({id: id})
+      setState({...state, id: id})
     });
-    if(this.props.license.status){
+    if(props.license.status){
       let key = JSON.parse(persistStore.get("license")).license_key;
-      this.setState({defaultValue: key});
+      setState({...state, defaultValue: key});
     }
-  }
-
-  render() {
-    const { showProFeatureDialog } = this.props.uiConfig;
+  },[])
+    const { showProFeatureDialog } = props.uiConfig;
     let style = {display: showProFeatureDialog.type === "PRO"? "block": "none"}
     let buttonToDisplay;
-    if(this.props.license.status){
-      buttonToDisplay = <Button style={style} onClick={this.handleDeactivate.bind(this)} color="primary"> Deactivate </Button>
+    if(props.license.status){
+      buttonToDisplay = <Button style={style} onClick={handleDeactivate.bind(this)} color="primary"> Deactivate </Button>
     } else {
-      buttonToDisplay = <Button style={style} onClick={this.handleActivate.bind(this)} color="primary"> Activate </Button>
+      buttonToDisplay = <Button style={style} onClick={handleActivate.bind(this)} color="primary"> Activate </Button>
     }
     return (
       <div>
@@ -94,7 +84,7 @@ class ProFeatureDialog extends React.Component {
           open={showProFeatureDialog.open}
           TransitionComponent={Transition}
           keepMounted
-          onClose={this.handleClose.bind(this)}
+          onClose={handleClose.bind(this)}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
@@ -103,7 +93,7 @@ class ProFeatureDialog extends React.Component {
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-slide-description">
-              {this.props.uiConfig.showProFeatureDialog.message}
+              {props.uiConfig.showProFeatureDialog.message}
             </DialogContentText>
               <Typography style={style}variant = "body1">
                 Alredy have a key?
@@ -113,25 +103,24 @@ class ProFeatureDialog extends React.Component {
                 id="licence-key"
                 label="Licence key"
                 margin="normal"
-                defaultValue={this.state.defaultValue}
-                val={this.state.textbox}
-                onChange={this.handleChange.bind(this)}
+                defaultValue={state.defaultValue}
+                val={state.textbox}
+                onChange={handleChange.bind(this)}
               />
-              <Typography variant="body1">{this.state.licenceMessage}</Typography>
+              <Typography variant="body1">{state.licenceMessage}</Typography>
           </DialogContent>
           <DialogActions>
             {buttonToDisplay}
-            <Button style={style} onClick={this.handlePurchase.bind(this)} color="primary">
+            <Button style={style} onClick={handlePurchase.bind(this)} color="primary">
               Purchase
             </Button>
-            <Button onClick={this.handleClose.bind(this)} color="primary">
+            <Button onClick={handleClose.bind(this)} color="primary">
               Close
             </Button>
           </DialogActions>
         </Dialog>
       </div>
     );
-  }
 }
 
 function mapStateToProps(store){

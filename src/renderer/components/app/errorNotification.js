@@ -9,13 +9,12 @@ const styles = theme => ({
     backgroundColor: theme.palette.error.dark
   },
   close: {
-    padding: theme.spacing.unit / 4,
+    padding: theme.spacing(0.25),
   },
 });
 
-class SimpleSnackbar extends React.Component {
-  render() {
-    const { classes } = this.props;
+const SimpleSnackbar = (props)=> {
+    const { classes } = props;
     return (
       <div>
         <Snackbar
@@ -23,8 +22,8 @@ class SimpleSnackbar extends React.Component {
             vertical: 'bottom',
             horizontal: 'right',
           }}
-          open={this.props.error.status}
-          onClose={this.props.closeErrorNotification}
+          open={props.error.status}
+          onClose={props.closeErrorNotification}
         >
         <SnackbarContent
           className={classes.error}
@@ -33,7 +32,7 @@ class SimpleSnackbar extends React.Component {
           message={
             <span id="client-snackbar" className={classes.message}>
               
-              {this.props.error.message}
+              {props.error.message}
             </span>
           }
           action={[
@@ -42,7 +41,7 @@ class SimpleSnackbar extends React.Component {
               aria-label="Close"
               color="inherit"
               className={classes.close}
-              onClick={this.props.closeErrorNotification}
+              onClick={props.closeErrorNotification}
             >
               <CloseIcon />
             </IconButton>,
@@ -51,7 +50,6 @@ class SimpleSnackbar extends React.Component {
         </Snackbar>
       </div>
     );
-  }
 }
 
 SimpleSnackbar.propTypes = {

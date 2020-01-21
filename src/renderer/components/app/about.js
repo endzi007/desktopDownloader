@@ -1,37 +1,26 @@
-import React from 'react';
-import { Button, Dialog, TextField, Typography, DialogActions, DialogContent, DialogContentText, DialogTitle, Slide } from '@material-ui/core';
-import { ipcRenderer } from 'electron';
+import React, { useState } from 'react';
+import { Dialog, Typography, DialogContent, DialogTitle, Slide } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
-import { creators as appStateActions } from '../../../main/appState/appStateDuck';
-import fetch from 'node-fetch';
-import { machineId } from 'node-machine-id';
 import { version } from '../../../../package.json';
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
 }
 
-class ProFeatureDialog extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      textbox: "",
-      licenceMessage: ""
-    }
-  }
-  handleClose() {
-    this.props.showAboutFn(false);
+const  ProFeatureDialog = (props) => {
+  const [ textBox, setTextBox ] = useState("");
+  const [ licenceMessage, setLicenceMessage ] = useState("");
+  const handleClose = () => {
+    props.showAboutFn(false);
   };
-
-  render() {
     return (
       <div>
         <Dialog
-          open={this.props.showAbout}
+          open={props.showAbout}
           TransitionComponent={Transition}
           keepMounted
-          onClose={this.handleClose.bind(this)}
+          onClose={handleClose.bind(this)}
           aria-labelledby="alert-dialog-slide-title"
           aria-describedby="alert-dialog-slide-description"
         >
@@ -41,7 +30,7 @@ class ProFeatureDialog extends React.Component {
           <DialogContent>
                 <Typography variant="h6">Dedex Video Downloader </Typography>
                 <Typography variant="body1">Current Version: {version}
-                <span style={{display: this.props.license.status === true? "block": "none" }}>licenced PRO version</span>
+                <span style={{display: props.license.status === true? "block": "none" }}>licenced PRO version</span>
                 </Typography>
                 <Typography variant="subtitle2">Copyright {new Date().getFullYear()} DeCom doo Montenegro</Typography>
                 <Typography variant="subtitle2">All rights reserved</Typography>
@@ -49,7 +38,6 @@ class ProFeatureDialog extends React.Component {
         </Dialog>
       </div>
     );
-  }
 }
 
 function mapStateToProps(store){

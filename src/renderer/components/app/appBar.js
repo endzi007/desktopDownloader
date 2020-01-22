@@ -8,7 +8,6 @@ import Build from '@material-ui/icons/Build';
 import ClearAll from '@material-ui/icons/ClearAll'
 import Save from '@material-ui/icons/Save'
 import Open from '@material-ui/icons/FolderOpen'
-import Cached from '@material-ui/icons/Cached';
 import { connect } from 'react-redux';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { creators as uiActions } from '../../../main/ui/uiDuck';

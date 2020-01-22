@@ -94,7 +94,7 @@ const  App  = (props) => {
                 onDrop={onDrop} 
                >
                     <ButtonAppBar />
-                    <VideoList reference={reference} />
+                    <VideoList />
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />

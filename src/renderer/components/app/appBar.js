@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,8 +14,6 @@ import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as optionsActions } from '../../../main/options/optionsDuck';
 
     
-
-
 const styles = theme => ({
   root:{
     padding: 0,
@@ -30,7 +28,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   buttonIcon: {
-    margin: theme.spacing(0.25)
+    margin: theme.spacing.unit / 4
   },
   button: {
     boxShadow: "none",

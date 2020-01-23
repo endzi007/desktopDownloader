@@ -9,7 +9,7 @@ import { ipcRenderer } from 'electron';
 
 const styles = theme => ({
   close: {
-    padding: theme.spacing(0.25),
+    padding: theme.spacing.unit * 0.25,
   },
 });
 

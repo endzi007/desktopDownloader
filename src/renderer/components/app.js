@@ -17,12 +17,27 @@ import licenseCheck from '../helpers/licenseCheck';
 
 import ErrorNotification from './app/errorNotification';
 
+
+const dropDivStyle = {
+    outlineOffset: "-4px", 
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+    zIndex: 10000000,
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1.5em"
+}
 const  App  = (props) => {
     const [ mode, setMode ] = useState();
-    const [ outline, setOutline ] = useState("hide");
+    const [ outline, setOutline ] = useState("none");
     const [ updateNotification, setUpdateNotification ] = useState(false);
     const [ hoverCounter, setHoverCounter ] = useState(false);
     const { classes } = props;
+    const appRef = useRef();
     useEffect(()=>{
         ipcRenderer.on("update-available", (e, info)=>{
             setUpdateNotification(true)
@@ -37,19 +52,12 @@ const  App  = (props) => {
         }).catch((e)=>{
             props.errorHandler({status: true, message: e});
         });
+
     },[]);
-    useEffect(()=>{
-        if(hoverCounter){
-            setOutline("show");
-        } else {
-            setOutline("hide");
-        }
-    },[hoverCounter]);
+
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
-        //setOutline
-        console.log("called on drop");
-        setOutline("hide");
+        setOutline("none");
         if(droppedItems){
             for(let x of droppedItems){
                 if(x.type==="text/plain"){
@@ -66,11 +74,11 @@ const  App  = (props) => {
     }
     const onDragEnterHandle = (e)=>{ 
         console.log("onDragEnter");
-        setHoverCounter(true);
+        setOutline("2px dotted green");
     }
     const onDragLeaveHandle =(e)=>{
         console.log("onDragLeave");
-        setHoverCounter(false);
+        setOutline("none");
     }
 
     const handleCloseUpdate = (bool)=>{
@@ -82,17 +90,27 @@ const  App  = (props) => {
             <MuiThemeProvider theme={theme}>
                 <div 
                     style={{
-                    outlineOffset: "-4px", 
                     height: 
                     `${window.innerHeight-100}px`, 
-                    outline: outline === "show"? `4px dashed ${theme.palette.secondary.main}`: "none",
                     marginTop: "55px",
-                    overflowY: "scroll"
+                    overflowY: "scroll",
+                    position: "relative"
                 }}
-                onDragEnter={onDragEnterHandle}
-                onDragLeave={onDragLeaveHandle}
-                onDrop={onDrop} 
                >
+                   <div
+                    style={{
+                        ...dropDivStyle, 
+                        outline: outline,
+                        backgroundColor: outline !=="none"? "gray": "",
+                        backgroundImage: outline !=="none"?"repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)":"none"
+                    }}
+                    onDragEnter={onDragEnterHandle}
+                    onDragLeave={onDragLeaveHandle}
+                    onDrop={onDrop}
+                    onDragOver={onDragOver}
+                   >
+                       {outline !== "none"? "DROP HERE": ""}
+                   </div>
                     <ButtonAppBar />
                     <VideoList />
                     <ConfigModal />

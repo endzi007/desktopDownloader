@@ -23,10 +23,10 @@ const styles = theme => ({
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
     gridGap: "20px",
-    paddingTop: theme.spacing(0.25),
-    paddingBottom: theme.spacing(0.25),
-    paddingLeft: theme.spacing(),
-    paddingRight: theme.spacing()
+    paddingTop: theme.spacing.unit * 0.25,
+    paddingBottom: theme.spacing.unit * 0.25,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit
   },
   format:{
     display: "grid",

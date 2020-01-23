@@ -73,8 +73,8 @@ function BottomAppBar(props) {
           {buttonToDisplay}
         </Tooltip>
         <Toolbar style={{ justifyContent: "space-between"}}className={classes.flex} variant="dense">
-          <Typography>{`Duration: ${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
-          <Typography>{`Items in: ${duration.number}`}</Typography>
+          <Typography variant="body1">{`Duration: ${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
+          <Typography variant="body1">{`Items in: ${duration.number}`}</Typography>
         </Toolbar>
       </AppBar>
   );

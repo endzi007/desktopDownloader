@@ -95,7 +95,7 @@ const ProFeatureDialog = (props)=> {
             <DialogContentText id="alert-dialog-slide-description">
               {props.uiConfig.showProFeatureDialog.message}
             </DialogContentText>
-              <Typography style={style}variant = "body1">
+              <Typography style={style} variant = "body1">
                 Alredy have a key?
               </Typography>
               <TextField

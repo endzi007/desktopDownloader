@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
-import { types as videoTypes } from '../../../main/videos/videoDuck';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
 import { Card, Typography } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
@@ -22,8 +21,6 @@ let styles = {
 };
 
 const VideoList = (props) => {
-    const getInfoRef = useRef("#app");
-    let reference = props.reference;
 
     const handleDelete = (url)=>{
         props.removeVideoFromPlaylist(url);
@@ -35,7 +32,7 @@ const VideoList = (props) => {
             props.resumeVideoDownload(i)
         }
     }
-        let noVideos = <Typography variant="title" align="center" color="inherit">Drag and Drop online video/url or paste using + sign above</Typography>
+        let noVideos = <Typography variant="h6" align="center" color="inherit">Drag and Drop online video/url or paste using + sign above</Typography>
         let arrOfVideos = [];
         const { videos } = props;
         if(videos.length !== 0 ){
@@ -43,7 +40,7 @@ const VideoList = (props) => {
                 arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={handleDelete.bind(this)} handlePauseResume={handlePauseResume.bind(this)} customRange={props.handleCustomRange}/>);
             });
         }
-        if(props.appState.parsingData.bool){
+        if(props.appState.parsingData.count > 0){
             arrOfVideos.push(
                 <Card 
                     key="gettingInfoCard"
@@ -54,11 +51,10 @@ const VideoList = (props) => {
                     maxHeight: "60px",
                     position: "relative"
                 }}>
-                    <Typography variant="body1" align="right" noWrap>Getting info...</Typography>
-                    <div ref={getInfoRef}></div>
+        <Typography variant="body1" align="right" noWrap>Getting info {props.appState.parsingData.count} left</Typography>
                 </Card>
             )
-            reference.current.scrollTop = 5000;
+            //reference.current.scrollTop = 5000;
         }
 
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;

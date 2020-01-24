@@ -24,7 +24,6 @@ module.exports = {
         "react-hooks"
     ],
     "rules": {
-        "react/prop-types": "off",
         "no-unused-vars": "off",
         "no-undef":"off",
         "react/no-unused-vars": "off",

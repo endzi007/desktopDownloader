@@ -23,7 +23,7 @@ const dropDivStyle = {
     height: "100%",
     width: "100%",
     position: "absolute",
-    zIndex: 10000000,
+    zIndex: 0,
     textAlign: "center",
     display: "flex",
     flexDirection: "row",
@@ -37,7 +37,7 @@ const  App  = (props) => {
     const [ updateNotification, setUpdateNotification ] = useState(false);
     const [ hoverCounter, setHoverCounter ] = useState(false);
     const { classes } = props;
-    const appRef = useRef();
+    const videoListReference = useRef();
     useEffect(()=>{
         ipcRenderer.on("update-available", (e, info)=>{
             setUpdateNotification(true)
@@ -58,6 +58,7 @@ const  App  = (props) => {
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         setOutline("none");
+        videoListReference.current.style.opacity = 1;
         if(droppedItems){
             for(let x of droppedItems){
                 if(x.type==="text/plain"){
@@ -75,10 +76,13 @@ const  App  = (props) => {
     const onDragEnterHandle = (e)=>{ 
         console.log("onDragEnter");
         setOutline("2px dotted green");
+        videoListReference.current.style.opacity = 0;
+
     }
     const onDragLeaveHandle =(e)=>{
         console.log("onDragLeave");
         setOutline("none");
+        videoListReference.current.style.opacity = 1;
     }
 
     const handleCloseUpdate = (bool)=>{
@@ -112,7 +116,7 @@ const  App  = (props) => {
                        {outline !== "none"? "DROP HERE": ""}
                    </div>
                     <ButtonAppBar />
-                    <VideoList />
+                    <VideoList reference={videoListReference}/>
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />

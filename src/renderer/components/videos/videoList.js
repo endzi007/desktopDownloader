@@ -54,7 +54,6 @@ const VideoList = (props) => {
         <Typography variant="body1" align="right" noWrap>Getting info {props.appState.parsingData.count} left</Typography>
                 </Card>
             )
-            //reference.current.scrollTop = 5000;
         }
 
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;
@@ -62,7 +61,7 @@ const VideoList = (props) => {
         return <div style={{...styles,
             height: videos.length === 0? "100%": "auto",
             display: videos.length === 0? "flex": "block"
-        }}><div>{renderDiv}</div></div>;
+        }}><div ref={props.reference}>{renderDiv}</div></div>;
     }
 
 const mapDispatchToProps = {

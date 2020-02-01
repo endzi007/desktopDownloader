@@ -58,7 +58,7 @@ const  App  = (props) => {
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         setOutline("none");
-        videoListReference.current.style.opacity = 1;
+        videoListReference.current.style.visibility ="visible";
         if(droppedItems){
             for(let x of droppedItems){
                 if(x.type==="text/plain"){
@@ -76,13 +76,13 @@ const  App  = (props) => {
     const onDragEnterHandle = (e)=>{ 
         console.log("onDragEnter");
         setOutline("2px dotted green");
-        videoListReference.current.style.opacity = 0;
+        videoListReference.current.style.visibility = "hidden";
 
     }
     const onDragLeaveHandle =(e)=>{
         console.log("onDragLeave");
         setOutline("none");
-        videoListReference.current.style.opacity = 1;
+        videoListReference.current.style.visibility = "visible";
     }
 
     const handleCloseUpdate = (bool)=>{

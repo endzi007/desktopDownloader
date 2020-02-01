@@ -37,7 +37,8 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: err})
+  alert(err);
+  window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: err});
 })
 
 // create main BrowserWindow when electron is ready
@@ -54,9 +55,9 @@ app.on('ready', () => {
     }))
   }
 
-  if (isDevelopment) {
+ if (isDevelopment) {
     window.webContents.openDevTools();
-  } 
+  }  
 
 
   let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})

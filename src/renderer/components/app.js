@@ -32,7 +32,7 @@ const dropDivStyle = {
     fontSize: "1.5em"
 }
 const  App  = (props) => {
-    const [ mode, setMode ] = useState();
+    const [ dragAndDropMode, setDragAndDropMode ] = useState(false);
     const [ outline, setOutline ] = useState("none");
     const [ updateNotification, setUpdateNotification ] = useState(false);
     const [ hoverCounter, setHoverCounter ] = useState(false);
@@ -73,14 +73,14 @@ const  App  = (props) => {
     const onDragOver = (e)=>{
         e.preventDefault();
     }
-    const onDragEnterHandle = (e)=>{ 
-        console.log("onDragEnter");
-        setOutline("2px dotted green");
-        videoListReference.current.style.visibility = "hidden";
+    const onDragEnterHandle = (e)=>{
+        if(!dragAndDropMode){
+            setOutline("2px dotted green");
+            videoListReference.current.style.visibility = "hidden";
+        }
 
     }
     const onDragLeaveHandle =(e)=>{
-        console.log("onDragLeave");
         setOutline("none");
         videoListReference.current.style.visibility = "visible";
     }
@@ -116,7 +116,7 @@ const  App  = (props) => {
                        {outline !== "none"? "DROP HERE": ""}
                    </div>
                     <ButtonAppBar />
-                    <VideoList reference={videoListReference}/>
+                    <VideoList reference={videoListReference} setDragAndDropMode={setDragAndDropMode.bind(this)} />
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />

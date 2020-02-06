@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
@@ -37,7 +38,7 @@ const VideoList = (props) => {
         const { videos } = props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={handleDelete.bind(this)} handlePauseResume={handlePauseResume.bind(this)} customRange={props.handleCustomRange}/>);
+                arrOfVideos.push(<Video setDragAndDropMode={props.dragAndDropMode} iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={handleDelete.bind(this)} handlePauseResume={handlePauseResume.bind(this)} customRange={props.handleCustomRange}/>);
             });
         }
         if(props.appState.parsingData.count > 0){

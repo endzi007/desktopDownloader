@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
@@ -58,10 +59,14 @@ const styles = (theme) => ({
         position: "absolute", 
         top: "1px",
         left: "10px"
+    },
+    dragNumber:{
+        alignSelf: "center",
+        cursor: "all-scroll"
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status })=>{
+const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status, setDragAndDropMode })=>{
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
@@ -74,7 +79,7 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
             buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)}  className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
             break;
         case "CONVERTING": 
-            stateToDisplay = <FadeLoader css={{transform: "scale(0.5)", transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
+            stateToDisplay = <FadeLoader css={{ transform: "scale(0.5)", position: "absolute!important", top: "7px!important", left: "-20px!important"}} color={theme.palette.secondary.main} loading={true}/>;
             break; 
         case "DOWNLOADING":
             buttonToDisplay = <IconButton className={classes.buttonToDisplay} onClick ={handlePauseResume.bind(null, true, iPosition)} aria-label="Delete"><StopIcon    fontSize="small" /></IconButton>
@@ -85,10 +90,31 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
         default:
             break;
     }
+    const onDragStartHandler =(e)=>{
+        setDragAndDropMode(true);
+        e.dataTransfer.setData("draggedVideo", iPosition);
+        console.log("on drag start started");
+    }
 
+    const onDragOverHandler =(e)=>{
+        e.preventDefault();
+        return false;
+    }
+
+
+    const onDropHandler =(e)=>{
+        setDragAndDropMode(false);
+        e.preventDefault();
+
+        console.log(JSON.parse(e.dataTransfer.getData("draggedVideo")));
+    }
     return (
-    <div style={{display: "grid", gridTemplateColumns: "25px auto"}}>
-        <Typography style={{alignSelf: "center"}} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
+    <div style={{display: "grid", gridTemplateColumns: "25px auto"}} 
+    draggable="true" 
+    onDragStart={onDragStartHandler} 
+    onDragOver={onDragOverHandler} 
+    onDrop={onDropHandler}>
+        <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>

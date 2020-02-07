@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
@@ -68,7 +69,7 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ 
+const SingleVideo = React.memo(({ 
     thumbnail, 
     title, 
     url, 
@@ -83,13 +84,16 @@ const SingleVideo = ({
     setDragAndDropMode, 
     setFromAndTo
 })=>{
-    let bottomBorderOfDiv = useRef("none");
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
     let h= Math.floor(duration / 3600);
     let m =  Math.floor(duration % 3600 / 60);
     let s=  Math.floor(duration % 3600 % 60);
+    
+    const numOfRenders = useRef(0);
+    numOfRenders.current++;
+    console.log( iPosition, numOfRenders.current, "number of renders");
     
     switch (status) {
         case "DONE":
@@ -108,7 +112,7 @@ const SingleVideo = ({
         default:
             break;
     }
-    const onDragStartHandler =(e)=>{
+    const onDragStartHandler =()=>{
         setDragAndDropMode(true);
         setFromAndTo(iPosition, 1);
     }
@@ -117,12 +121,11 @@ const SingleVideo = ({
         return false;
     }
 
-    const onDragEnterHandler =(e)=>{
+    const onDragEnterHandler =()=>{
         setFromAndTo(iPosition, 2);
-        bottomBorderOfDiv="2px solid green";
     }
 
-    const onDragEndHandler =(e)=>{
+    const onDragEndHandler =()=>{
         setDragAndDropMode(false);
         setFromAndTo(iPosition, 3);
     }
@@ -159,6 +162,15 @@ const SingleVideo = ({
     </div>
      
     );
-};
+}, (prev, next)=>{
+    if(prev.downloaded !== next.downloaded){
+        if(prev.status !== next.status){
+            return false
+        } else {
+            return true;
+        }
+    }
+    return true;
+});
 
 export default withStyles(styles, {withTheme: true})(SingleVideo)

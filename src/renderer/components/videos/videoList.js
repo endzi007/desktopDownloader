@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import Video from './singleVideo';
 import { creators as videoActions } from '../../../main/videos/videoDuck';
@@ -22,7 +22,18 @@ let styles = {
 };
 
 const VideoList = (props) => {
+    let draggedVid = useRef(0);
+    let draggedTo = useRef(0);
+    const setFromAndTo = useCallback((val, from)=>{
+        if(from === 1){
+            draggedVid = val;
+        } else if(from === 2) {
+            draggedTo = val;
+        } else {
+            console.log("call swap function", draggedVid, draggedTo);
 
+        }
+    },[]);
     const handleDelete = (url)=>{
         props.removeVideoFromPlaylist(url);
     }
@@ -38,7 +49,18 @@ const VideoList = (props) => {
         const { videos } = props;
         if(videos.length !== 0 ){
             videos.forEach((video, i) => {
-                arrOfVideos.push(<Video setDragAndDropMode={props.dragAndDropMode} iPosition={i} parsing={false} key={`${video.url}_${i}`} {...video} handleDelete={handleDelete.bind(this)} handlePauseResume={handlePauseResume.bind(this)} customRange={props.handleCustomRange}/>);
+                arrOfVideos.push(<Video 
+                    setDragAndDropMode={props.setDragAndDropMode} 
+                    iPosition={i} 
+                    parsing={false} 
+                    key={`${video.url}_${i}`} 
+                    {...video} 
+                    handleDelete={handleDelete.bind(this)} 
+                    handlePauseResume={handlePauseResume.bind(this)} 
+                    customRange={props.handleCustomRange}
+                    setFromAndTo={setFromAndTo}
+                    />
+                );
             });
         }
         if(props.appState.parsingData.count > 0){

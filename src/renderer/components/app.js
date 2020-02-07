@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { withStyles, MuiThemeProvider } from '@material-ui/core';
 import ButtonAppBar from './app/appBar';
@@ -38,6 +38,10 @@ const  App  = (props) => {
     const [ hoverCounter, setHoverCounter ] = useState(false);
     const { classes } = props;
     const videoListReference = useRef();
+    const setDragDropMode = useCallback((mode)=>{
+        setDragAndDropMode(mode);
+    }, [dragAndDropMode]);
+
     useEffect(()=>{
         ipcRenderer.on("update-available", (e, info)=>{
             setUpdateNotification(true)
@@ -116,7 +120,7 @@ const  App  = (props) => {
                        {outline !== "none"? "DROP HERE": ""}
                    </div>
                     <ButtonAppBar />
-                    <VideoList reference={videoListReference} setDragAndDropMode={setDragAndDropMode.bind(this)} />
+                    <VideoList reference={videoListReference} setDragAndDropMode={setDragDropMode} />
                     <ConfigModal />
                     <BottomAppBar />
                     <ProFeatureDialog />

@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import StopIcon from '@material-ui/icons/Stop';
+import UpIcon from '@material-ui/icons/ExpandLess'
+import DownIcon from '@material-ui/icons/ExpandMore'
 import ReplayIcon from '@material-ui/icons/Replay';
 import CustomRange from './customRange';
 
@@ -66,13 +68,29 @@ const styles = (theme) => ({
     }
 });
 
-const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePauseResume, classes, duration, iPosition, theme, status, setDragAndDropMode })=>{
+const SingleVideo = ({ 
+    thumbnail, 
+    title, 
+    url, 
+    downloaded, 
+    handleDelete, 
+    handlePauseResume, 
+    classes, 
+    duration, 
+    iPosition, 
+    theme, 
+    status, 
+    setDragAndDropMode, 
+    setFromAndTo
+})=>{
+    let bottomBorderOfDiv = useRef("none");
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
     let h= Math.floor(duration / 3600);
     let m =  Math.floor(duration % 3600 / 60);
     let s=  Math.floor(duration % 3600 % 60);
+    
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -92,29 +110,36 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
     }
     const onDragStartHandler =(e)=>{
         setDragAndDropMode(true);
-        e.dataTransfer.setData("draggedVideo", iPosition);
-        console.log("on drag start started");
+        setFromAndTo(iPosition, 1);
     }
-
-    const onDragOverHandler =(e)=>{
+    const onDragOverHandler = (e)=>{
         e.preventDefault();
         return false;
     }
 
-
-    const onDropHandler =(e)=>{
-        setDragAndDropMode(false);
-        e.preventDefault();
-
-        console.log(JSON.parse(e.dataTransfer.getData("draggedVideo")));
+    const onDragEnterHandler =(e)=>{
+        setFromAndTo(iPosition, 2);
+        bottomBorderOfDiv="2px solid green";
     }
+
+    const onDragEndHandler =(e)=>{
+        setDragAndDropMode(false);
+        setFromAndTo(iPosition, 3);
+    }
+
     return (
     <div style={{display: "grid", gridTemplateColumns: "25px auto"}} 
     draggable="true" 
     onDragStart={onDragStartHandler} 
-    onDragOver={onDragOverHandler} 
-    onDrop={onDropHandler}>
-        <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
+    onDragEnter={onDragEnterHandler} 
+    onDragEnd={onDragEndHandler}
+    onDragOver={onDragOverHandler}
+    >
+        <div style={{display: "flex", flexDirection:"column"}}>
+            <UpIcon />
+            <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
+            <DownIcon />
+        </div>
         <Card className={classes.card}>
             <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
@@ -129,8 +154,8 @@ const SingleVideo = ({ thumbnail, title, url, downloaded, handleDelete, handlePa
                 </div>
             </CardContent>
         </Card>
-        <div></div>
         <CustomRange duration={duration} index={iPosition} />
+        <div></div>
     </div>
      
     );

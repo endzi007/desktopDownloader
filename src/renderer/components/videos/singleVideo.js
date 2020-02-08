@@ -163,12 +163,8 @@ const SingleVideo = React.memo(({
      
     );
 }, (prev, next)=>{
-    if(prev.downloaded !== next.downloaded){
-        if(prev.status !== next.status){
-            return false
-        } else {
-            return true;
-        }
+    if(prev.downloaded !== next.downloaded || prev.status !== next.status){
+        return false;
     }
     return true;
 });

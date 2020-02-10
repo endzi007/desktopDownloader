@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import { LinearProgress } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Fab, Tooltip, Typography } from '@material-ui/core';
@@ -49,7 +50,8 @@ function BottomAppBar(props) {
   let s=  Math.floor(duration.duration % 3600 % 60);
   const { classes } = props;
   let buttonToDisplay;
-  if(props.downloading !== 0){
+  let linearProgress = "";
+  if(props.appState.downloading !== 0){
     buttonToDisplay = <Fab onClick={()=>{
                             props.resetLimit();
                             //props.downloadingStarted(0);
@@ -66,7 +68,21 @@ function BottomAppBar(props) {
                         <SaveAltIcon />
                       </Fab>
   }
-
+  let intervalDots;
+  let dots=".";
+  if(props.appState.parsingData.count > 0){
+    linearProgress = <LinearProgress />;
+    intervalDots = setInterval(()=>{
+      console.log("called");
+      if(dots.lengt === 3){
+        dots = ".";
+      } else{
+        dots = dots + ".";
+      }
+    }, 300);
+  }
+  clearInterval(intervalDots);
+  
   return (
       <AppBar position="fixed" className={classes.root}>
         <Tooltip title= "Download All" aria-label="Download All">
@@ -74,16 +90,22 @@ function BottomAppBar(props) {
         </Tooltip>
         <Toolbar style={{ justifyContent: "space-between"}}className={classes.flex} variant="dense">
           <Typography variant="body1">{`Duration: ${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
-          <Typography variant="body1">{`Items in: ${duration.number}`}</Typography>
+          <div style={{display: "flex", flexDirection:"column"}}>
+            <Typography variant="body1">Parsing {props.appState.parsingData.count} {dots}</Typography>
+            <Typography variant="body1">{`Items in playlist: ${duration.number}`}</Typography>
+          </div>
         </Toolbar>
+        {linearProgress}
       </AppBar>
   );
 }
 
+
+
 function mapStateToProps(store){
     return {
       videos: store.videos,
-      downloading: store.appState.downloading
+      appState: store.appState
     }
 }
 const  mapDispatchToProps = {

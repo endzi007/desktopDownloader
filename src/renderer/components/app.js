@@ -21,9 +21,7 @@ import ErrorNotification from './app/errorNotification';
 const dropDivStyle = {
     outlineOffset: "-4px", 
     height: "100%",
-    width: "100%",
-    position: "absolute",
-    zIndex: 0,
+    position: "fixed",
     textAlign: "center",
     display: "flex",
     flexDirection: "row",
@@ -108,6 +106,7 @@ const  App  = (props) => {
                    <div
                     style={{
                         ...dropDivStyle, 
+                        width: window.innerWidth-20 + "px",
                         outline: outline,
                         backgroundColor: outline !=="none"? "gray": "",
                         backgroundImage: outline !=="none"?"repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.5) 35px, rgba(255,255,255,.5) 70px)":"none"

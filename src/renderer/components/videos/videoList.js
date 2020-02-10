@@ -63,22 +63,6 @@ const VideoList = (props) => {
                 );
             });
         }
-        if(props.appState.parsingData.count > 0){
-            arrOfVideos.push(
-                <Card 
-                    key="gettingInfoCard"
-                    style={{
-                    display: "flex",
-                    marginBottom: "5px",
-                    flexGrow: "1",
-                    maxHeight: "60px",
-                    position: "relative"
-                }}>
-        <Typography variant="body1" align="right" noWrap>Getting info {props.appState.parsingData.count} left</Typography>
-                </Card>
-            )
-        }
-
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;
     
         return <div style={{...styles,

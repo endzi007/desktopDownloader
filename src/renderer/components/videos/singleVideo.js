@@ -119,18 +119,14 @@ const SingleVideo = React.memo(({
     }
 
     const onDragEnterHandler =(e)=>{
-        console.log("drag enter", iPosition);
-        refToDiv.current.style.display ="block";
         setFromAndTo(iPosition, 2);
     }
 
     const onDragLeaveHandler = ()=>{
-        console.log("drag leave", iPosition);
-        refToDiv.current.style.display ="none";
+
     }
     const onDragEndHandler =()=>{
         setDragAndDropMode(false);
-        refToDiv.current.style.display ="none";
         setFromAndTo(iPosition, 3);
     }
 

@@ -51,6 +51,7 @@ function BottomAppBar(props) {
   const { classes } = props;
   let buttonToDisplay;
   let linearProgress = "";
+  linearProgress = props.appState.parsingData.count > 0? <LinearProgress />: "";
   if(props.appState.downloading !== 0){
     buttonToDisplay = <Fab onClick={()=>{
                             props.resetLimit();
@@ -68,21 +69,9 @@ function BottomAppBar(props) {
                         <SaveAltIcon />
                       </Fab>
   }
-  let intervalDots;
-  let dots=".";
-  if(props.appState.parsingData.count > 0){
-    linearProgress = <LinearProgress />;
-    intervalDots = setInterval(()=>{
-      console.log("called");
-      if(dots.lengt === 3){
-        dots = ".";
-      } else{
-        dots = dots + ".";
-      }
-    }, 300);
-  }
-  clearInterval(intervalDots);
-  
+  let Dots= ({count})=><div id='animatedDots'>Parsing {count} <span>. </span><span>. </span><span>. </span></div>;
+
+
   return (
       <AppBar position="fixed" className={classes.root}>
         <Tooltip title= "Download All" aria-label="Download All">
@@ -91,7 +80,7 @@ function BottomAppBar(props) {
         <Toolbar style={{ justifyContent: "space-between"}}className={classes.flex} variant="dense">
           <Typography variant="body1">{`Duration: ${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
           <div style={{display: "flex", flexDirection:"column"}}>
-            <Typography variant="body1">Parsing {props.appState.parsingData.count} {dots}</Typography>
+            <Typography style={{display:props.appState.parsingData.count>0? "block": "none" }} variant="body1"> <Dots count={props.appState.parsingData.count}/></Typography>
             <Typography variant="body1">{`Items in playlist: ${duration.number}`}</Typography>
           </div>
         </Toolbar>

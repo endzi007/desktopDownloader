@@ -23,3 +23,8 @@ body{
         color: transparent;
     }
 }
+
+.singleVideo{
+    cursor: move;
+    border-bottom: 2px solid green;
+}

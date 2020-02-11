@@ -25,6 +25,18 @@ const VideoList = (props) => {
     let draggedVid = useRef(0);
     let draggedTo = useRef(0);
 
+    const setFromAndTo = useCallback((val, from)=>{
+        if(from === 1){
+            draggedVid = val;
+        } else if(from === 2) {
+            draggedTo = val;
+        } else {
+            console.log("dragged", draggedVid, draggedTo);
+            props.swapVideos(draggedVid, draggedTo);
+
+        }
+    },[]);
+
     const handleDelete = (url)=>{
         props.removeVideoFromPlaylist(url);
     }
@@ -55,18 +67,6 @@ const VideoList = (props) => {
             });
         }
 
-        const setFromAndTo = useCallback((val, from)=>{
-            if(from === 1){
-                draggedVid = val;
-            } else if(from === 2) {
-                draggedTo = val;
-            } else {
-                console.log("call swap function", draggedVid, draggedTo);
-                let sortedVideos = [...videos];
-               //continue here
-    
-            }
-        },[]);
         let renderDiv = arrOfVideos.length === 0? noVideos : arrOfVideos;
     
         return <div style={{...styles,
@@ -78,6 +78,7 @@ const VideoList = (props) => {
 const mapDispatchToProps = {
     removeVideoFromPlaylist: videoActions.removeVideoFromPlaylist,
     handleCustomRange: videoActions.handleCustomRange,
-    resumeVideoDownload: videoActions.resumeVideoDownload
+    resumeVideoDownload: videoActions.resumeVideoDownload,
+    swapVideos: videoActions.swapVideos
 }
 export default connect(mapStateToProps, mapDispatchToProps)(VideoList);

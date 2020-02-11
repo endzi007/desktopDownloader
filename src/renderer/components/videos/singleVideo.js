@@ -1,14 +1,12 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DoneIcon from '@material-ui/icons/Done';
 import StopIcon from '@material-ui/icons/Stop';
-import UpIcon from '@material-ui/icons/ExpandLess'
-import DownIcon from '@material-ui/icons/ExpandMore'
 import ReplayIcon from '@material-ui/icons/Replay';
 import CustomRange from './customRange';
 
@@ -20,10 +18,10 @@ const styles = (theme) => ({
         marginBottom: "5px",
         flexGrow: "1",
         maxHeight: "60px",
-        position: "relative",
+        position: "relative"
     },
     cover: {
-        minWidth: "120px" 
+        minWidth: "120px"
       },
     content: {
         display: "flex",
@@ -92,6 +90,9 @@ const SingleVideo = React.memo(({
     let m =  Math.floor(duration % 3600 / 60);
     let s=  Math.floor(duration % 3600 % 60);
     let refToDiv = useRef(null);
+    useEffect(()=>{
+        refToDiv.current.style.display = borderDiv? "block": "none";
+    }, [borderDiv]);
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -115,10 +116,10 @@ const SingleVideo = React.memo(({
     }
     const onDragOverHandler = (e)=>{
         e.preventDefault();
-        return false;
     }
 
     const onDragEnterHandler =(e)=>{
+
         setFromAndTo(iPosition, 2);
     }
 
@@ -126,22 +127,22 @@ const SingleVideo = React.memo(({
 
     }
     const onDragEndHandler =()=>{
+
         setDragAndDropMode(false);
         setFromAndTo(iPosition, 3);
     }
 
     return (
-    <div style={{display: "grid", gridTemplateColumns: "25px auto", position: "relative"}} 
+    <div style={{display: "grid", gridTemplateColumns: "25px auto", position: "relative", borderBottom: borderDiv? "3px solid black": "none" }} 
     draggable="true" 
-    onDragStartCapture={onDragStartHandler} 
-    onDragEnterCapture={onDragEnterHandler} 
+    onDragStart={onDragStartHandler} 
+    onDragEnter={onDragEnterHandler} 
     onDragEnd={onDragEndHandler}
-    onDragOverCapture={onDragOverHandler}
-    onDragLeaveCapture={onDragLeaveHandler}
+    onDragOver={onDragOverHandler}
+    onDragLeave={onDragLeaveHandler}
+    className={borderDiv? "singleVideo": ""}
     >
-        <div style={{display: "flex", flexDirection:"column", cursor: "grab"}}>
-            <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
-        </div>
+        <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
             <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
@@ -157,7 +158,7 @@ const SingleVideo = React.memo(({
             </CardContent>
         </Card>
         <CustomRange duration={duration} index={iPosition} />
-        <div ref = {refToDiv} style={{position: "absolute", bottom: 0, width: "100%", height: "10px", backgroundColor: "green", display: borderDiv===true? "block": "none" }}></div>
+        <div ref = {refToDiv} style={{position: "absolute", bottom: 0, width: "100%", height: "5px", backgroundColor: "green" }}></div>
     </div>
      
     );

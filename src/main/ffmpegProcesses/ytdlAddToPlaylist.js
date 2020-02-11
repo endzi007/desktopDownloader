@@ -47,7 +47,6 @@ export default (action)=>{
         });
 
         video.stderr.on("data", (err)=>{
-            console.log("err", err)
             newAction.type = appStateTypes.ERROR_HANDLER;
             newAction.payload = {status: true, message: err};
         });
@@ -56,7 +55,6 @@ export default (action)=>{
             console.log("some err", err);
         })
         video.on("close", ()=>{
-            console.log(newAction, "newAction");
             resolve(newAction);
         })
     });

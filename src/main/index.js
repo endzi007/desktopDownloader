@@ -43,7 +43,7 @@ process.on('uncaughtException', function (err) {
 
 // create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader", resizable: false, height: 750});
+  window = new BrowserWindow({show: false, icon: path.resolve(__static, "assets/logo.ico"), title: "DeDex Video Downloader", resizable: true, height: 750});
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);
   }

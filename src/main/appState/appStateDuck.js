@@ -22,7 +22,7 @@ export const creators = {
     allowUpdates: bool => ({type: types.ALLOW_UPDATES, payload: bool})
 }
 
-let defaultState = {
+export let defaultState = {
     connection: null,
     downloading: 0,
     updates: true, 

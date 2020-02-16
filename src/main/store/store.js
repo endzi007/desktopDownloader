@@ -2,60 +2,15 @@ import { createStore, applyMiddleware} from 'redux';
 import { forwardToRenderer, triggerAlias, replayActionMain } from 'electron-redux';
 import reducers from './reducers';
 import allMiddlewares from './middlewares';
+import {defaultState as defaultAppState} from '../appState/appStateDuck';
+import { defaultState as defaultUiState } from '../ui/uiDuck';
+import { defaultState as defaultOptionsState } from '../options/optionsDuck';
 
 let initialState = {
-    options: {
-      downloadFormat: {
-        type: "mp3",
-        quality: "best",
-        mp3:  ["low", "medium", "best"],
-        mp4:  ["360", "720", "1080"]
-      },
-      downloadFolder: "",
-      parallel: {
-          limit: 5, 
-          inProgress: "NO",
-          index: 0
-      },
-      autoNumbering: {
-        numbering: false,
-        value: 0
-      },
-      customRange: false
-    },
+    ...defaultOptionsState,
     videos: [],
-    uiConfig: {
-        showConfig: false, 
-        showProFeatureDialog: {
-          open: false,
-          message: "",
-          type: "INFO" //PRO, ALERT, INFO
-        },
-        showAbout: false,
-        showPlaylistDialog: {show: false, videos: [], playlistUrl: ""},
-        scrollTopPosition: 0
-    },
-    appState: {
-      connection: null,
-      downloading: 0,
-      updates: true,
-      error: {
-        status: false,
-        message: ""
-      },
-      parsingData: {
-        bool: null,
-        count: 0
-      },
-      license: {
-        status: false,
-        failureCount: 0
-      },
-      proFeatures: {
-          videosLength: 20, 
-          quality: "1080"
-      }
-    }
+    ...defaultUiState,
+    ...defaultAppState
 };
 
 const store = createStore(

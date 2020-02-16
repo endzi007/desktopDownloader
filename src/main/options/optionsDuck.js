@@ -8,7 +8,9 @@ export const types = {
     GET_SAVE_FOLDER: "options/GET_SAVE_FOLDER",
     CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
     AUTO_NUMBERING: "options/AUTO_NUMBERING",
-    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE"
+    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE",
+    ADD_CHANNEL: "options/ADD_CHANNEL",
+    REMOVE_CHANNEL: "options/REMOVE_CHANNEL"
 }
 
 export const creators = {
@@ -28,10 +30,12 @@ export const creators = {
                 numbering: val.numbering,
                 value: val.value
             }
-    })
+    }),
+    addChannel: (channel, value)=>({type: types.ADD_CHANNEL, payload: {channel, value}}),
+    removeChannel: index =>({type: types.REMOVE_CHANNEL, payload: index})
 }
 
-let defaultState = {
+export let defaultState = {
     downloadFormat: {
         type: "mp3",
         quality: "best",
@@ -48,7 +52,8 @@ let defaultState = {
         numbering: false,
         value: 0
     },
-    customRange: false
+    customRange: false,
+    channels:[]
   };
 export default (state = defaultState, action)=>{
     let newState = {...state};
@@ -74,6 +79,11 @@ export default (state = defaultState, action)=>{
         case types.ENABLE_CUSTOM_RANGE:
             newState.customRange = action.payload;
             return newState;
+        case types.ADD_CHANNEL:
+            newState.channels.push([{channel: action.payload.channel, value: action.payload.value}]);
+            return newState;
+        case types.REMOVE_CHANNEL: 
+            
         default:
             return newState;
     }

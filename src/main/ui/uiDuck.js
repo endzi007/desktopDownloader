@@ -26,8 +26,7 @@ export const creators = {
     showAbout: open =>({type: types.SHOW_ABOUT, payload: open}),
     showPlaylistDialog: open =>({type:types.SHOW_PLAYLIST_DIALOG, payload: {show: open.show, videos: open.videos, playlistUrl: open.playlistUrl}})
 }
-
-export default (state={
+export let defaultState = {
     showConfig: false, 
     showProFeatureDialog: {open: false, message: "", type: "INFO"}, 
     showAbout: false, 
@@ -35,7 +34,10 @@ export default (state={
         show: false, videos: [], playlistUrl: ""
     },
     scrollTopPosition: 0
-}, action)=>{
+}
+
+
+export default (state=defaultState, action)=>{
     let newState = {...state};
     switch (action.type) {
         case types.SHOW_CONFIG_PANEL:

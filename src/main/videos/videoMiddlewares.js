@@ -1,3 +1,5 @@
+/* eslint-disable no-fallthrough */
+/* eslint-disable no-case-declarations */
 import downloadAndConvert from '../ffmpegProcesses';
 import ytdlAddToPlaylist from '../ffmpegProcesses/ytdlAddToPlaylist';
 import ytdlPlaylist from '../ffmpegProcesses/ytdlPlaylist';
@@ -33,7 +35,7 @@ export default (store)=>(next)=>(action)=>{
             }
             break;
         case types.START_DOWNLOAD:
-        let loopLength = state.videos.length < state.options.parallel.limit ? state.videos.length: state.options.parallel.limit; 
+            let loopLength = state.videos.length < state.options.parallel.limit ? state.videos.length: state.options.parallel.limit; 
             for(let i = state.options.parallel.index; i<loopLength; i++){
                 downloadAndConvert(store, i).then(()=>{
                     store.dispatch({ type: types.DOWNLOAD_NEXT });
@@ -85,7 +87,7 @@ export default (store)=>(next)=>(action)=>{
                 next(errAction);
             })
         default: 
-        break;
+            break;
     }
     next(action);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 export const types = {
     INCREASE_LIMIT: "options/INCREASE_LIMIT",
     CHANGE_SAVE_FOLDER: "options/CHANGE_SAVE_FOLDER",
@@ -9,8 +10,7 @@ export const types = {
     CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
     AUTO_NUMBERING: "options/AUTO_NUMBERING",
     ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE",
-    ADD_CHANNEL: "options/ADD_CHANNEL",
-    REMOVE_CHANNEL: "options/REMOVE_CHANNEL"
+    UPDATE_CHANNELS: "options/UPDATE_CHANNELS"
 }
 
 export const creators = {
@@ -31,8 +31,7 @@ export const creators = {
                 value: val.value
             }
     }),
-    addChannel: (channel, value)=>({type: types.ADD_CHANNEL, payload: {channel, value}}),
-    removeChannel: index =>({type: types.REMOVE_CHANNEL, payload: index})
+    updateChannels: arr=>({type: types.ADD_CHANNEL, payload: arr}),
 }
 
 export let defaultState = {
@@ -79,11 +78,9 @@ export default (state = defaultState, action)=>{
         case types.ENABLE_CUSTOM_RANGE:
             newState.customRange = action.payload;
             return newState;
-        case types.ADD_CHANNEL:
-            newState.channels.push([{channel: action.payload.channel, value: action.payload.value}]);
+        case types.UPDATE_CHANNELS:
+            newState.channels = [...action.payload];
             return newState;
-        case types.REMOVE_CHANNEL: 
-            
         default:
             return newState;
     }

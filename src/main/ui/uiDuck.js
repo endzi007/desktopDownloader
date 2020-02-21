@@ -4,7 +4,8 @@ export const types = {
     SHOW_VIDEO_LOADER : "ui/SHOW_VIDEO_LOADER",
     SHOW_PRO_FEATURE: "ui/SHOW_PRO_FEATURE",
     SHOW_ABOUT: "ui/SHOW_ABOUT",
-    SHOW_PLAYLIST_DIALOG: "ui/SHOW_PLAYLIST_DIALOG"
+    SHOW_PLAYLIST_DIALOG: "ui/SHOW_PLAYLIST_DIALOG",
+    SHOW_CHANNELS_DIALOG: "ui/SHOW_CHANNELS_DIALOG"
 }
 export const creators = {
     showOpenDialog: val =>({ type: types.SHOW_OPEN_DIALOG, payload: val }),
@@ -24,7 +25,8 @@ export const creators = {
             }
     }),
     showAbout: open =>({type: types.SHOW_ABOUT, payload: open}),
-    showPlaylistDialog: open =>({type:types.SHOW_PLAYLIST_DIALOG, payload: {show: open.show, videos: open.videos, playlistUrl: open.playlistUrl}})
+    showPlaylistDialog: open =>({type:types.SHOW_PLAYLIST_DIALOG, payload: {show: open.show, videos: open.videos, playlistUrl: open.playlistUrl}}),
+    showChannelsDialog: open =>({type: types.SHOW_CHANNELS_DIALOG, payload: open})
 }
 export let defaultState = {
     showConfig: false, 
@@ -33,7 +35,8 @@ export let defaultState = {
     showPlaylistDialog: {
         show: false, videos: [], playlistUrl: ""
     },
-    scrollTopPosition: 0
+    scrollTopPosition: 0,
+    showChannels: false
 }
 
 
@@ -51,7 +54,10 @@ export default (state=defaultState, action)=>{
             return newState;
         case types.SHOW_PLAYLIST_DIALOG: 
             newState.showPlaylistDialog = action.payload;
-            return newState; 
+            return newState;
+        case types.SHOW_CHANNELS_DIALOG:
+            newState.showChannels = action.payload;
+            return newState;
         default:
             return newState;
     }

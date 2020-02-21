@@ -10,6 +10,7 @@ import ProFeatureDialog from "./app/proFeatureDialog";
 import UpdateNotification from './app/updateNotification';
 import PlaylistDialog from './videos/playlistDialog';
 import About from './app/about';
+import Channels from './app/channels';
 import { creators as videoActions } from '../../main/videos/videoDuck';
 import { creators as appStateActions } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
@@ -127,6 +128,8 @@ const  App  = (props) => {
                     <About />
                     <ErrorNotification error={props.error} closeErrorNotification={props.errorHandler}/>
                     <PlaylistDialog />
+                    <Channels />
+
                 </div>
             </MuiThemeProvider>
         );

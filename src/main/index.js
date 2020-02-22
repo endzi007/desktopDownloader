@@ -8,13 +8,21 @@ import persistStore from '../main/helpers/persistStore';
 import { execFile } from 'child_process';
 
 //update youtube-dl if there is an update or fix available
-execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"]);
+execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"], (err, stdout, stderr)=>{
+
+  if(err){
+    console.log("err", err);
+  }
+  console.log(stdout, "stdout");
+  console.log(stderr, "stderr");
+
+});
 
 let key = persistStore.get("license");
 if(key === undefined){
   store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
 } else {
-  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true })
+  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true });
 }
 const isDevelopment = process.env.NODE_ENV !== 'production';
 

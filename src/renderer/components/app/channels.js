@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import {Table, TableBody, TableCell, TableHead, TableRow, Paper, Dialog, DialogActions, Button, DialogContent} from '@material-ui/core';
 import {connect } from 'react-redux';
 import { creators as uiActions } from '../../../main/ui/uiDuck';
+import { creators as optionActions } from '../../../main/options/optionsDuck';
 
 const styles = theme => ({
   root: {
@@ -16,30 +17,31 @@ const styles = theme => ({
   },
 });
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-const rows = [
-
-];
-
-
 function mapStateToProps(state){
     return {
-      show: state.uiConfig.showChannels
+      show: state.uiConfig.showChannels,
+      channels: state.options.channels
     }
 }
 const mapDispatchToProps = {
-    showChannelsDialog: uiActions.showChannelsDialog
+    showChannelsDialog: uiActions.showChannelsDialog,
+    updateChannels: optionActions.updateChannels
 }
 function SimpleTable(props) {
   const { classes } = props;
   const handleClose = ()=>{
     props.showChannelsDialog(false);
   }
+  const [rows, setRows] = useState([]);
+
+  useEffect(()=>{
+      setRows(...props.channels);
+  },[]);
+
+  useEffect(()=>{
+    props.updateChannels(rows);
+  },[rows]);
+
   return (
       <Dialog 
         open={props.show}
@@ -63,10 +65,10 @@ function SimpleTable(props) {
                     <TableCell component="th" scope="row">
                         {row.name}
                     </TableCell>
-                    <TableCell align="right">{row.calories}</TableCell>
-                    <TableCell align="right">{row.fat}</TableCell>
-                    <TableCell align="right">{row.carbs}</TableCell>
-                    <TableCell align="right">{row.protein}</TableCell>
+                    <TableCell align="right">{row.name}</TableCell>
+                    <TableCell align="right">{row.url}</TableCell>
+                    <TableCell align="right">{row.startValue}</TableCell>
+                    <TableCell align="right">{row.endValue}</TableCell>
                     </TableRow>
                 ))}
                 </TableBody>
@@ -74,7 +76,9 @@ function SimpleTable(props) {
             </Paper>
             </DialogContent>
             <DialogActions>
-              <Button>Save</Button>
+              <Button onClick={()=>{setRows((oldRows)=>{
+                  oldRows.push()
+              })}}>Save</Button>
               <Button onClick={()=>{props.showChannelsDialog(false)}}>Close</Button>
             </DialogActions>
         </Dialog>

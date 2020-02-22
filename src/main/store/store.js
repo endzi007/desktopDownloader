@@ -7,10 +7,10 @@ import { defaultState as defaultUiState } from '../ui/uiDuck';
 import { defaultState as defaultOptionsState } from '../options/optionsDuck';
 
 let initialState = {
-    ...defaultOptionsState,
+    options:{...defaultOptionsState},
     videos: [],
-    ...defaultUiState,
-    ...defaultAppState
+    uiConfig: {...defaultUiState},
+    appState:{...defaultAppState}
 };
 
 const store = createStore(

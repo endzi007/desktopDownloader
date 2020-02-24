@@ -2,10 +2,7 @@ export const types = {
     PARSING_DATA: "appState/PARSING_DATA",
     CHECK_LICENCE: "appState/CHECK_LICENCE",
     REGISTER_LICENCE: "appState/REGISTER_LICENCE",
-    CHECK_PRO_FEATURES: "appState/CHECK_PRO_FEATURES",
     DOWNLOADING: "appState/DOWNLOADING",
-    CHANGE_LICENSE: "appState/CHANGE_LICENSE",
-    LICENSE_FAILURE_COUNTER: "appState/LICENSE_FAILURE_COUNTER",
     ERROR_HANDLER: "appState/ERROR_HANDLER",
     ALLOW_UPDATES: "appState/ALLOW_UPDATES"
 }
@@ -58,16 +55,6 @@ export default (state = defaultState, action)=>{
                 newState.downloading = newState.downloading-1;
             } else {
                 newState.downloading = 0;
-            }
-            return newState;
-        case types.CHANGE_LICENSE: 
-            newState.license.status = action.payload;
-            return newState;
-        case types.LICENSE_FAILURE_COUNTER: 
-            if(action.payload === "INC"){
-                newState.license.failureCount++;
-            } else {
-                newState.license.failureCount = 0;
             }
             return newState;
         case types.ERROR_HANDLER: 

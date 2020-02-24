@@ -30,19 +30,9 @@ export default (action)=>{
             videoObj.duration = Number.parseInt(infoData.duration);
             videoObj.range.range = [0, Number.parseInt(infoData.duration)]
             videoObj.downloadLinks = infoData.formats;
+            newAction.type = `${action.type}_PROCESSED`;
+            newAction.payload = videoObj;
 
-            if(isPro === false){
-                if(Number.parseInt(infoData.duration) > 1200){
-                    newAction.type = uiTypes.SHOW_PRO_FEATURE;
-                    newAction.payload = {open: true, message: "To download videos longer than 20 minutes please consider donating to get PRO License"};
-                } else {
-                    newAction.type = `${action.type}_PROCESSED`;
-                    newAction.payload = videoObj;
-                }
-            } else {
-                newAction.type = `${action.type}_PROCESSED`;
-                newAction.payload = videoObj;
-            }
 
         });
 

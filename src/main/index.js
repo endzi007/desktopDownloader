@@ -146,16 +146,6 @@ window.webContents.openDevTools();
     {
       label: "Help",
       submenu:[
-        {
-          label: "Activate",
-          click(){
-            window.webContents.send("FORWARD_TO_REDUX", 
-            {
-              type: "ui/SHOW_PRO_FEATURE", 
-              payload: {open: true, message: "", type: "PRO"} 
-            })
-          }
-        },
         {label: "About",
         click(){
           window.webContents.send("FORWARD_TO_REDUX", {type: "ui/SHOW_ABOUT", payload: true})

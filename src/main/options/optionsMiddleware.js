@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { types as optionsTypes, creators as optionsActions } from './optionsDuck';
 import { types as uiTypes } from '../ui/uiDuck';
 import path from 'path';

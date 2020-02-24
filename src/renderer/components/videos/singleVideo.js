@@ -89,10 +89,6 @@ const SingleVideo = React.memo(({
     let h= Math.floor(duration / 3600);
     let m =  Math.floor(duration % 3600 / 60);
     let s=  Math.floor(duration % 3600 % 60);
-    let refToDiv = useRef(null);
-    useEffect(()=>{
-        refToDiv.current.style.display = borderDiv? "block": "none";
-    }, [borderDiv]);
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -133,14 +129,13 @@ const SingleVideo = React.memo(({
     }
 
     return (
-    <div style={{display: "grid", gridTemplateColumns: "25px auto", position: "relative", borderBottom: borderDiv? "3px solid black": "none" }} 
+    <div style={{display: "grid", gridTemplateColumns: "25px auto"}} 
     draggable="true" 
     onDragStart={onDragStartHandler} 
     onDragEnter={onDragEnterHandler} 
     onDragEnd={onDragEndHandler}
     onDragOver={onDragOverHandler}
     onDragLeave={onDragLeaveHandler}
-    className={borderDiv? "singleVideo": ""}
     >
         <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
@@ -157,8 +152,8 @@ const SingleVideo = React.memo(({
                 </div>
             </CardContent>
         </Card>
-        <CustomRange duration={duration} index={iPosition} />
-        <div ref = {refToDiv} style={{position: "absolute", bottom: 0, width: "100%", height: "5px", backgroundColor: "green" }}></div>
+            <div></div>
+            <CustomRange duration={duration} index={iPosition} />
     </div>
      
     );

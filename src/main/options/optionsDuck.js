@@ -9,8 +9,7 @@ export const types = {
     GET_SAVE_FOLDER: "options/GET_SAVE_FOLDER",
     CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
     AUTO_NUMBERING: "options/AUTO_NUMBERING",
-    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE",
-    UPDATE_CHANNELS: "options/UPDATE_CHANNELS"
+    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE"
 }
 
 export const creators = {
@@ -30,8 +29,7 @@ export const creators = {
                 numbering: val.numbering,
                 value: val.value
             }
-    }),
-    updateChannels: arr=>({type: types.ADD_CHANNEL, payload: arr}),
+    })
 }
 
 export let defaultState = {
@@ -51,8 +49,7 @@ export let defaultState = {
         numbering: false,
         value: 0
     },
-    customRange: false,
-    channels:[]
+    customRange: false
   };
 export default (state = defaultState, action)=>{
     let newState = {...state};
@@ -77,9 +74,6 @@ export default (state = defaultState, action)=>{
             return newState;
         case types.ENABLE_CUSTOM_RANGE:
             newState.customRange = action.payload;
-            return newState;
-        case types.UPDATE_CHANNELS:
-            newState.channels = [...action.payload];
             return newState;
         default:
             return newState;

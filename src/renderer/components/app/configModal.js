@@ -180,10 +180,6 @@ const ConfigModal = (props)=> {
               <Typography variant="body1">Allow updates (recommended):</Typography>
               <Switch id="autoUpdateSwitch" onChange={handleAutoUpdate} checked={props.appState.updates}/>
             </ListItem>
-            <ListItem className={classes.listItem}>
-              <Typography variant="body1">Show saved channels: </Typography>
-              <Button onClick={()=>{props.showChannelsDialog(true)}}> Show Channels</Button>
-            </ListItem>
           </List>
         </Dialog>
       </div>

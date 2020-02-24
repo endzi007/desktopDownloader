@@ -9,12 +9,13 @@ import { execFile } from 'child_process';
 
 //update youtube-dl if there is an update or fix available
 execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"], (err, stdout, stderr)=>{
-
-  if(err){
-    console.log("err", err);
-  }
-  console.log(stdout, "stdout");
-  console.log(stderr, "stderr");
+  setTimeout(()=>{
+    if(err){
+      window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: `err ${err}`});
+    }
+    let response = `${stdout} and d ${stderr}`
+    window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: response});
+  }, 5000);
 
 });
 
@@ -63,9 +64,9 @@ app.on('ready', () => {
     }))
   }
 
- if (isDevelopment) {
-    window.webContents.openDevTools();
-  }  
+ /* if (isDevelopment) {
+} */  
+window.webContents.openDevTools();
 
 
   let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})

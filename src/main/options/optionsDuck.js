@@ -30,6 +30,7 @@ export const creators = {
                 value: val.value
             }
     })
+    
 }
 
 export let defaultState = {
@@ -41,7 +42,7 @@ export let defaultState = {
     },
     downloadFolder: "",
     parallel: {
-        limit: 7, 
+        limit: 5, 
         inProgress: "NO",
         index: 0
     },

@@ -82,13 +82,17 @@ const SingleVideo = React.memo(({
     setDragAndDropMode, 
     setFromAndTo
 })=>{
-    const [ borderDiv, setBorderDiv ] = useState(false);
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
     let h= Math.floor(duration / 3600);
     let m =  Math.floor(duration % 3600 / 60);
     let s=  Math.floor(duration % 3600 % 60);
+    const downloadedRef = useRef(0);
+    if(downloaded > downloadedRef.current){
+        console.log("ref.current", downloadedRef.current, downloaded);
+        downloadedRef.current = downloaded;
+    }
     switch (status) {
         case "DONE":
             stateToDisplay = <IconButton className={classes.stateToDisplay} aria-label="Done"><DoneIcon /></IconButton>
@@ -139,7 +143,7 @@ const SingleVideo = React.memo(({
     >
         <Typography className={classes.dragNumber} variant="subtitle1" color="inherit">{`${Number.parseInt(iPosition)+1}.`}</Typography>
         <Card className={classes.card}>
-            <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloaded} />
+            <LinearProgress className={`${classes.progress} ${classes.colorSecondary}`} style={{opacity: status=== "DONE"? 0: 0.65}} color="secondary" variant="determinate" value={downloadedRef.current} />
             <CardMedia className={classes.cover} image={thumbnail} title={title} onClick={()=>{ ipcRenderer.send("pauseVideo", iPosition)}}/>
             <CardContent className={classes.content}>
                 <div>

@@ -22,7 +22,7 @@
     "mp3"
   ],
   "author": "Enis Jašarović",
-  "license": "ISC",
+  "license": "GPL",
   "dependencies": {
     "@material-ui/core": "^3.6.1",
     "@material-ui/icons": "^3.0.1",

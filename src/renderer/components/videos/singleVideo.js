@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 /* eslint-disable react/prop-types */
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Card, Typography, CardContent, CardMedia, LinearProgress, IconButton } from '@material-ui/core';
 import { ipcRenderer } from 'electron';
@@ -82,7 +82,6 @@ const SingleVideo = React.memo(({
     setDragAndDropMode, 
     setFromAndTo
 })=>{
-    const [ borderDiv, setBorderDiv ] = useState(false);
     let modifiedTitle = title.length > 47 ? `${title.substr(0, 44)}...`: title;
     let buttonToDisplay = <IconButton onClick ={handleDelete.bind(null, url)} className={classes.buttonToDisplay} aria-label="Delete"><DeleteIcon fontSize="small" /></IconButton>
     let stateToDisplay = "";
@@ -159,6 +158,9 @@ const SingleVideo = React.memo(({
     );
 }, (prev, next)=>{
     if(prev.downloaded !== next.downloaded || prev.status !== next.status){
+        if(prev.downloaded > next.downloaded && prev.status === next.status){
+            return true;
+        }
         return false;
     }
     return true;

@@ -29,11 +29,12 @@ const  ProFeatureDialog = (props) => {
           </DialogTitle>
           <DialogContent>
                 <Typography variant="h6">Dedex Video Downloader </Typography>
-                <Typography variant="body1">Current Version: {version}
-                <span style={{display: props.license.status === true? "block": "none" }}>licenced PRO version</span>
+                <Typography variant="body1">Current Version: {version}</Typography>
+                <Typography variant="subtitle2">Copyright {new Date().getFullYear()} Enis Jasarovic</Typography>
+                <Typography variant="subtitle2">
+                  This software is completely free to use. 
+                  This software is build on top of FFMPEG and YOUTUBE-DL softwares. 
                 </Typography>
-                <Typography variant="subtitle2">Copyright {new Date().getFullYear()} DeCom doo Montenegro</Typography>
-                <Typography variant="subtitle2">All rights reserved</Typography>
           </DialogContent>
         </Dialog>
       </div>

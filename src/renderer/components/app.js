@@ -6,14 +6,12 @@ import theme from '../helpers/theme.js';
 import VideoList from './videos/videoList';
 import ConfigModal from './app/configModal';
 import BottomAppBar from './app/bottomAppBar';
-import ProFeatureDialog from "./app/proFeatureDialog";
 import UpdateNotification from './app/updateNotification';
 import PlaylistDialog from './videos/playlistDialog';
 import About from './app/about';
 import { creators as videoActions } from '../../main/videos/videoDuck';
 import { creators as appStateActions } from '../../main/appState/appStateDuck';
 import { ipcRenderer } from 'electron';
-import licenseCheck from '../helpers/licenseCheck';
 
 import ErrorNotification from './app/errorNotification';
 
@@ -44,17 +42,6 @@ const  App  = (props) => {
         ipcRenderer.on("update-available", (e, info)=>{
             setUpdateNotification(true)
         })
-        licenseCheck().then((res)=>{
-            if(res === "RESET"){
-                props.changeLicense(true);
-                props.licenseFailureCounter(res);
-            } else {
-                props.licenseFailureCounter("INC");
-            }
-        }).catch((e)=>{
-            props.errorHandler({status: true, message: e});
-        });
-
     },[]);
 
     const onDrop = (e)=>{
@@ -122,7 +109,6 @@ const  App  = (props) => {
                     <VideoList reference={videoListReference} setDragAndDropMode={setDragDropMode} />
                     <ConfigModal />
                     <BottomAppBar />
-                    <ProFeatureDialog />
                     <UpdateNotification open={updateNotification} handleClose={handleCloseUpdate}/>
                     <About />
                     <ErrorNotification error={props.error} closeErrorNotification={props.errorHandler}/>

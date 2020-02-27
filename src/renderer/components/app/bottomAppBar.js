@@ -69,7 +69,7 @@ function BottomAppBar(props) {
                         <SaveAltIcon />
                       </Fab>
   }
-  let Dots= ({count})=><div id='animatedDots'>Parsing {count} <span>. </span><span>. </span><span>. </span></div>;
+  let Dots= ({count})=><span id='animatedDots'>Parsing {count} <span>. </span><span>. </span><span>. </span></span>;
 
 
   return (

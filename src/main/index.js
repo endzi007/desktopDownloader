@@ -19,12 +19,6 @@ execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"], (err, stdout, stderr)
 
 });
 
-let key = persistStore.get("license");
-if(key === undefined){
-  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: false});
-} else {
-  store.dispatch({ type: "appState/CHANGE_LICENSE", payload: true });
-}
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 // global reference to mainWindow (necessary to prevent window from being garbage collected)
@@ -46,7 +40,6 @@ app.on('activate', () => {
 })
 
 process.on('uncaughtException', function (err) {
-  alert(err);
   window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: err});
 })
 

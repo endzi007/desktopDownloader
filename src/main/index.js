@@ -57,9 +57,9 @@ app.on('ready', () => {
     }))
   }
 
- /* if (isDevelopment) {
-} */  
-window.webContents.openDevTools();
+ if (isDevelopment) {
+   window.webContents.openDevTools();
+}   
 
 
   let loading = new BrowserWindow({show: false, frame: false, transparent: true, icon: path.resolve(__static, "assets/logo.ico")})

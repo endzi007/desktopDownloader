@@ -16,8 +16,7 @@ const store = createStore(
   reducers,
   initialState,
   applyMiddleware(
-    forwardToMain, // IMPORTANT! This goes first,
-    logger
+    forwardToMain // IMPORTANT! This goes first,
     )
 );
 

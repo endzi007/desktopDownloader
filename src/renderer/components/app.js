@@ -38,12 +38,6 @@ const  App  = (props) => {
         setDragAndDropMode(mode);
     }, [dragAndDropMode]);
 
-    useEffect(()=>{
-        ipcRenderer.on("update-available", (e, info)=>{
-            setUpdateNotification(true)
-        })
-    },[]);
-
     const onDrop = (e)=>{
         let droppedItems = e.dataTransfer.items;
         setOutline("none");

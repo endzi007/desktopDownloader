@@ -163,9 +163,6 @@ app.on('ready', () => {
   ipcMain.on("QUIT_AND_INSTALL", (e)=>{
     autoUpdater.quitAndInstall(true, true);
   })
-  autoUpdater.on("update-available", (info)=>{
-    window.webContents.send("update-available", info);
-  })
 
   autoUpdater.on("update-not-available", ()=>{
     window.webContents.send("update-not-available");

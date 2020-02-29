@@ -8,7 +8,7 @@ import { creators as uiActions } from '../../../main/ui/uiDuck';
 import { creators as optionsActions } from '../../../main/options/optionsDuck';
 import { creators as appStateActions } from '../../../main/appState/appStateDuck';
 import persistStore from '../../../main/helpers/persistStore';
-
+import StepSlider from './configSlider';
 
 
 const styles = theme => ({
@@ -180,6 +180,12 @@ const ConfigModal = (props)=> {
               <Typography variant="body1">Allow updates (recommended):</Typography>
               <Switch id="autoUpdateSwitch" onChange={handleAutoUpdate} checked={props.appState.updates}/>
             </ListItem>
+            <ListItem className={classes.listItem}>
+            <Divider />
+            <Typography variant="body1">Simultaneous downloads: {props.options.parallel.limit}</Typography>
+              <StepSlider parallelDownloads ={props.options.parallel.limit} setParallelDownloads = {props.setParallelDownloads}/>
+              <Typography variant="caption">Higher number may take more RAM and CPU that can couse computer to freeze while downloads in progress.</Typography>
+            </ListItem>
           </List>
         </Dialog>
       </div>
@@ -210,7 +216,8 @@ const mapDispatchToProps = {
     autoNumbering: optionsActions.autoNumbering,
     allowUpdates: appStateActions.allowUpdates,
     enableCustomRange: optionsActions.enableCustomRange,
-    showChannelsDialog: uiActions.showChannelsDialog
+    showChannelsDialog: uiActions.showChannelsDialog,
+    setParallelDownloads: optionsActions.parallelDownloads
 }
 
 

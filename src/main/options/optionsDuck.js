@@ -9,7 +9,8 @@ export const types = {
     GET_SAVE_FOLDER: "options/GET_SAVE_FOLDER",
     CHANGE_DOWNLOAD_QUALITY: "options/CHANGE_DOWNLOAD_QUALITY",
     AUTO_NUMBERING: "options/AUTO_NUMBERING",
-    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE"
+    ENABLE_CUSTOM_RANGE: "options/ENABLE_CUSTOM_RANGE",
+    PARALLEL_DOWNLOADS: "options/PARALLEL_DOWNLOADS"
 }
 
 export const creators = {
@@ -29,7 +30,9 @@ export const creators = {
                 numbering: val.numbering,
                 value: val.value
             }
-    })
+    }),
+    parallelDownloads:(num)=>({type: types.PARALLEL_DOWNLOADS, payload: num})
+    
 }
 
 export let defaultState = {
@@ -41,7 +44,7 @@ export let defaultState = {
     },
     downloadFolder: "",
     parallel: {
-        limit: 7, 
+        limit: 4, 
         inProgress: "NO",
         index: 0
     },
@@ -74,6 +77,9 @@ export default (state = defaultState, action)=>{
             return newState;
         case types.ENABLE_CUSTOM_RANGE:
             newState.customRange = action.payload;
+            return newState;
+        case types.PARALLEL_DOWNLOADS:
+            newState.parallel.limit = action.payload;
             return newState;
         default:
             return newState;

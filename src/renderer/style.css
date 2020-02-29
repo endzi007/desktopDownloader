@@ -28,3 +28,18 @@ body{
     cursor: move;
     border-bottom: 2px solid green;
 }
+
+.donateIcon{
+    background: rgb(255,226,0);
+    background: linear-gradient(90deg, rgba(255,226,0,1) 0%, rgba(181,174,6,1) 100%, rgba(0,212,255,1) 100%);
+    text-align: center;
+    color: black;
+    border-radius: 30px;
+    width: 100px;
+    height: 20px;
+    font-weight: bold;
+    font-size: small;
+    padding-top: 5px;
+    box-shadow: inset;
+    cursor: pointer;
+}

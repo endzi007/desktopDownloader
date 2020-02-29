@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { LinearProgress } from '@material-ui/core';
+import { LinearProgress, SvgIcon } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import { Fab, Tooltip, Typography } from '@material-ui/core';
@@ -11,6 +11,7 @@ import { creators as optionActions } from '../../../main/options/optionsDuck';
 import { creators as appStateActions } from '../../../main/appState/appStateDuck';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import StopIcon from '@material-ui/icons/Stop';
+import { DONATE_ICON } from '../../../appConfig';
 import { ipcRenderer } from 'electron';
 const styles = theme => ({
   root:{
@@ -71,14 +72,16 @@ function BottomAppBar(props) {
   }
   let Dots= ({count})=><span id='animatedDots'>Parsing {count} <span>. </span><span>. </span><span>. </span></span>;
 
-
   return (
       <AppBar position="fixed" className={classes.root}>
         <Tooltip title= "Download All" aria-label="Download All">
           {buttonToDisplay}
         </Tooltip>
         <Toolbar style={{ justifyContent: "space-between"}}className={classes.flex} variant="dense">
+          <div>
           <Typography variant="body1">{`Duration: ${h===0 ? "": h>9? h+":": "0"+h+":"}${m>9? m: "0"+m}:${s>9?s: "0"+s}`}</Typography>
+          <div className="donateIcon" onClick={()=>{ ipcRenderer.send("GO_TO_WEBSITE", "https://enisjasarovic.me/#/donate") }}>DONATE</div>
+          </div>
           <div style={{display: "flex", flexDirection:"column"}}>
             <Typography style={{display:props.appState.parsingData.count>0? "block": "none" }} variant="body1"> <Dots count={props.appState.parsingData.count}/></Typography>
             <Typography variant="body1">{`Items in playlist: ${duration.number}`}</Typography>

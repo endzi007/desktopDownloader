@@ -180,8 +180,8 @@ const ConfigModal = (props)=> {
               <Typography variant="body1">Allow updates (recommended):</Typography>
               <Switch id="autoUpdateSwitch" onChange={handleAutoUpdate} checked={props.appState.updates}/>
             </ListItem>
-            <ListItem className={classes.listItem}>
             <Divider />
+            <ListItem className={classes.listItem}>
             <Typography variant="body1">Simultaneous downloads: {props.options.parallel.limit}</Typography>
               <StepSlider parallelDownloads ={props.options.parallel.limit} setParallelDownloads = {props.setParallelDownloads}/>
               <Typography variant="caption">Higher number may take more RAM and CPU that can couse computer to freeze while downloads in progress.</Typography>

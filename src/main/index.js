@@ -8,6 +8,17 @@ import persistStore from '../main/helpers/persistStore';
 import { execFile } from 'child_process';
 
 //update youtube-dl if there is an update or fix available
+execFile(path.resolve(__static, "youtube-dl.exe"), ["--rm-cache-dir"], (err, stdout, stderr)=>{
+  setTimeout(()=>{
+    if(err){
+      window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: `err ${err}`});
+    }
+    let response = `${stdout} and d ${stderr}`
+    window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: response});
+  }, 5000);
+});
+
+//update youtube-dl if there is an update or fix available
 execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"], (err, stdout, stderr)=>{
   setTimeout(()=>{
     if(err){
@@ -16,8 +27,10 @@ execFile(path.resolve(__static, "youtube-dl.exe"), ["-U"], (err, stdout, stderr)
     let response = `${stdout} and d ${stderr}`
     window.webContents.send("FORWARD_TO_REDUX", {type: 'appState/ERROR_HANDLER', payload: response});
   }, 5000);
-
 });
+
+
+
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 

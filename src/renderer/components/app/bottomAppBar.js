@@ -11,7 +11,6 @@ import { creators as optionActions } from '../../../main/options/optionsDuck';
 import { creators as appStateActions } from '../../../main/appState/appStateDuck';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import StopIcon from '@material-ui/icons/Stop';
-import { DONATE_ICON } from '../../../appConfig';
 import { ipcRenderer } from 'electron';
 const styles = theme => ({
   root:{

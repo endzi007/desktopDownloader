@@ -7,24 +7,9 @@ Dedex video downloader is build with ElectronJS. Under the hood this program use
   - Download youtube playlists 
   - Download only specific part of video  
 You can also:
-  - Import and save playlist files.
+  - Import and save files.
   - Drag and drop videos directly into the software.
   - Automatically number downloads.
-
-
-### Tech
-
-Dillinger uses a number of open source projects to work properly:
-
-* [React] - HTML enhanced for web apps!
-* [Ace Editor] - awesome web-based text editor
-* [markdown-it] - Markdown parser done right. Fast and easy to extend.
-* [Twitter Bootstrap] - great UI boilerplate for modern web apps
-* [node.js] - evented I/O for the backend
-* [Express] - fast node.js network app framework [@tjholowaychuk]
-* [Gulp] - the streaming build system
-* [Breakdance](https://breakdance.github.io/breakdance/) - HTML to Markdown converter
-* [jQuery] - duh
 
 ### Installation
 Just download from "Releases" section above and fallow the standard installation process.
